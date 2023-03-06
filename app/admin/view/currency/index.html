@@ -1,0 +1,198 @@
+{extend name="common/base"/}
+<!-- 主體 -->
+{block name="body"}
+
+<style>
+    tbody .layui-table-cell {
+        height: auto;
+        line-height: normal;
+    }
+</style>
+<div class="p-3">
+    <table class="layui-hide" id="currency" lay-filter="currency"></table>
+</div>
+
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <span class="layui-btn layui-btn-sm layui-btn-normal" lay-event="add" data-title="添加貨幣">+添加貨幣</span>
+    </div>
+</script>
+
+<script type="text/html" id="barDemo">
+    <div class="layui-btn-group">
+        <a class="layui-btn layui-btn-xs  layui-btn-normal" lay-event="edit">編輯</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">刪除</a>
+    </div>
+</script>
+
+<script type="text/html" id="status">
+
+    <input type="checkbox" name="status" lay-skin="switch" {{# if(d.status==1){ }}checked {{# } }}
+           lay-text="開啟|禁用" value={{ d.id }} lay-filter="status">
+
+</script>
+
+<script type="text/html" id="is_trade">
+
+    <input type="checkbox" name="is_trade" lay-skin="switch" {{# if(d.is_trade==1){ }}checked {{# } }}
+           lay-text="開啟|禁用" value={{ d.id }} lay-filter="is_trade">
+
+</script>
+
+<script type="text/html" id="is_recharge">
+
+    <input type="checkbox" name="is_recharge" lay-skin="switch" {{# if(d.is_recharge==1){ }}checked {{# } }}
+           lay-text="開啟|禁用" value={{ d.id }} lay-filter="is_recharge">
+
+</script>
+
+
+<script type="text/html" id="is_withdraw">
+    <input type="checkbox" name="is_withdraw" lay-skin="switch" {{# if(d.is_withdraw==1){ }}checked {{# } }}
+           lay-text="開啟|禁用" value={{ d.id }}
+           lay-filter="is_withdraw">
+</script>
+
+<script type="text/html" id="is_transfer">
+    <input type="checkbox" name="is_transfer" lay-skin="switch" {{# if(d.is_transfer==1){ }}checked {{# } }}
+           lay-text="開啟|禁用" value={{ d.id }} lay-filter="is_transfer">
+</script>
+
+
+{/block}
+<!-- /主體 -->
+
+<!-- 腳本 -->
+{block name="script"}
+<script>
+    const moduleInit = ['tool'];
+
+    function xuwenInit() {
+        var table = layui.table, tool = layui.tool, form = layui.form;
+        layui.pageTable = table.render({
+            elem: '#currency',
+            title: '貨幣列表',
+            toolbar: '#toolbarDemo',
+            url: '/admin/currency/index',
+            page: true,
+            limit: 20,
+            cols: [
+                [
+                    {
+                        field: 'id',
+                        title: '編號',
+                        align: 'center',
+                        width: 80
+                    }, {
+                    field: 'name_cn',
+                    title: '名稱',
+                }, {
+                    field: 'name_en',
+                    title: '英文名稱',
+                    align: 'center',
+                    width: 90
+                }, {
+                    field: 'code',
+                    title: '標識符',
+                    align: 'center',
+                    width: 90
+                }, {
+                    field: 'decimal',
+                    title: '小數位',
+                    align: 'center',
+                    width: 100
+                }, {
+                    field: 'sort_order',
+                    title: '排序',
+                    align: 'center',
+                    width: 80
+                }, {
+                    title: '狀態',
+                    toolbar: '#status',
+                    align: 'center',
+                    width: 120
+                },
+                    {
+                        title: '交易',
+                        align: 'center',
+                        toolbar: '#is_trade',
+                        width: 100
+                    }, {
+                    title: '充值',
+                    align: 'center',
+                    toolbar: '#is_recharge',
+                    width: 100
+                }, {
+                    title: '提現',
+                    align: 'center',
+                    toolbar: '#is_withdraw',
+                    width: 100
+                }, {
+                    title: '轉賬',
+                    align: 'center',
+                    toolbar: '#is_transfer',
+                    width: 100
+                },
+                    {
+                        field: 'right',
+                        title: '操作',
+                        toolbar: '#barDemo',
+                        width: 136,
+                        align: 'center'
+                    }
+                ]
+            ]
+        });
+
+        //監聽表頭工具欄事件
+        table.on('toolbar(currency)', function (obj) {
+            if (obj.event === 'add') {
+                tool.side("/admin/currency/add");
+                return false;
+            }
+        });
+
+        //監聽表格行工具事件
+        table.on('tool(currency)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {
+                tool.side('/admin/currency/edit?id=' + obj.data.id);
+            } else if (obj.event === 'del') {
+                layer.confirm('確定要刪除該記錄嗎?', {
+                    icon: 3,
+                    title: '提示'
+                }, function (index) {
+                    let callback = function (e) {
+                        layer.msg(e.msg);
+                        if (e.code == 0) {
+                            obj.del();
+                        }
+                    }
+                    tool.delete("/admin/currency/delete", {id: data.id}, callback);
+                    layer.close(index);
+                });
+            }
+            return false;
+        });
+
+        let statusList = ['status', 'is_trade', 'is_recharge', 'is_withdraw', 'is_transfer'];
+        statusList.map((item) => {
+            //监听指定开关
+            form.on('switch(' + item + ')', function (data) {
+
+
+                console.log(data);
+                let callback = function (e) {
+                    layer.msg(e.msg);
+                    if (e.code == 0) {
+                        parent.layui.tool.close(1000);
+                    }
+                }
+                tool.post("/admin/index/status", {table: 'currency', id: data.value, field: item}, callback);
+
+            });
+        })
+    }
+</script>
+{/block}
+<!-- /腳本 -->

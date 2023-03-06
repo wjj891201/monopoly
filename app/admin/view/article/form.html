@@ -1,0 +1,147 @@
+{extend name="common/base"/}
+{block name="style"}
+<style type="text/css">
+    .editormd-code-toolbar select {
+        display: inline-block
+    }
+
+    .editormd li {
+        list-style: inherit;
+    }
+</style>
+{/block}
+<!-- 主體 -->
+{block name="body"}
+<style type="text/css">
+
+    [type=button]{
+        background-color: #448ff7;
+    }
+</style>
+<form class="layui-form p-4">
+    <h3 class="pb-3">編輯文章表</h3>
+    <table class="layui-table layui-table-form">
+        <tr>
+            <td class="layui-td-gray">文章標題<span>*</span></td>
+            <td colspan="7"><input type="text" name="title" lay-verify="required" lay-reqText="請輸入文章標題"
+                                   autocomplete="off" placeholder="請輸入文章標題" class="layui-input" value="{$item.title}">
+            </td>
+        </tr>
+        <tr>
+            <td class="layui-td-gray">文章分類<span>*</span></td>
+            <td>
+                <select name="cate_id" lay-verify="required" lay-reqText="請選擇分類">
+                    <option value="">請選擇分類</option>
+                    {volist name=":set_recursion(get_article_cate())" id="v"}
+                    <option value="{$v.id}" {eq name="$item.cate_id" value="$v.id" }selected{/eq}>{$v.title}
+                    </option>
+                    {/volist}
+                </select>
+            </td>
+            <td class="layui-td-gray">狀態<span>*</span></td>
+            <td>
+                <input type="radio" name="status" value="1" title="正常" {eq name="$item.status" value="1" }checked{/eq}>
+                <input type="radio" name="status" value="0" title="下架" {eq name="$item.status" value="0" }checked{/eq}>
+            </td>
+        </tr>
+        <tr>
+            <td class="layui-td-gray">排序</td>
+            <td>
+                <input type="text" name="sort_order" placeholder="請輸入排序，數字" autocomplete="off" class="layui-input"
+                       value="{$item.sort_order}">
+            </td>
+            <td class="layui-td-gray">文章屬性</td>
+            <td>
+                <select name="type">
+                    {volist name="type_list" id="v" key="key}
+                    <option value="{$key}" {eq name="$item.type" value="$key" }selected{/eq}>{$v}</option>
+                    {/volist}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td class="layui-td-gray" style="vertical-align:top;">文章簡介</td>
+            <td colspan="3">
+                <textarea name="desc" placeholder="請輸入簡介，不能超過200個字" class="layui-textarea">{$item.desc}</textarea>
+            </td>
+            <td class="layui-td-gray" style="vertical-align:top;">封面</td>
+            <td>
+                <div class="layui-upload">
+                    <button type="button" class="layui-btn layui-btn-sm" id="upload_btn_thumb">上传封面
+                    </button>
+                    <div class="layui-upload-list" id="upload_box_thumb"
+                         style="width: 120px; height:66px; overflow: hidden;">
+                        <img src="{:get_file($item.image)}"
+                             onerror="javascript:this.src='{__ASSETS__}/xuwen/images/nonepic600x360.jpg';this.onerror=null;"
+                             style="max-width: 100%; height:66px;"/>
+                        <input type="hidden" name="image" value="{$item.image}">
+                    </div>
+                </div>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="6">
+                <textarea placeholder="請輸入內容" class="layui-textarea" id="container_content">{$item.content}</textarea>
+            </td>
+        </tr>
+
+    </table>
+    <div class="flex justify-center py-4">
+        <input type="hidden" name="id" value="{$item.id}"/>
+        <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="webform">立即提交</button>
+        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+</form>
+{/block}
+<!-- /主體 -->
+
+<!-- 腳本 -->
+{block name="script"}
+<script>
+    moduleInit = ['tool', 'tinymce'];
+
+    function xuwenInit() {
+        var form = layui.form, tool = layui.tool;
+
+        //上传缩略图
+        var upload_thumb = layui.upload.render({
+            elem: '#upload_btn_thumb',
+            url: '/admin/api/upload',
+            done: function (res) {
+                //如果上传失败
+                if (res.code == 1) {
+                    layer.msg('上传失败');
+                    return false;
+                }
+                //上传成功
+                $('#upload_box_thumb input').attr('value', res.data.id);
+                $('#upload_box_thumb img').attr('src', res.data.filepath);
+            }
+        });
+
+        var editor = layui.tinymce;
+        var edit = editor.render({
+            selector: "#container_content",
+            height: 500
+        });
+        //監聽提交
+        form.on('submit(webform)', function (data) {
+            data.field.content = tinyMCE.editors['container_content'].getContent();
+            if (data.field.content == '') {
+                layer.msg('請先完善文章內容');
+                return false;
+            }
+            let callback = function (e) {
+                layer.msg(e.msg);
+                if (e.code == 0) {
+                    tool.sideClose(1000);
+                }
+            }
+            tool.post("/admin/article/edit", data.field, callback);
+            return false;
+        });
+    }
+</script>
+{/block}
+<!-- /腳本 -->

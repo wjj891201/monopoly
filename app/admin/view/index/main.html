@@ -1,0 +1,54 @@
+{extend name="common/base"/}
+<!-- 主体 -->
+{block name="body"}
+
+<div class="m-4">
+    <div class="grid md:grid-cols-4 sm:grid-cols-1 mb-4 gap-4">
+        <div class="bg-white rounded p-4">
+            <div class="border-b border-neutral-100 pb-2">累計充值</div>
+            <div class="text-3xl py-2 text-center">{$account.recharge} <span class="text-sm">USDT</span></div>
+        </div>
+        <div class="bg-white rounded p-4">
+            <div class="border-b border-neutral-100 pb-2">累計提現</div>
+            <div class="text-3xl py-2 text-center">{$account.withdraw} <span class="text-sm">USDT</span></div>
+        </div>
+        <div class="bg-white rounded p-4">
+            <div class="border-b border-neutral-100 pb-2">當前可用</div>
+            <div class="text-3xl py-2 text-center">{$account.available} <span class="text-sm">USDT</span></div>
+        </div>
+        <div class="bg-white rounded p-4">
+            <div class="border-b border-neutral-100 pb-2">當前凍結</div>
+            <div class="text-3xl py-2 text-center">{$account.freeze} <span class="text-sm">USDT</span></div>
+        </div>
+    </div>
+    <div class="grid md:grid-cols-2 sm:grid-cols-1 gap-4">
+        <div class=" bg-white p-4 rounded">
+            <div class="border-b border-neutral-100 pb-2">用戶數量</div>
+            <div class="grid grid-cols-2 gap-4 py-4">
+                <div class="flex items-center flex-col">
+                    <div class="text-3xl">{$member_count.today}</div>
+                    <div class="mt-4">今日</div>
+                </div>
+                <div class="flex items-center flex-col">
+                    <div class="text-3xl">{$member_count.week}</div>
+                    <div class="mt-4">本週</div>
+                </div>
+                <div class="flex items-center flex-col">
+                    <div class="text-3xl">{$member_count.month}</div>
+                    <div class="mt-4">本月</div>
+                </div>
+                <div class="flex items-center flex-col">
+                    <div class="text-3xl">{$member_count.total}</div>
+                    <div class="mt-4">累計</div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+</div>
+
+{/block}
+<!-- /主体 -->

@@ -1,0 +1,67 @@
+<?php
+
+namespace app\admin\controller;
+
+use app\admin\BaseController;
+use app\model\AccountWithdrawModel;
+use app\model\ChainModel;
+use app\model\CurrencyChainModel;
+use app\model\CurrencyModel;
+use app\service\WithdrawService;
+use Carbon\Carbon;
+use think\facade\View;
+
+class WithdrawController extends BaseController
+{
+
+    private WithdrawService $withdrawService;
+
+    public function initialize()
+    {
+        parent::initialize();
+        $this->withdrawService = new WithdrawService();
+        $this->setTable((new AccountWithdrawModel())->getTable());
+    }
+
+    public function index()
+    {
+        $param = get_param();
+        if (request()->isAjax()) {
+            $where = [];
+            if (!empty($param['keywords'])) {
+                $where[] = ['m.username', 'like', '%' . $param['keywords'] . '%'];
+            }
+            $list = $this->withdrawService->getWithdrawList($where, $param);
+            return $this->apiTable($list);
+        } else {
+            return view();
+        }
+    }
+
+    public function initForm($item)
+    {
+        $cc_model = new CurrencyChainModel();
+        $cc_item = $cc_model->find($item['cc_id']);
+        View::assign('cc_item', $cc_item);
+
+        $chain_model = new ChainModel();
+        $chain_item = $chain_model->find($cc_item['chain_id']);
+        View::assign('chain_item', $chain_item);
+
+        $currency_model = new CurrencyModel();
+        $currency_item = $currency_model->find($cc_item['currency_id']);
+        View::assign('currency_item', $currency_item);
+    }
+
+    public function save($param)
+    {
+        if ($param['status'] == 'finished') {
+            $param['finished_at'] = Carbon::now()->toDateTimeString();
+        } elseif ($param['status'] == 'refused') {
+            $param['refused_at'] = Carbon::now()->toDateTimeString();
+        } elseif ($param['status'] == 'checked') {
+            $param['checked_at'] = Carbon::now()->toDateTimeString();
+        }
+        return parent::save($param);
+    }
+}

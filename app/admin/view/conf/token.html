@@ -1,0 +1,67 @@
+{extend name="common/base"/}
+<!-- 主體 -->
+{block name="body"}
+<form class="layui-form p-4">
+	<h3 class="pb-3">TOKEN配置</h3>
+	<table class="layui-table layui-table-form">
+		<tr>
+			<td class="layui-td-gray-2">Token簽發組織</td>
+			<td>
+				<input type="hidden" value="{$id}" name="id">
+				<input type="text" name="iss" autocomplete="off" placeholder="請輸入簽發組織" lay-reqText="請輸入簽發組織"
+					   class="layui-input" {notempty name="$config.iss" } value="{$config.iss}" {/notempty}>
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray-2">Token簽發作者
+			</td>
+			<td>
+				<input type="text" name="aud" autocomplete="off" placeholder="請輸入簽發作者" lay-reqText="請輸入簽發作者"
+					   class="layui-input" {notempty name="$config.aud" } value="{$config.aud}" {/notempty}>
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray">Token Secrect</td>
+			<td>
+				<input type="text" name="secrect" autocomplete="off" placeholder="請輸入secrect" lay-reqText="請輸入secrect"
+					   class="layui-input" {notempty name="$config.secrect" } value="{$config.secrect}" {/notempty}>
+			</td>
+		</tr>
+		<tr>
+			<td class="layui-td-gray">Token過期時間
+			</td>
+			<td>
+				<input type="text" name="exptime" autocomplete="off" placeholder="請輸入過期時間" lay-reqText="請輸入過期時間"
+					   class="layui-input" {notempty name="$config.exptime" } value="{$config.exptime}" {/notempty}>
+			</td>
+		</tr>
+	</table>
+	<div class="py-4 flex justify-center">
+		<button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="webform">立即提交</button>
+		<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+	</div>
+</form>
+{/block}
+<!-- /主體 -->
+
+<!-- 腳本 -->
+{block name="script"}
+<script>
+	const moduleInit = ['tool'];
+	function xuwenInit() {
+		var form = layui.form, tool = layui.tool;
+		//監聽提交
+		form.on('submit(webform)', function (data) {
+			let callback = function (e) {
+				layer.msg(e.msg);
+				if (e.code == 0) {
+					parent.layui.tool.close(1000);
+				}
+			}
+			tool.post("/admin/conf/edit", data.field, callback);
+			return false;
+		});
+	}
+</script>
+{/block}
+<!-- /腳本 -->

@@ -1,0 +1,84 @@
+{extend name="common/base"/}
+<!-- 主體 -->
+{block name="body"}
+<form class="layui-form p-4">
+  <h3 class="pb-3">編輯</h3>
+  <table class="layui-table layui-table-form">
+    <tr>
+      <td class="layui-td-gray">資產</td>
+      <td >{$item.currency_code}</td>
+
+      <td class="layui-td-gray">資產類型</td>
+      <td>{$item.asset_name}</td>
+    </tr>
+    <tr>
+      <td class="layui-td-gray">餘額類型<span>*</span></td>
+      <td>
+        <select name="balance_type" lay-verify="required" lay-reqText="請選擇">
+          <option value="">請選擇</option>
+          <option value="available">可用餘額</option>
+          <option value="freeze">凍結餘額</option>
+        </select>
+      </td>
+      <td class="layui-td-gray">操作類型<span>*</span></td>
+      <td>
+        <select name="operate_type" lay-verify="required" lay-reqText="請選擇">
+          <option value="">請選擇</option>
+          <option value="add">增加</option>
+          <option value="sub">減少</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td class="layui-td-gray">數量<span>*</span></td>
+      <td>
+        <input type="text" name="amount" lay-verify="required" lay-reqText="請輸入" placeholder="請輸入數量" autocomplete="off" class="layui-input">
+      </td>
+      <td class="layui-td-gray">備註</td>
+      <td>
+        <input type="text" name="remark" placeholder="請輸入" autocomplete="off" class="layui-input">
+      </td>
+    </tr>
+
+
+  </table>
+  <div class="flex justify-center py-4" >
+    <input type="hidden" name="id" value="{$item.id}"/>
+    <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="webform">立即提交</button>
+    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+  </div>
+</form>
+{/block}
+<!-- /主體 -->
+
+<!-- 腳本 -->
+{block name="script"}
+<script>
+  const DISABLED = 'layui-btn-disabled';
+  const moduleInit = ['tool'];
+  function xuwenInit() {
+    var form = layui.form,tool=layui.tool;
+    //監聽提交
+    form.on('submit(webform)', function (data) {
+      // $(':button').addClass(DISABLED); // 添加样式
+      // $(':button').attr('disabled', 'disabled');  // 添加属性
+
+      let callback = function (e) {
+        //移除禁止提交状态
+        // $(':button').removeClass(DISABLED);
+        // $(':button').removeAttr('disabled');
+
+        layer.msg(e.msg);
+        if (e.code == 0) {
+          setTimeout(function () {
+            parent.location.reload();
+          }, 1000);
+        }
+      }
+      tool.post("/admin/account/edit", data.field, callback);
+      return false;
+    });
+  }
+</script>
+{/block}
+<!-- /腳本 -->

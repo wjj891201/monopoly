@@ -1,0 +1,122 @@
+{extend name="common/base"/}
+<!-- 主體 -->
+{block name="body"}
+<form class="layui-form p-4">
+    <h3 class="pb-3">編輯</h3>
+    <table class="layui-table layui-table-form">
+        <tr>
+            <td class="layui-td-gray">顯示名稱<span>*</span></td>
+            <td>
+                <input type="text" value="{$item.display_name}" name="display_name" lay-verify="required" lay-reqText="請輸入"   class="layui-input">
+            </td>
+            <td class="layui-td-gray">小數位</td>
+            <td>
+                <input type="text" value="{$item.chain_precision}" name="chain_precision" lay-verify="required" lay-reqText="請輸入"   class="layui-input">
+            </td>
+        </tr>
+        <tr>
+            <td class="layui-td-gray">公鏈<span>*</span></td>
+            <td>
+                <select name="chain_id" lay-verify="required" lay-reqText="請選擇公鏈">
+                    <option value="">請選擇公鏈</option>
+                    {volist name="chain_list" id="v"}
+                    <option value="{$v.id}" {eq name="$item.chain_id" value="$v.id" }selected{/eq}>{$v.chain_name}
+                    </option>
+                    {/volist}
+                </select>
+            </td>
+            <td class="layui-td-gray">貨幣<span>*</span></td>
+            <td>
+                <select name="currency_id" lay-verify="required" lay-reqText="請選擇貨幣">
+                    <option value="">請選擇貨幣</option>
+                    {volist name="currency_list" id="v"}
+                    <option value="{$v.id}" {eq name="$item.currency_id" value="$v.id" }selected{/eq}>{$v.code}
+                    </option>
+                    {/volist}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td class="layui-td-gray">合約地址</td>
+            <td colspan="3">
+                <input type="text" value="{$item.contract_address}" name="contract_address"  class="layui-input">
+            </td>
+        </tr>
+        <tr>
+            <td class="layui-td-gray-2">是否可提現
+            </td>
+            <td>
+                <input type="radio" name="is_withdraw" value="1" title="是" {eq name="$item.is_withdraw" value="1" } checked{/eq}>
+                <input type="radio" name="is_withdraw" value="0" title="不是" {eq name="$item.is_withdraw" value="0" } checked{/eq}>
+            </td>
+        </tr>
+        <tr>
+            <td class="layui-td-gray-2">最小提現金額
+            </td>
+            <td>
+                <input type="text" value="{$item.min_withdraw_amount}" name="min_withdraw_amount"  class="layui-input">
+            </td>
+            <td class="layui-td-gray">最大提現金額</td>
+            <td>
+                <input type="text" value="{$item.max_withdraw_amount}" name="max_withdraw_amount"  class="layui-input">
+            </td>
+        </tr>
+        <tr>
+            <td class="layui-td-gray-2">是否可充值
+            </td>
+            <td>
+                <input type="radio" name="is_recharge" value="1" title="是" {eq name="$item.is_recharge" value="1" } checked{/eq}>
+                <input type="radio" name="is_recharge" value="0" title="不是" {eq name="$item.is_recharge" value="0" } checked{/eq}>
+            </td>
+            <td class="layui-td-gray">最小充值金額</td>
+            <td>
+                <input type="text" value="{$item.min_recharge_amount}" name="min_recharge_amount"  class="layui-input">
+            </td>
+        </tr>
+        <tr>
+            <td class="layui-td-gray">排序</td>
+            <td>
+                <input type="text" value="{$item.sort_order}" name="sort_order"  lay-reqText="請輸入"   class="layui-input">
+            </td>
+            <td class="layui-td-gray-2">顯示狀態
+            </td>
+            <td>
+                <input type="radio" name="status" value="1" title="是" {eq name="$item.status " value="1" } checked{/eq}>
+                <input type="radio" name="status" value="0" title="不是" {eq name="$item.status " value="0" } checked{/eq}>
+            </td>
+        </tr>
+
+
+    </table>
+    <div class="flex justify-center py-4" >
+        <input type="hidden" name="id" value="{$item.id}"/>
+        <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="webform">立即提交</button>
+        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+</form>
+{/block}
+<!-- /主體 -->
+
+<!-- 腳本 -->
+{block name="script"}
+<script>
+    const moduleInit = ['tool'];
+    function xuwenInit() {
+        var form = layui.form,tool=layui.tool;
+        //監聽提交
+        form.on('submit(webform)', function (data) {
+            let callback = function (e) {
+                layer.msg(e.msg);
+                if (e.code == 0) {
+                    setTimeout(function () {
+                        parent.location.reload();
+                    }, 1000);
+                }
+            }
+            tool.post("/admin/currencychain/edit", data.field, callback);
+            return false;
+        });
+    }
+</script>
+{/block}
+<!-- /腳本 -->

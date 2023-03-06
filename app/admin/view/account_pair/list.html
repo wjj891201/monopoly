@@ -1,0 +1,211 @@
+{extend name="common/base"/}
+<!-- 主體 -->
+{block name="body"}
+
+<style>
+  tbody .layui-table-cell {
+    height: auto;
+    line-height: normal;
+  }
+</style>
+<div class="p-3">
+  <table class="layui-hide" id="datalist" lay-filter="datalist"></table>
+</div>
+
+<script type="text/html" id="toolbarDemo">
+  <div class="layui-btn-container">
+    <span
+      class="layui-btn layui-btn-sm layui-btn-normal"
+      lay-event="add"
+      data-title="添加交易對"
+    >
+      +添加交易對
+    </span>
+  </div>
+</script>
+
+<script type="text/html" id="barDemo">
+  <div class="layui-btn-group">
+    <a class="layui-btn layui-btn-xs  layui-btn-normal" lay-event="edit">
+      編輯
+    </a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">刪除</a>
+  </div>
+</script>
+
+<script type="text/html" id="status">
+  <input type="checkbox" name="status" lay-skin="switch" {{# if(d.status==1){
+  }}checked {{# } }} lay-text="開啟|禁用" value={{ d.id }} lay-filter="status">
+</script>
+
+<script type="text/html" id="is_recharge">
+  <input type="checkbox" name="is_recharge" lay-skin="switch"
+  {{#if(d.is_recharge==1){ }}checked {{# } }} lay-text="開啟|禁用" value={{ d.id
+  }} lay-filter="is_recharge">
+</script>
+
+<script type="text/html" id="is_withdraw">
+  <input type="checkbox" name="is_withdraw" lay-skin="switch" {{#
+  if(d.is_withdraw==1){ }}checked {{# } }} lay-text="開啟|禁用" value={{ d.id }}
+  lay-filter="is_withdraw">
+</script>
+
+<script type="text/html" id="address">
+  <div>入金地址：{{d.input_address}}</div>
+  <div>出金地址：{{d.output_address}}</div>
+</script>
+
+<script type="text/html" id="recharge">
+  <div>充值價格：{{d.recharge_price}}</div>
+  <div>充值手續費：{{d.fee_recharge}}</div>
+  <div>最小充值：{{d.min_recharge}}</div>
+  <div>最大充值：{{d.max_recharge}}</div>
+</script>
+
+<script type="text/html" id="withdraw">
+  <div>提現價格：{{d.withdraw_price}}</div>
+  <div>提現手續費：{{d.fee_withdraw}}</div>
+  <div>最小提現：{{d.min_withdraw}}</div>
+  <div>最大提現：{{d.max_withdraw}}</div>
+</script>
+
+{/block}
+<!-- /主體 -->
+
+<!-- 腳本 -->
+{block name="script"}
+<script>
+  const moduleInit = ["tool"];
+
+  function xuwenInit() {
+    var table = layui.table,
+      tool = layui.tool,
+      form = layui.form;
+    layui.pageTable = table.render({
+      elem: "#datalist",
+      title: "交易對列表",
+      toolbar: "#toolbarDemo",
+      url: "/admin/account_pair/list",
+      page: false,
+      cols: [
+        [
+          {
+            field: "id",
+            title: "編號",
+            align: "center",
+            width: 80,
+          },
+          {
+            field: "name",
+            title: "名稱",
+            width: 100,
+          },
+          {
+            title: "地址",
+            toolbar: "#address",
+          },
+          {
+            title: "充值",
+            toolbar: "#recharge",
+            width: 200,
+          },
+          {
+            title: "提現",
+            toolbar: "#withdraw",
+            width: 200,
+          },
+          {
+            field: "sort_order",
+            title: "排序",
+            width: 80,
+          },
+          {
+            title: "狀態",
+            toolbar: "#status",
+            align: "center",
+            width: 100,
+          },
+          {
+            title: "充值",
+            align: "center",
+            toolbar: "#is_recharge",
+            width: 100,
+          },
+          {
+            title: "提現",
+            align: "center",
+            toolbar: "#is_withdraw",
+            width: 100,
+          },
+          {
+            field: "right",
+            title: "操作",
+            toolbar: "#barDemo",
+            width: 136,
+            align: "center",
+          },
+        ],
+      ],
+    });
+
+    //監聽表頭工具欄事件
+    table.on("toolbar(datalist)", function (obj) {
+      if (obj.event === "add") {
+        tool.side("/admin/account_pair/add");
+        return false;
+      }
+    });
+
+    //監聽表格行工具事件
+    table.on("tool(datalist)", function (obj) {
+      var data = obj.data;
+      if (obj.event === "edit") {
+        tool.side("/admin/account_pair/edit?id=" + obj.data.id);
+      } else if (obj.event === "del") {
+        layer.confirm(
+          "確定要刪除該記錄嗎?",
+          {
+            icon: 3,
+            title: "提示",
+          },
+          function (index) {
+            let callback = function (e) {
+              layer.msg(e.msg);
+              if (e.code == 0) {
+                obj.del();
+              }
+            };
+            tool.delete(
+              "/admin/account_pair/delete",
+              { id: data.id },
+              callback
+            );
+            layer.close(index);
+          }
+        );
+      }
+      return false;
+    });
+
+    let statusList = ["status", "is_recharge", "is_withdraw"];
+    statusList.map((item) => {
+      //监听指定开关
+      form.on("switch(" + item + ")", function (data) {
+        console.log(data);
+        let callback = function (e) {
+          layer.msg(e.msg);
+          if (e.code == 0) {
+            parent.layui.tool.close(1000);
+          }
+        };
+        tool.post(
+          "/admin/index/status",
+          { table: "account_pair", id: data.value, field: item },
+          callback
+        );
+      });
+    });
+  }
+</script>
+{/block}
+<!-- /腳本 -->

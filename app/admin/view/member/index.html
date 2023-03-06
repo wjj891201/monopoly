@@ -1,0 +1,169 @@
+{extend name="common/base"/}
+<!-- 主體 -->
+{block name="body"}
+<style>
+    tbody .layui-table-cell {
+        height: auto;
+        line-height: normal;
+    }
+</style>
+
+<div class="p-3">
+    <form class="layui-form gg-form-bar border-t border-x">
+        <div class="layui-input-inline" style="width:300px;">
+            <input type="text" name="keywords" placeholder="用戶名稱/Email" class="layui-input" autocomplete="off"/>
+        </div>
+        <div class="layui-input-inline" style="width:120px;">
+            <input type="text" class="layui-input" id="start_time" readonly placeholder="註冊開始時間" name="start_time">
+        </div>
+        ~
+        <div class="layui-input-inline" style="width:120px;">
+            <input type="text" class="layui-input" id="end_time" readonly placeholder="註冊結束時間" name="end_time">
+        </div>
+        <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="webform">提交搜索</button>
+    </form>
+
+    <table class="layui-hide" id="user" lay-filter="user"></table>
+</div>
+
+<script type="text/html" id="parent">
+    <div>
+        上級名稱：{{d.parent_name}}
+    </div>
+    <div>
+        上級角色：{{d.parent_role_name}}
+    </div>
+    <div>上級Email:{{d.parent_email}}</div>
+</script>
+
+<script type="text/html" id="status">
+    {{#  if(d.status==1){ }}
+    <input type="checkbox" name="status" lay-skin="switch" checked lay-text="開啟|禁用" value={{ d.id }} lay-filter="status" >
+    {{#  } else { }}
+    <input type="checkbox" name="status" lay-skin="switch" lay-text="開啟|禁用" value={{ d.id}} lay-filter="status">
+    {{#  } }}
+</script>
+
+
+</script>
+
+{/block}
+<!-- /主體 -->
+
+<!-- 腳本 -->
+{block name="script"}
+<script>
+    const moduleInit = ['tool'];
+
+    function xuwenInit() {
+        var tool = layui.tool, table = layui.table, laydate = layui.laydate, form = layui.form;
+        laydate.render({
+            elem: '#start_time',
+            type: 'date'
+        });
+
+        laydate.render({
+            elem: '#end_time',
+            type: 'date'
+        });
+
+        layui.pageTable = table.render({
+            elem: '#user',
+            title: '用戶列表',
+            // toolbar: '#toolbarDemo',
+            url: '/admin/member/index', //數據介面
+            page: true, //開啟分頁
+            limit: 20,
+            cols: [
+                [ //表頭
+                    {
+                        field: 'username',
+                        title: '用戶名',
+                        align: 'center',
+                        width: 150
+                    }, {
+                    field: 'role_name',
+                    title: '會員等級',
+                    align: 'center',
+                    width: 90
+                }, {
+                    field: 'email',
+                    title: '電子郵箱',
+                    align: 'center',
+                    width: 150
+                }, {
+                    field: 'parent',
+                    title: '上級信息',
+                    align: 'left',
+                    toolbar: '#parent',
+                }, {
+                    field: 'created_at',
+                    title: '註冊時間',
+                    align: 'center',
+                    width: 150
+                }, {
+                    field: 'status',
+                    title: '狀態',
+                    toolbar: '#status',
+                    align: 'center',
+                    width: 150
+                }, {
+                    field: 'right',
+                    title: '操作',
+                    align: 'center',
+                    width: 136,
+                    templet: function (d) {
+                        let btn1 = '<span class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit">編輯</span>';
+                        return '<div class="layui-btn-group">' + btn1  + '</div>';
+                    }
+                }
+                ]
+            ]
+        });
+
+        //監聽行工具事件
+        table.on('tool(user)', function (obj) {
+            var data = obj.data;
+            console.log(obj)
+            if (obj.event === 'view') {
+                tool.side('/admin/member/view?id=' + data.id);
+                return;
+            } else if (obj.event === 'edit') {
+                tool.side('/admin/member/edit?id=' + data.id);
+                return;
+            }
+
+        });
+
+        //监听指定开关
+        form.on('switch(status)', function(data){
+            let callback = function (e) {
+                layer.msg(e.msg);
+                if (e.code == 0) {
+                    parent.layui.tool.close(1000);
+                }
+            }
+            tool.post("/admin/index/status",{table:'member',id:data.value}, callback);
+
+        });
+
+
+        //監聽搜索提交
+        form.on('submit(webform)', function (data) {
+            layui.pageTable.reload({
+                where: {
+                    keywords: data.field.keywords,
+                    start_time: data.field.start_time,
+                    end_time: data.field.end_time
+                },
+                page: {
+                    curr: 1
+                }
+            });
+            return false;
+        });
+
+    }
+</script>
+{/block}
+<!-- /腳本 -->

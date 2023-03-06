@@ -1,0 +1,125 @@
+{extend name="common/base"/}
+<!-- 主體 -->
+{block name="body"}
+
+<div class="p-3">
+    <form class="layui-form gg-form-bar border-t border-x">
+        <div class="layui-input-inline" style="width:300px;">
+            <input type="text" name="keywords" placeholder="請輸入關鍵字" class="layui-input" autocomplete="off" />
+        </div>
+        <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="searchform">提交搜索</button>
+    </form>
+    <table class="layui-hide" id="datalist" lay-filter="datalist"></table>
+</div>
+
+<script type="text/html" id="status">
+    <i class="layui-icon {{#  if(d.status == 1){ }}layui-icon-ok{{#  } else { }}layui-icon-close{{#  } }}"></i>
+</script>
+
+
+<script type="text/html" id="barDemo">
+    <div class="layui-btn-group">
+        <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit">編輯</a>
+    </div>
+</script>
+
+{/block}
+<!-- /主體 -->
+
+<!-- 腳本 -->
+{block name="script"}
+<script>
+    const moduleInit = ['tool'];
+    function xuwenInit() {
+        var table = layui.table,tool = layui.tool, form = layui.form;
+        layui.pageTable = table.render({
+            elem: '#datalist',
+            title: '資產列表',
+            url: '/admin/account/index',
+            page: true,
+            limit: 20,
+            cellMinWidth: 300,
+            cols: [
+                [
+                    {
+                        field: 'id',
+                        title: '編號',
+                        align: 'center',
+                        width: 80
+                    },{
+                    field: 'username',
+                    title: '會員',
+                    align: 'center',
+                },{
+                    field: 'asset_name',
+                    title: '帳戶類型',
+                    align: 'center',
+                    width: 130
+                },{
+                    field: 'currency_code',
+                    title: '貨幣',
+                    align: 'center',
+                    width: 130
+                },{
+                    field: 'available',
+                    title: '可用餘額',
+                    align: 'center',
+                    width: 160
+                },{
+                    field: 'freeze',
+                    title: '凍結餘額',
+                    align: 'center',
+                    width: 160
+                },{
+                    field: 'status',
+                    title: '狀態',
+                    toolbar: '#status',
+                    align: 'center',
+                    width: 80
+                },{
+                    field: 'created_at',
+                    title: '創建時間',
+                    align: 'center',
+                    width: 160
+                },{
+                    field: 'updated_at',
+                    title: '更新時間',
+                    align: 'center',
+                    width: 160
+                },{
+                    fixed: 'right',
+                    field: 'right',
+                    title: '操作',
+                    toolbar: '#barDemo',
+                    width: 136,
+                    align: 'center'
+                }
+                ]
+            ]
+        });
+
+        //監聽表格行工具事件
+        table.on('tool(datalist)', function(obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {
+                tool.side('/admin/account/edit?id='+obj.data.id);
+            }
+            return false;
+        });
+
+        //監聽搜索提交
+        form.on('submit(searchform)', function(data) {
+            layui.pageTable.reload({
+                where: {
+                    keywords: data.field.keywords,
+                },
+                page: {
+                    curr: 1
+                }
+            });
+            return false;
+        });
+    }
+</script>
+{/block}
+<!-- /腳本 -->

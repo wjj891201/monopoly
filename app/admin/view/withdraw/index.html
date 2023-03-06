@@ -1,0 +1,133 @@
+{extend name="common/base"/}
+<!-- 主體 -->
+{block name="body"}
+<style>
+    tbody .layui-table-cell {
+        height: auto;
+        line-height: normal;
+    }
+</style>
+<div class="p-3">
+    <form class="layui-form gg-form-bar border-t border-x">
+        <div class="layui-input-inline" style="width:300px;">
+            <input type="text" name="keywords" placeholder="請輸入關鍵字" class="layui-input" autocomplete="off"/>
+        </div>
+        <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="searchform">提交搜索</button>
+    </form>
+    <table class="layui-hide" id="datalist" lay-filter="datalist"></table>
+</div>
+
+<script type="text/html" id="name">
+    <div>
+        幣鏈：{{d.cc_name}}
+    </div>
+    <div>
+        提現地址：{{d.to_address}}
+    </div>
+    <div>提幣數量：{{d.amount}}</div>
+    <div>手續費：{{d.fee}}</div>
+</script>
+
+<script type="text/html" id="time">
+    <div style="">
+        <div>
+            提交時間：{{d.created_at}}
+        </div>
+        <div>
+            審核時間：{{d.checked_at}}
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="barDemo">
+    <div class="layui-btn-group">
+        <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit">編輯</a>
+    </div>
+</script>
+{/block}
+<!-- /主體 -->
+
+<!-- 腳本 -->
+{block name="script"}
+<script>
+    const moduleInit = ['tool'];
+
+    function xuwenInit() {
+        var table = layui.table, tool = layui.tool, form = layui.form;
+        layui.pageTable = table.render({
+            elem: '#datalist',
+            title: '提現列表',
+            url: '/admin/withdraw/index',
+            page: true,
+            limit: 20,
+            cellMinWidth: 300,
+            cols: [
+                [
+                    {
+                        field: 'id',
+                        title: '編號',
+                        align: 'center',
+                        width: 80
+                    }, {
+                    field: 'username',
+                    title: '會員',
+                    align: 'center',
+                    width: 130
+                }, {
+                    title: '交易詳情',
+                    toolbar: '#name',
+                }, {
+                    field: 'real_amount',
+                    title: '實際到帳',
+                    align: 'center',
+                    width: 160
+                }, {
+                    field: "status_name",
+                    title: '狀態',
+                    align: 'center',
+                    width: 160
+                }, {
+                    field: 'remark',
+                    title: '備註',
+                    align: 'center',
+                    width: 200
+
+                }, {
+                    field: 'created_at',
+                    title: '時間',
+                    toolbar: '#time',
+                    width: 280
+                },{
+                    field: 'right',
+                    title: '操作',
+                    toolbar: '#barDemo',
+                    width: 136,
+                    align: 'center'
+                }
+                ]
+            ]
+        });
+        //監聽表格行工具事件
+        table.on('tool(datalist)', function(obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {
+                tool.side('/admin/withdraw/edit?id='+obj.data.id);
+            }
+            return false;
+        });
+        //監聽搜索提交
+        form.on('submit(searchform)', function (data) {
+            layui.pageTable.reload({
+                where: {
+                    keywords: data.field.keywords,
+                },
+                page: {
+                    curr: 1
+                }
+            });
+            return false;
+        });
+    }
+</script>
+{/block}
+<!-- /腳本 -->

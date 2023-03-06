@@ -1,0 +1,98 @@
+{extend name="common/base"/}
+<!-- 主體 -->
+{block name="body"}
+<div class="p-3">
+    <form class="layui-form gg-form-bar border-t border-x">
+        <div class="layui-input-inline" style="width:300px;">
+            <input type="text" name="keywords" placeholder="請輸入關鍵字" class="layui-input" autocomplete="off"/>
+        </div>
+        <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="searchform">提交搜索</button>
+    </form>
+    <table class="layui-hide" id="datalist" lay-filter="datalist"></table>
+</div>
+
+<script type="text/html" id="settled">
+    <i class="layui-icon {{#  if(d.is_settled == 1){ }}layui-icon-ok{{#  } else { }}layui-icon-close{{#  } }}"></i>
+</script>
+{/block}
+<!-- /主體 -->
+
+<!-- 腳本 -->
+{block name="script"}
+<script>
+    const moduleInit = ['tool'];
+
+    function xuwenInit() {
+        var table = layui.table, tool = layui.tool, form = layui.form;
+        layui.pageTable = table.render({
+            elem: '#datalist',
+            title: '獎勵列表',
+            url: '/admin/reward/index',
+            page: true,
+            limit: 20,
+            cellMinWidth: 300,
+            cols: [
+                [
+                    {
+                        field: 'id',
+                        title: '編號',
+                        align: 'center',
+                        width: 80
+                    }, {
+                    field: 'username',
+                    title: '會員',
+                    align: 'center',
+                    width: 130
+                }, {
+                    field: 'item',
+                    title: '場景',
+                }, {
+                    field: 'from_username',
+                    title: '來源',
+                    align: 'center',
+                    width: 160
+                }, {
+                    field: 'asset_type',
+                    title: '帳戶類型',
+                    align: 'center',
+                    width: 160
+                },  {
+                    field: 'currency_code',
+                    title: '帳戶類型',
+                    align: 'center',
+                    width: 160
+                },  {
+                    field: 'amount',
+                    title: '數量',
+                    align: 'center',
+                    width: 160
+                },{
+                    title: '是否結算',
+                    align: 'center',
+                    toolbar: "#settled",
+                    width: 160
+                }, {
+                    field: 'created_at',
+                    title: '創建時間',
+                    align: 'center',
+                    width: 180
+                }
+                ]
+            ]
+        });
+        //監聽搜索提交
+        form.on('submit(searchform)', function (data) {
+            layui.pageTable.reload({
+                where: {
+                    keywords: data.field.keywords,
+                },
+                page: {
+                    curr: 1
+                }
+            });
+            return false;
+        });
+    }
+</script>
+{/block}
+<!-- /腳本 -->

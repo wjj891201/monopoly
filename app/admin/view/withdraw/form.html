@@ -1,0 +1,101 @@
+{extend name="common/base"/}
+<!-- 主體 -->
+{block name="body"}
+<form class="layui-form p-4">
+    <h3 class="pb-3">提現處理</h3>
+    <table class="layui-table layui-table-form">
+        <tr>
+            <td class="layui-td-gray">幣鏈信息</td>
+            <td>{$cc_item.display_name}</td>
+        </tr>
+        <tr>
+            <td class="layui-td-gray">公鏈</td>
+            <td>{$chain_item.chain_name}</td>
+        </tr>
+        <tr>
+            <td class="layui-td-gray">貨幣</td>
+            <td>{$currency_item.code}</td>
+        </tr>
+        <tr>
+            <td class="layui-td-gray">幣鏈信息</td>
+            <td>{$cc_item.display_name}</td>
+        </tr>
+        <tr>
+            <td class="layui-td-gray">申請數量</td>
+            <td>{$item.amount}</td>
+        </tr>
+        <tr>
+            <td class="layui-td-gray">手續費</td>
+            <td>{$item.fee}</td>
+        </tr>
+        <tr>
+            <td class="layui-td-gray">實際到帳</td>
+            <td>{$item.real_amount}</td>
+        </tr>
+        <tr>
+            <td class="layui-td-gray">提現地址</td>
+            <td>{$item.to_address}</td>
+        </tr>
+        <tr>
+            <td class="layui-td-gray">申請時間</td>
+            <td>{$item.created_at}</td>
+        </tr>
+
+        <tr>
+            <td class="layui-td-gray">狀態<span>*</span></td>
+            <td>
+                <select name="status">
+                    <option value="created" {eq name="$item.status" value="created" } selected{/eq}>待審核</option>
+                    <option value="checked" {eq name="$item.status" value="checked" } selected{/eq}>已審核</option>
+                    <option value="refused" {eq name="$item.status" value="refused" } selected{/eq}>拒絕</option>
+                    <option value="finished" {eq name="$item.status" value="finished" } selected{/eq}>提現成功</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td class="layui-td-gray">提現單號(鏈上)</td>
+            <td>
+                <input type="text" value="{$item.tx_id}" name="tx_id" autocomplete="off" class="layui-input">
+            </td>
+        </tr>
+        <tr>
+            <td class="layui-td-gray">備註</td>
+            <td>
+                <input type="text" value="{$item.remark}" name="remark" placeholder="請輸入" autocomplete="off" class="layui-input">
+            </td>
+        </tr>
+
+    </table>
+    <div class="flex justify-center py-4">
+        <input type="hidden" name="id" value="{$item.id}"/>
+        <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="webform">立即提交</button>
+        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+</form>
+{/block}
+<!-- /主體 -->
+
+<!-- 腳本 -->
+{block name="script"}
+<script>
+    const moduleInit = ['tool'];
+
+    function xuwenInit() {
+        var form = layui.form, tool = layui.tool;
+        //監聽提交
+        form.on('submit(webform)', function (data) {
+            let callback = function (e) {
+                layer.msg(e.msg);
+                if (e.code == 0) {
+                    setTimeout(function () {
+                        parent.location.reload();
+                    }, 1000);
+                }
+            }
+            tool.post("/admin/withdraw/edit", data.field, callback);
+            return false;
+        });
+    }
+</script>
+{/block}
+<!-- /腳本 -->

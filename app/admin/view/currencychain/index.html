@@ -1,0 +1,208 @@
+{extend name="common/base"/}
+<!-- 主體 -->
+{block name="body"}
+<style>
+    tbody .layui-table-cell {
+        height: auto;
+        line-height: normal;
+    }
+</style>
+<div class="p-3">
+    <table class="layui-hide" id="datalist" lay-filter="datalist"></table>
+</div>
+
+<script type="text/html" id="status">
+
+    <input type="checkbox" name="status" lay-skin="switch" {{# if(d.status==1){ }}checked {{# } }}
+           lay-text="開啟|禁用" value={{ d.id }} lay-filter="status">
+
+</script>
+
+
+<script type="text/html" id="is_recharge">
+
+    <input type="checkbox" name="is_recharge" lay-skin="switch" {{# if(d.is_recharge==1){ }}checked {{# } }}
+           lay-text="開啟|禁用" value={{ d.id }} lay-filter="is_recharge">
+
+</script>
+
+
+<script type="text/html" id="is_withdraw">
+    <input type="checkbox" name="is_withdraw" lay-skin="switch" {{# if(d.is_withdraw==1){ }}checked {{# } }}
+           lay-text="開啟|禁用" value={{ d.id }}
+           lay-filter="is_withdraw">
+</script>
+
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <span class="layui-btn layui-btn-sm layui-btn-normal" lay-event="add" data-title="添加幣鏈">+添加幣鏈</span>
+    </div>
+</script>
+
+
+<script type="text/html" id="detail">
+    <div>
+        公鏈：{{d.chain_name}}
+    </div>
+    <div>
+        貨幣：{{d.currency_code}}
+    </div>
+    <div>合約地址：{{d.contract_address}}</div>
+</script>
+
+<script type="text/html" id="recharge">
+    <div>
+        充幣：{{# if(d.is_recharge == 1){ }}支持{{# } else { }}不支持{{# } }}
+    </div>
+    <div>
+        最小充幣：{{d.min_recharge_amount}}
+    </div>
+</script>
+<script type="text/html" id="withdraw">
+    <div>
+        提幣：{{# if(d.is_withdraw == 1){ }}支持{{# } else { }}不支持{{# } }}
+    </div>
+    <div>最小提幣：{{d.min_withdraw_amount}}</div>
+    <div>最大提幣：{{d.max_withdraw_amount}}</div>
+    <div>提幣手續費：{{d.fee_ratio}}</div>
+</script>
+
+<script type="text/html" id="barDemo">
+    <div class="layui-btn-group">
+        <a class="layui-btn layui-btn-xs  layui-btn-normal" lay-event="edit">編輯</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">刪除</a>
+    </div>
+</script>
+
+{/block}
+<!-- /主體 -->
+
+<!-- 腳本 -->
+{block name="script"}
+<script>
+    const moduleInit = ['tool'];
+
+    function xuwenInit() {
+        var table = layui.table, tool = layui.tool, form = layui.form;
+        layui.pageTable = table.render({
+            elem: '#datalist',
+            title: '幣鏈列表',
+            toolbar: '#toolbarDemo',
+            url: '/admin/currencychain/index',
+            page: true,
+            limit: 20,
+            cols: [
+                [
+                    {
+                        field: 'id',
+                        title: '編號',
+                        align: 'center',
+                        width: 80
+                    }, {
+                    field: 'display_name',
+                    title: '名稱',
+                    width: 160
+                }, {
+                    field: 'chain_name',
+                    title: '詳情',
+                    toolbar: '#detail',
+
+                }, {
+                    field: 'chain_precision',
+                    title: '小數位',
+                    align: 'center',
+                    width: 100
+                }, {
+                    title: '充幣相關',
+                    toolbar: "#recharge",
+                    width: 180
+                },{
+                    title: '提幣相關',
+                    toolbar: "#withdraw",
+                    width: 200,
+                },{
+                    field: 'sort_order',
+                    title: '排序',
+                    align: 'center',
+                    width: 80
+                }, {
+                    field: 'status',
+                    title: '狀態',
+                    toolbar: '#status',
+                    align: 'center',
+                    width: 80
+                }, {
+                    title: '充值',
+                    align: 'center',
+                    toolbar: '#is_recharge',
+                    width: 100
+                }, {
+                    title: '提現',
+                    align: 'center',
+                    toolbar: '#is_withdraw',
+                    width: 100
+                },{
+                    fixed: 'right',
+                    field: 'right',
+                    title: '操作',
+                    toolbar: '#barDemo',
+                    width: 136,
+                    align: 'center'
+                }
+                ]
+            ]
+        });
+
+        //監聽表頭工具欄事件
+        table.on('toolbar(datalist)', function (obj) {
+            if (obj.event === 'add') {
+                tool.side("/admin/currencychain/add");
+                return false;
+            }
+        });
+
+        //監聽表格行工具事件
+        table.on('tool(datalist)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {
+                tool.side('/admin/currencychain/edit?id=' + obj.data.id);
+            } else if (obj.event === 'del') {
+                layer.confirm('確定要刪除該記錄嗎?', {
+                    icon: 3,
+                    title: '提示'
+                }, function (index) {
+                    let callback = function (e) {
+                        layer.msg(e.msg);
+                        if (e.code == 0) {
+                            obj.del();
+                        }
+                    }
+                    tool.delete("/admin/currencychain/delete", {id: data.id}, callback);
+                    layer.close(index);
+                });
+            }
+            return false;
+        });
+
+        let statusList = ['status','is_recharge', 'is_withdraw'];
+        statusList.map((item) => {
+            //监听指定开关
+            form.on('switch(' + item + ')', function (data) {
+
+
+                console.log(data);
+                let callback = function (e) {
+                    layer.msg(e.msg);
+                    if (e.code == 0) {
+                        parent.layui.tool.close(1000);
+                    }
+                }
+                tool.post("/admin/index/status", {table: 'currency_chain', id: data.value, field: item}, callback);
+
+            });
+        })
+
+    }
+</script>
+{/block}
+<!-- /腳本 -->

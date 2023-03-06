@@ -1,0 +1,71 @@
+{extend name="common/base"/}
+<!-- 主體 -->
+{block name="body"}
+<form class="layui-form p-4">
+    <h3 class="pb-3">系統配置</h3>
+    <table class="layui-table layui-table-form">
+        <tr>
+            <td class="layui-td-gray-2">系統名稱<span>*</span></td>
+            <td>
+                <input type="hidden" name="id" value="{$id}">
+                <input type="text" name="admin_title" lay-verify="required" autocomplete="off" placeholder="請輸入系統名稱"
+                       lay-reqText="請輸入系統名稱" class="layui-input" {notempty name="$config.admin_title" }
+                       value="{$config.admin_title}" {/notempty}>
+            </td>
+        </tr>
+        <tr>
+            <td class="layui-td-gray">前端名稱<span>*</span>
+            </td>
+            <td>
+                <input type="text" name="title" lay-verify="required" autocomplete="off" placeholder="請輸入網站平臺名稱"
+                       lay-reqText="請輸入網站名稱" class="layui-input" {notempty name="$config.title" }
+                       value="{$config.title}" {/notempty}>
+            </td>
+        </tr>
+    </table>
+
+    <div class="flex justify-center py-4">
+        <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="webform">立即提交</button>
+        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+</form>
+{/block}
+<!-- /主體 -->
+
+<!-- 腳本 -->
+{block name="script"}
+<script>
+    const moduleInit = ['tool'];
+
+    function xuwenInit() {
+        var form = layui.form, tool = layui.tool, upload = layui.upload;
+        //監聽提交
+        form.on('submit(webform)', function (data) {
+            let callback = function (e) {
+                layer.msg(e.msg);
+                if (e.code == 0) {
+                    parent.layui.tool.close(1000);
+                }
+            }
+            tool.post("/admin/conf/edit", data.field, callback);
+            return false;
+        });
+
+        //logo上傳
+        var uploadInst = upload.render({
+            elem: '#uploadBtn',
+            url: "/admin/api/upload",
+            done: function (res) {
+                if (res.code == 1) {
+                    layer.msg('上傳失敗');
+                } else {
+                    layer.msg('上傳成功');
+                    $('#demo1 input').attr('value', res.data.filepath);
+                    $('#demo1 img').attr('src', res.data.filepath);
+                }
+            }
+        });
+    }
+</script>
+{/block}
+<!-- /腳本 -->

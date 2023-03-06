@@ -1,0 +1,1 @@
+npx tailwindcss -i ./public/static/assets/xuwen/css/input.css -o ./public/static/assets/xuwen/css/output.css --watch

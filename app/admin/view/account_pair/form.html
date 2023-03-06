@@ -1,0 +1,166 @@
+{extend name="common/base"/}
+<!-- 主體 -->
+{block name="body"}
+<style type="text/css">
+
+  [type=button]{
+    background-color: #448ff7;
+  }
+</style>
+<form class="layui-form p-4">
+  <h3 class="pb-3">編輯</h3>
+  <table class="layui-table layui-table-form">
+    <tr>
+      <td class="layui-td-gray">中文名稱<span>*</span></td>
+      <td>
+        <input type="text" value="{$item.name_cn}" name="name_cn" lay-verify="required" lay-reqText="請輸入"   class="layui-input">
+      </td>
+      <td class="layui-td-gray">英文名稱<span>*</span></td>
+      <td>
+        <input type="text" value="{$item.name_en}" name="name_en" lay-verify="required" lay-reqText="請輸入"   class="layui-input">
+      </td>
+    </tr>
+    <tr>
+      <td class="layui-td-gray">標識符<span>*</span></td>
+      <td>
+        <input type="text" name="code"  value="{$item.code}" lay-verify="required" lay-reqText="請輸入"  autocomplete="off" class="layui-input">
+      </td>
+      <td class="layui-td-gray">小數位<span>*</span></td>
+      <td>
+        <input type="text" value="{$item.decimal}" name="decimal" lay-verify="required" lay-reqText="請輸入"   class="layui-input">
+      </td>
+    </tr>
+    <tr>
+      <td class="layui-td-gray">官網<span>*</span></td>
+      <td>
+        <input type="text" value="{$item.link}"  name="link" lay-verify="required" lay-reqText="請輸入"   class="layui-input">
+      </td>
+      <td class="layui-td-gray">瀏覽器<span>*</span></td>
+      <td>
+        <input type="text"  value="{$item.explorer}"  name="explorer" lay-verify="required" lay-reqText="請輸入"   class="layui-input">
+      </td>
+    </tr>
+    <tr>
+      <td class="layui-td-gray">發行時間<span>*</span></td>
+      <td>
+        <input type="text"  value="{$item.start_at}"  name="start_at" lay-verify="required" lay-reqText="請輸入"   class="layui-input">
+      </td>
+      <td class="layui-td-gray">流通量<span>*</span></td>
+      <td>
+        <input type="text"  value="{$item.turnover}"  name="turnover" lay-verify="required" lay-reqText="請輸入"   class="layui-input">
+      </td>
+    </tr>
+    <tr>
+      <td class="layui-td-gray-2">是否可交易
+      </td>
+      <td>
+        <input type="radio" name="is_trade" value="1" title="是" {eq name="$item.is_trade" value="1" } checked{/eq}>
+        <input type="radio" name="is_trade" value="0" title="不是" {eq name="$item.is_trade" value="0" } checked{/eq}>
+      </td>
+      <td class="layui-td-gray-2">是否可充值
+      </td>
+      <td>
+        <input type="radio" name="is_recharge" value="1" title="是" {eq name="$item.is_recharge" value="1" } checked{/eq}>
+        <input type="radio" name="is_recharge" value="0" title="不是" {eq name="$item.is_recharge" value="0" } checked{/eq}>
+      </td>
+    </tr>
+    <tr>
+      <td class="layui-td-gray-2">是否可提現
+      </td>
+      <td>
+        <input type="radio" name="is_withdraw" value="1" title="是" {eq name="$item.is_withdraw" value="1" } checked{/eq}>
+        <input type="radio" name="is_withdraw" value="0" title="不是" {eq name="$item.is_withdraw" value="0" } checked{/eq}>
+      </td>
+      <td class="layui-td-gray-2">是否可轉帳
+      </td>
+      <td>
+        <input type="radio" name="is_transfer" value="1" title="是" {eq name="$item.is_transfer" value="1" } checked{/eq}>
+        <input type="radio" name="is_transfer" value="0" title="不是" {eq name="$item.is_transfer" value="0" } checked{/eq}>
+      </td>
+    </tr>
+    <tr>
+      <td class="layui-td-gray">排序</td>
+      <td>
+        <input type="text" value="{$item.sort_order}" name="sort_order"  lay-reqText="請輸入"   class="layui-input">
+      </td>
+      <td class="layui-td-gray-2">顯示狀態
+      </td>
+      <td>
+        <input type="radio" name="status" value="1" title="是" {eq name="$item.status " value="1" } checked{/eq}>
+        <input type="radio" name="status" value="0" title="不是" {eq name="$item.status " value="0" } checked{/eq}>
+      </td>
+    </tr>
+    <tr>
+      <td class="layui-td-gray-2" style="vertical-align:top;">文章簡介</td>
+      <td>
+        <textarea name="desc" placeholder="請輸入簡介，不能超過200個字" class="layui-textarea">{$item.desc}</textarea>
+      </td>
+      <td class="layui-td-gray-2" style="vertical-align:top;">封面</td>
+      <td>
+        <div class="layui-upload">
+          <button type="button" class="layui-btn layui-btn-sm" id="upload_btn_thumb">上传封面
+          </button>
+          <div class="layui-upload-list" id="upload_box_thumb"
+               style="width: 120px; height:66px; overflow: hidden;">
+            <img src="{:get_file($item.image)}"
+                 onerror="javascript:this.src='{__ASSETS__}/xuwen/images/nonepic600x360.jpg';this.onerror=null;"
+                 style="max-width: 100%; height:66px;"/>
+            <input type="hidden" name="image" value="{$item.image}">
+          </div>
+        </div>
+      </td>
+    </tr>
+
+
+  </table>
+  <div class="flex justify-center py-4" >
+    <input type="hidden" name="id" value="{$item.id}"/>
+    <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="webform">立即提交</button>
+    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+  </div>
+</form>
+{/block}
+<!-- /主體 -->
+
+<!-- 腳本 -->
+{block name="script"}
+<script>
+  const moduleInit = ['tool'];
+  function xuwenInit() {
+    var form = layui.form,tool=layui.tool;
+
+    //上传缩略图
+    var upload_thumb = layui.upload.render({
+      elem: '#upload_btn_thumb',
+      url: '/admin/api/upload',
+      done: function (res) {
+        //如果上传失败
+        if (res.code == 1) {
+          layer.msg('上传失败');
+          return false;
+        }
+        //上传成功
+        $('#upload_box_thumb input').attr('value', res.data.id);
+        $('#upload_box_thumb img').attr('src', res.data.filepath);
+      }
+    });
+
+
+
+    //監聽提交
+    form.on('submit(webform)', function (data) {
+      let callback = function (e) {
+        layer.msg(e.msg);
+        if (e.code == 0) {
+          setTimeout(function () {
+            parent.location.reload();
+          }, 1000);
+        }
+      }
+      tool.post("/admin/currency/edit", data.field, callback);
+      return false;
+    });
+  }
+</script>
+{/block}
+<!-- /腳本 -->
