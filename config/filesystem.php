@@ -3,7 +3,7 @@
 use think\facade\Env;
 
 return [
-    'url' => 'http://xwwallet.com:7888',
+    'url' => 'http://monopoly.deve',
     // 默认磁盘
     'default' => Env::get('filesystem.driver', 'local'),
     // 磁盘列表
