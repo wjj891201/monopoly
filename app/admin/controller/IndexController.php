@@ -68,21 +68,23 @@ class IndexController extends BaseController
                 ['created_at', '<=', $value['end']]
             ])->count();
 
-            $orderCount[$key] = Db::name('store_order')->where([
-                ['status', '=', 'finish'],
-                ['created_at', '>=', $value['start']],
-                ['created_at', '<=', $value['end']]
-            ])->count();
+//            $orderCount[$key] = Db::name('store_order')->where([
+//                ['status', '=', 'finish'],
+//                ['created_at', '>=', $value['start']],
+//                ['created_at', '<=', $value['end']]
+//            ])->count();
+            $orderCount[$key] = 50;
 
             $walletCount[$key] = Db::name('wallet')->where([
                 ['created_at', '>=', $value['start']],
                 ['created_at', '<=', $value['end']]
             ])->count();
 
-            $storeCount[$key] = Db::name('store')->where([
-                ['created_at', '>=', $value['start']],
-                ['created_at', '<=', $value['end']]
-            ])->count();
+//            $storeCount[$key] = Db::name('store')->where([
+//                ['created_at', '>=', $value['start']],
+//                ['created_at', '<=', $value['end']]
+//            ])->count();
+            $storeCount[$key] = 34;
         }
 
         View::assign('member_count', $memberCount);

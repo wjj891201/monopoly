@@ -2,7 +2,7 @@
 <!-- 主體 -->
 {block name="body"}
 <div class="p-3">
-    <table class="layui-hide" id="role" lay-filter="role"></table>
+    <table class="layui-hide" id="datalist" lay-filter="datalist"></table>
 </div>
 <!--<script type="text/html" id="toolbar">-->
 <!--    <div class="layui-btn-container">-->
@@ -28,7 +28,7 @@
     function xuwenInit() {
         var table = layui.table, tool = layui.tool ,form = layui.form;
         layui.pageTable = table.render({
-            elem: '#role'
+            elem: '#datalist'
             // , toolbar: '#toolbar'
             , title: '用戶等級列表'
             , url: "/admin/role/index"
@@ -55,85 +55,16 @@
             ]]
         });
 
-        table.on('tool(role)', function (obj) {
+        table.on('tool(datalist)', function (obj) {
             if (obj.event === 'edit') {
-                addExpense(obj.data.id, obj.data.name, obj.data.reward_fee, obj.data.desc);
+                tool.smallForm('/admin/role/edit?id=' + obj.data.id,'edit');
             }
         });
-
-
         //监听指定开关
         form.on('switch(status)', function(data){
             tool.post("/admin/index/status",{table:'member_role',id:data.value}, tool.reqCallBack(false));
 
         });
-
-
-        $('body').on('click', '.addNew', function () {
-            addExpense(0, '', 0, '');
-        });
-
-        function addExpense(id, name, reward_fee, desc) {
-            var biaoti = '新增等級';
-            if (id > 0) {
-                biaoti = '編輯等級';
-            }
-
-            layer.open({
-                type: 1
-                , title: biaoti
-                , area: '512px;'
-                , id: 'LAY_module' //設定一個id，防止重複彈出
-                , btn: ['確定', '取消']
-                , btnAlign: 'c'
-                , content: '<div style="padding-top:15px;">\
-                        <div class="layui-form-item">\
-                          <label class="layui-form-label">等級名稱</label>\
-                          <div class="layui-input-inline" style="width:360px;">\
-                           <input type="hidden" name="id" value="' + id + '">\
-                           <input type="text" name="name" autocomplete="off" value="' + name + '" placeholder="請輸入名稱" class="layui-input">\
-                          </div>\
-                        </div>\
-                        <div class="layui-form-item">\
-                          <label class="layui-form-label">手續費獎勵比例</label>\
-                          <div class="layui-input-inline" style="width:360px;">\
-                           <input type="text" name="reward_fee" autocomplete="off" value="' + reward_fee + '" placeholder="請輸入比例" class="layui-input">\
-                          </div>\
-                        </div>\
-                        <div class="layui-form-item">\
-                          <label class="layui-form-label">等級描述</label>\
-                          <div class="layui-input-inline" style="width:360px;">\
-                           <textarea name="desc" placeholder="請輸入等級描述，100字以內" class="layui-textarea">' + desc + '</textarea>\
-                          </div>\
-                        </div>\
-                       </div>'
-                , yes: function (index) {
-                    let id = $('#LAY_module').find('[name="id"]').val();
-                    let name = $('#LAY_module').find('[name="name"]').val();
-                    let reward_fee = $('#LAY_module').find('[name="reward_fee"]').val();
-                    let desc = $('#LAY_module').find('[name="desc"]').val();
-                    let callback = function (e) {
-                        layer.msg(e.msg);
-                        if (e.code == 0) {
-                            if (e.code == 0) {
-                                layer.close(index);
-                                layui.pageTable.reload();
-                            }
-                        }
-                    }
-                    tool.post("/admin/role/add", {
-                        id: id,
-                        name: name,
-                        reward_fee: reward_fee,
-                        desc: desc
-                    }, callback);
-                    return false;
-                }
-                , btn2: function () {
-                    layer.closeAll();
-                }
-            });
-        }
     }
 </script>
 {/block}

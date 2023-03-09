@@ -1,34 +1,26 @@
--- phpMyAdmin SQL Dump
--- version 5.1.0
--- https://www.phpmyadmin.net/
---
--- Host: localhost:8889
--- Generation Time: Mar 06, 2023 at 04:11 PM
--- Server version: 5.7.34
--- PHP Version: 7.4.21
+/*
+Navicat MySQL Data Transfer
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
+Source Server         : localhost
+Source Server Version : 50726
+Source Host           : localhost:3306
+Source Database       : monopoly
 
+Target Server Type    : MYSQL
+Target Server Version : 50726
+File Encoding         : 65001
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+Date: 2023-03-09 18:02:45
+*/
 
---
--- Database: `monopoly`
---
+SET FOREIGN_KEY_CHECKS=0;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `xw_account`
---
-
+-- ----------------------------
+-- Table structure for xw_account
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_account`;
 CREATE TABLE `xw_account` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `member_id` int(11) NOT NULL COMMENT '用戶ID',
   `currency_id` int(11) NOT NULL COMMENT '幣種ID',
   `currency_code` varchar(16) CHARACTER SET utf8 NOT NULL COMMENT '货币',
@@ -37,24 +29,25 @@ CREATE TABLE `xw_account` (
   `available` decimal(30,6) NOT NULL DEFAULT '0.000000' COMMENT '可用数量',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1启用0冻结',
   `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `member_id_2` (`member_id`,`currency_id`,`asset_type`),
+  KEY `member_id` (`member_id`),
+  KEY `asset_type` (`asset_type`),
+  KEY `currency_id` (`currency_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `xw_account`
---
+-- ----------------------------
+-- Records of xw_account
+-- ----------------------------
+INSERT INTO `xw_account` VALUES ('1', '1', '2', 'USDT', 'funding', '200.000000', '33319.000000', '1', '2023-02-24 16:15:44', '2023-03-04 18:37:48');
 
-INSERT INTO `xw_account` (`id`, `member_id`, `currency_id`, `currency_code`, `asset_type`, `freeze`, `available`, `status`, `created_at`, `updated_at`) VALUES
-(1, 1, 2, 'USDT', 'funding', '200.000000', '33319.000000', 1, '2023-02-24 16:15:44', '2023-03-04 18:37:48');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `xw_account_log`
---
-
+-- ----------------------------
+-- Table structure for xw_account_log
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_account_log`;
 CREATE TABLE `xw_account_log` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `member_id` int(11) NOT NULL,
   `scene` varchar(20) CHARACTER SET utf8 NOT NULL COMMENT '变更场景',
   `item_id` int(8) NOT NULL COMMENT '关联id',
@@ -67,37 +60,38 @@ CREATE TABLE `xw_account_log` (
   `before_amount` decimal(16,6) NOT NULL COMMENT '变更之前数量',
   `after_amount` decimal(16,6) NOT NULL COMMENT '变更之后数量',
   `remark` varchar(200) CHARACTER SET utf8 NOT NULL COMMENT '備註',
-  `created_at` datetime NOT NULL COMMENT '变更时间'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `created_at` datetime NOT NULL COMMENT '变更时间',
+  PRIMARY KEY (`id`),
+  KEY `currency_id` (`currency_id`),
+  KEY `member_id` (`member_id`),
+  KEY `scene` (`scene`),
+  KEY `asset_type` (`asset_type`)
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `xw_account_log`
---
+-- ----------------------------
+-- Records of xw_account_log
+-- ----------------------------
+INSERT INTO `xw_account_log` VALUES ('4', '1', 'funding', '8', 'sub', 'available', 'funding', '2', 'USDT', '33.000000', '33333.000000', '33300.000000', '商戶交易', '2023-02-26 15:15:26');
+INSERT INTO `xw_account_log` VALUES ('5', '1', 'funding', '9', 'sub', 'available', 'funding', '2', 'USDT', '3.000000', '33300.000000', '33297.000000', '商戶交易', '2023-02-26 15:16:22');
+INSERT INTO `xw_account_log` VALUES ('6', '1', '後台', '1', 'add', 'available', 'funding', '2', 'USDT', '1.000000', '33297.000000', '33298.000000', '', '2023-03-04 18:34:20');
+INSERT INTO `xw_account_log` VALUES ('7', '1', '後台', '1', 'add', 'available', 'funding', '2', 'USDT', '1.000000', '33298.000000', '33299.000000', '', '2023-03-04 18:34:20');
+INSERT INTO `xw_account_log` VALUES ('8', '1', '後台', '1', 'add', 'available', 'funding', '2', 'USDT', '1.000000', '33299.000000', '33300.000000', '', '2023-03-04 18:34:20');
+INSERT INTO `xw_account_log` VALUES ('9', '1', '後台', '1', 'add', 'available', 'funding', '2', 'USDT', '1.000000', '33300.000000', '33301.000000', '', '2023-03-04 18:35:21');
+INSERT INTO `xw_account_log` VALUES ('10', '1', '後台', '1', 'add', 'available', 'funding', '2', 'USDT', '1.000000', '33301.000000', '33302.000000', '', '2023-03-04 18:35:21');
+INSERT INTO `xw_account_log` VALUES ('11', '1', '後台', '1', 'add', 'available', 'funding', '2', 'USDT', '1.000000', '33302.000000', '33303.000000', '', '2023-03-04 18:35:22');
+INSERT INTO `xw_account_log` VALUES ('12', '1', '後台', '1', 'add', 'available', 'funding', '2', 'USDT', '1.000000', '33303.000000', '33304.000000', '', '2023-03-04 18:35:22');
+INSERT INTO `xw_account_log` VALUES ('13', '1', '後台', '1', 'add', 'available', 'funding', '2', 'USDT', '3.000000', '33304.000000', '33307.000000', '', '2023-03-04 18:36:07');
+INSERT INTO `xw_account_log` VALUES ('14', '1', '後台', '1', 'add', 'available', 'funding', '2', 'USDT', '3.000000', '33307.000000', '33310.000000', '', '2023-03-04 18:36:07');
+INSERT INTO `xw_account_log` VALUES ('15', '1', '後台', '1', 'add', 'available', 'funding', '2', 'USDT', '3.000000', '33310.000000', '33313.000000', '', '2023-03-04 18:36:08');
+INSERT INTO `xw_account_log` VALUES ('16', '1', '後台', '1', 'add', 'available', 'funding', '2', 'USDT', '3.000000', '33313.000000', '33316.000000', '', '2023-03-04 18:36:08');
+INSERT INTO `xw_account_log` VALUES ('17', '1', '後台', '1', 'add', 'available', 'funding', '2', 'USDT', '3.000000', '33316.000000', '33319.000000', '', '2023-03-04 18:37:48');
 
-INSERT INTO `xw_account_log` (`id`, `member_id`, `scene`, `item_id`, `operate_type`, `balance_type`, `asset_type`, `currency_id`, `currency_code`, `amount`, `before_amount`, `after_amount`, `remark`, `created_at`) VALUES
-(4, 1, 'funding', 8, 'sub', 'available', 'funding', 2, 'USDT', '33.000000', '33333.000000', '33300.000000', '商戶交易', '2023-02-26 15:15:26'),
-(5, 1, 'funding', 9, 'sub', 'available', 'funding', 2, 'USDT', '3.000000', '33300.000000', '33297.000000', '商戶交易', '2023-02-26 15:16:22'),
-(6, 1, '後台', 1, 'add', 'available', 'funding', 2, 'USDT', '1.000000', '33297.000000', '33298.000000', '', '2023-03-04 18:34:20'),
-(7, 1, '後台', 1, 'add', 'available', 'funding', 2, 'USDT', '1.000000', '33298.000000', '33299.000000', '', '2023-03-04 18:34:20'),
-(8, 1, '後台', 1, 'add', 'available', 'funding', 2, 'USDT', '1.000000', '33299.000000', '33300.000000', '', '2023-03-04 18:34:20'),
-(9, 1, '後台', 1, 'add', 'available', 'funding', 2, 'USDT', '1.000000', '33300.000000', '33301.000000', '', '2023-03-04 18:35:21'),
-(10, 1, '後台', 1, 'add', 'available', 'funding', 2, 'USDT', '1.000000', '33301.000000', '33302.000000', '', '2023-03-04 18:35:21'),
-(11, 1, '後台', 1, 'add', 'available', 'funding', 2, 'USDT', '1.000000', '33302.000000', '33303.000000', '', '2023-03-04 18:35:22'),
-(12, 1, '後台', 1, 'add', 'available', 'funding', 2, 'USDT', '1.000000', '33303.000000', '33304.000000', '', '2023-03-04 18:35:22'),
-(13, 1, '後台', 1, 'add', 'available', 'funding', 2, 'USDT', '3.000000', '33304.000000', '33307.000000', '', '2023-03-04 18:36:07'),
-(14, 1, '後台', 1, 'add', 'available', 'funding', 2, 'USDT', '3.000000', '33307.000000', '33310.000000', '', '2023-03-04 18:36:07'),
-(15, 1, '後台', 1, 'add', 'available', 'funding', 2, 'USDT', '3.000000', '33310.000000', '33313.000000', '', '2023-03-04 18:36:08'),
-(16, 1, '後台', 1, 'add', 'available', 'funding', 2, 'USDT', '3.000000', '33313.000000', '33316.000000', '', '2023-03-04 18:36:08'),
-(17, 1, '後台', 1, 'add', 'available', 'funding', 2, 'USDT', '3.000000', '33316.000000', '33319.000000', '', '2023-03-04 18:37:48');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `xw_account_pair`
---
-
+-- ----------------------------
+-- Table structure for xw_account_pair
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_account_pair`;
 CREATE TABLE `xw_account_pair` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `cc_id` int(8) NOT NULL COMMENT '幣鏈信息',
   `name` varchar(30) CHARACTER SET utf8 NOT NULL,
   `input_address` varchar(150) CHARACTER SET utf8 NOT NULL COMMENT '入金地址',
@@ -115,24 +109,22 @@ CREATE TABLE `xw_account_pair` (
   `is_recharge` tinyint(1) NOT NULL COMMENT '是否可买',
   `is_withdraw` tinyint(1) NOT NULL COMMENT '是否可卖',
   `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='资产交易对';
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `is_show` (`status`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='资产交易对';
 
---
--- Dumping data for table `xw_account_pair`
---
+-- ----------------------------
+-- Records of xw_account_pair
+-- ----------------------------
+INSERT INTO `xw_account_pair` VALUES ('1', '5', 'USDT', '0xCe29996800385753dF0db9dAc67A15277b6D54eC', '0x2e4a46d066d98231d3b9a4e8190f430635d0d01b', '0.0200', '0.0000', '0.0500', '5.0000', '0.1000', '99999999.9999', '0.0000', '0.0000', '9999', '0', '1', '0', '2022-07-23 20:27:47', '2022-10-18 13:28:21');
 
-INSERT INTO `xw_account_pair` (`id`, `cc_id`, `name`, `input_address`, `output_address`, `fee_recharge`, `fee_withdraw`, `recharge_price`, `withdraw_price`, `min_recharge`, `max_recharge`, `min_withdraw`, `max_withdraw`, `sort_order`, `status`, `is_recharge`, `is_withdraw`, `created_at`, `updated_at`) VALUES
-(1, 5, 'USDT', '0xCe29996800385753dF0db9dAc67A15277b6D54eC', '0x2e4a46d066d98231d3b9a4e8190f430635d0d01b', '0.0200', '0.0000', '0.0500', '5.0000', '0.1000', '99999999.9999', '0.0000', '0.0000', 9999, 0, 1, 0, '2022-07-23 20:27:47', '2022-10-18 13:28:21');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `xw_account_recharge`
---
-
+-- ----------------------------
+-- Table structure for xw_account_recharge
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_account_recharge`;
 CREATE TABLE `xw_account_recharge` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `member_id` int(11) NOT NULL,
   `cc_id` int(11) NOT NULL COMMENT '币链id',
   `amount` decimal(16,6) NOT NULL COMMENT '充值数量',
@@ -142,17 +134,22 @@ CREATE TABLE `xw_account_recharge` (
   `remark` varchar(50) CHARACTER SET utf8 NOT NULL,
   `status` enum('created','finished','reject','') NOT NULL,
   `is_admin` tinyint(1) NOT NULL COMMENT '是否手动添加',
-  `created_at` datetime NOT NULL
+  `created_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `trx_id` (`tx_id`(255)) USING BTREE,
+  KEY `member_id` (`member_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- --------------------------------------------------------
+-- ----------------------------
+-- Records of xw_account_recharge
+-- ----------------------------
 
---
--- Table structure for table `xw_account_reward`
---
-
+-- ----------------------------
+-- Table structure for xw_account_reward
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_account_reward`;
 CREATE TABLE `xw_account_reward` (
-  `id` int(8) NOT NULL,
+  `id` int(8) NOT NULL AUTO_INCREMENT,
   `member_id` int(8) NOT NULL,
   `item` varchar(20) CHARACTER SET utf8 NOT NULL COMMENT '类型',
   `item_id` int(20) NOT NULL COMMENT '具体数据',
@@ -163,17 +160,25 @@ CREATE TABLE `xw_account_reward` (
   `is_settled` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否结算',
   `asset_type` enum('funding') CHARACTER SET utf8 NOT NULL COMMENT '余额类型',
   `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `member_id` (`member_id`),
+  KEY `amount` (`amount`),
+  KEY `currency_id` (`currency_id`),
+  KEY `asset_type` (`asset_type`),
+  KEY `created_at` (`created_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- --------------------------------------------------------
+-- ----------------------------
+-- Records of xw_account_reward
+-- ----------------------------
 
---
--- Table structure for table `xw_account_transfer`
---
-
+-- ----------------------------
+-- Table structure for xw_account_transfer
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_account_transfer`;
 CREATE TABLE `xw_account_transfer` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `from_member` int(8) NOT NULL COMMENT '来自账户',
   `to_member` int(8) NOT NULL COMMENT '接收帐户',
   `from_asset_type` enum('funding','spot','swap','otc') CHARACTER SET utf8 NOT NULL,
@@ -184,17 +189,23 @@ CREATE TABLE `xw_account_transfer` (
   `amount` decimal(16,4) NOT NULL COMMENT '劃轉數量',
   `fee` decimal(16,4) NOT NULL,
   `created_at` datetime NOT NULL COMMENT '時間',
-  `updated_at` datetime NOT NULL
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `from_account` (`from_member`),
+  KEY `to_account` (`to_member`),
+  KEY `currency_id` (`currency_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='資金劃轉';
 
--- --------------------------------------------------------
+-- ----------------------------
+-- Records of xw_account_transfer
+-- ----------------------------
 
---
--- Table structure for table `xw_account_withdraw`
---
-
+-- ----------------------------
+-- Table structure for xw_account_withdraw
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_account_withdraw`;
 CREATE TABLE `xw_account_withdraw` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `member_id` int(11) NOT NULL,
   `cc_id` int(11) NOT NULL COMMENT '币链id',
   `amount` decimal(16,6) NOT NULL COMMENT '提现数量',
@@ -209,25 +220,24 @@ CREATE TABLE `xw_account_withdraw` (
   `checked_at` datetime DEFAULT NULL COMMENT '审核时间',
   `refused_at` datetime NOT NULL,
   `finished_at` datetime NOT NULL,
-  `updated_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `member_id` (`member_id`) USING BTREE,
+  KEY `currency_chain_id` (`cc_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `xw_account_withdraw`
---
+-- ----------------------------
+-- Records of xw_account_withdraw
+-- ----------------------------
+INSERT INTO `xw_account_withdraw` VALUES ('1', '1', '2', '11.000000', '0.000000', '0.000000', '0', '', '32423', '234', '', '2023-02-15 12:48:10', null, '2023-02-21 21:35:29', '0000-00-00 00:00:00', '2023-02-21 21:35:29');
+INSERT INTO `xw_account_withdraw` VALUES ('2', '1', '2', '11.000000', '0.000000', '0.000000', '0', '', '2342', '234', '', '2023-02-15 12:48:49', '2023-02-21 21:32:25', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2023-02-21 21:32:25');
 
-INSERT INTO `xw_account_withdraw` (`id`, `member_id`, `cc_id`, `amount`, `fee`, `real_amount`, `withdraw_address_id`, `to_address`, `remark`, `tx_id`, `status`, `created_at`, `checked_at`, `refused_at`, `finished_at`, `updated_at`) VALUES
-(1, 1, 2, '11.000000', '0.000000', '0.000000', 0, '', '32423', '234', '', '2023-02-15 12:48:10', NULL, '2023-02-21 21:35:29', '0000-00-00 00:00:00', '2023-02-21 21:35:29'),
-(2, 1, 2, '11.000000', '0.000000', '0.000000', 0, '', '2342', '234', '', '2023-02-15 12:48:49', '2023-02-21 21:32:25', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2023-02-21 21:32:25');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `xw_admin`
---
-
+-- ----------------------------
+-- Table structure for xw_admin
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_admin`;
 CREATE TABLE `xw_admin` (
-  `id` int(11) UNSIGNED NOT NULL,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(100) NOT NULL DEFAULT '',
   `password` varchar(100) NOT NULL DEFAULT '',
   `nickname` varchar(255) DEFAULT '',
@@ -243,64 +253,59 @@ CREATE TABLE `xw_admin` (
   `last_login_at` datetime NOT NULL,
   `login_num` int(11) NOT NULL DEFAULT '0',
   `last_login_ip` varchar(64) NOT NULL DEFAULT '',
-  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1正常,0禁止登录,-1删除'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='管理员表';
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1正常,0禁止登录,-1删除',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='管理员表';
 
---
--- Dumping data for table `xw_admin`
---
+-- ----------------------------
+-- Records of xw_admin
+-- ----------------------------
+INSERT INTO `xw_admin` VALUES ('1', 'admin', 'e10adc3949ba59abbe56e057f20f883e', '超级管理员', '/static/admin/images/icon.png', 'black', '2343423', '23423', 'dfasd', '1', '1', '2023-01-28 16:04:49', '2023-02-22 09:47:07', '2023-03-09 14:30:47', '72', '127.0.0.1', '1');
 
-INSERT INTO `xw_admin` (`id`, `username`, `password`, `nickname`, `thumb`, `theme`, `mobile`, `email`, `desc`, `did`, `position_id`, `created_at`, `updated_at`, `last_login_at`, `login_num`, `last_login_ip`, `status`) VALUES
-(1, 'admin', 'e10adc3949ba59abbe56e057f20f883e', '超级管理员', '/static/admin/images/icon.png', 'black', 2343423, '23423', 'dfasd', 1, 1, '2023-01-28 16:04:49', '2023-02-22 09:47:07', '2023-03-06 16:08:25', 70, '127.0.0.1', 1);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `xw_admin_department`
---
-
+-- ----------------------------
+-- Table structure for xw_admin_department
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_admin_department`;
 CREATE TABLE `xw_admin_department` (
-  `id` int(11) UNSIGNED NOT NULL,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(100) NOT NULL DEFAULT '' COMMENT '部门名称',
-  `pid` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '上级部门id',
-  `leader_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '部门负责人ID',
+  `pid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '上级部门id',
+  `leader_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '部门负责人ID',
   `phone` varchar(60) NOT NULL DEFAULT '' COMMENT '部门联系电话',
   `remark` varchar(1000) DEFAULT '' COMMENT '备注',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态：-1删除 0禁用 1启用',
   `created_at` datetime NOT NULL COMMENT '创建时间',
-  `updated_at` datetime NOT NULL COMMENT '更新时间'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='部门组织';
+  `updated_at` datetime NOT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COMMENT='部门组织';
 
---
--- Dumping data for table `xw_admin_department`
---
+-- ----------------------------
+-- Records of xw_admin_department
+-- ----------------------------
+INSERT INTO `xw_admin_department` VALUES ('1', '谷歌', '0', '0', '13688888888', '', '1', '0000-00-00 00:00:00', '2023-02-21 22:14:44');
+INSERT INTO `xw_admin_department` VALUES ('2', '广州总公司', '1', '0', '13688888889', '', '1', '0000-00-00 00:00:00', '2023-02-21 22:13:59');
+INSERT INTO `xw_admin_department` VALUES ('3', '人事部2', '2', '0', '13688888898', '', '1', '0000-00-00 00:00:00', '2023-01-30 00:00:00');
+INSERT INTO `xw_admin_department` VALUES ('4', '财务部', '2', '0', '13688888898', '', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_department` VALUES ('5', '市场部', '2', '0', '13688888978', '', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_department` VALUES ('6', '销售部', '2', '0', '13688889868', '', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_department` VALUES ('7', '技术部', '2', '0', '13688898858', '', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_department` VALUES ('8', '客服部', '2', '0', '13688988848', '', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_department` VALUES ('9', '销售一部', '6', '0', '13688998838', '', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_department` VALUES ('10', '销售二部', '6', '0', '13688999828', '', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_department` VALUES ('11', '深圳分公司', '1', '0', '13688999918', '', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_department` VALUES ('12', '人事部', '11', '0', '13688888886', '', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_department` VALUES ('13', '市场部', '11', '0', '13688888886', '', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_department` VALUES ('14', '财务部', '11', '0', '13688888876', '', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_department` VALUES ('15', '销售部', '11', '0', '13688888666', '', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
-INSERT INTO `xw_admin_department` (`id`, `title`, `pid`, `leader_id`, `phone`, `remark`, `status`, `created_at`, `updated_at`) VALUES
-(1, '谷歌', 0, 0, '13688888888', '', 1, '0000-00-00 00:00:00', '2023-02-21 22:14:44'),
-(2, '广州总公司', 1, 0, '13688888889', '', 1, '0000-00-00 00:00:00', '2023-02-21 22:13:59'),
-(3, '人事部2', 2, 0, '13688888898', '', 1, '0000-00-00 00:00:00', '2023-01-30 00:00:00'),
-(4, '财务部', 2, 0, '13688888898', '', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(5, '市场部', 2, 0, '13688888978', '', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(6, '销售部', 2, 0, '13688889868', '', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(7, '技术部', 2, 0, '13688898858', '', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(8, '客服部', 2, 0, '13688988848', '', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(9, '销售一部', 6, 0, '13688998838', '', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(10, '销售二部', 6, 0, '13688999828', '', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(11, '深圳分公司', 1, 0, '13688999918', '', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(12, '人事部', 11, 0, '13688888886', '', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(13, '市场部', 11, 0, '13688888886', '', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(14, '财务部', 11, 0, '13688888876', '', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(15, '销售部', 11, 0, '13688888666', '', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `xw_admin_log`
---
-
+-- ----------------------------
+-- Table structure for xw_admin_log
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_admin_log`;
 CREATE TABLE `xw_admin_log` (
-  `id` int(11) UNSIGNED NOT NULL COMMENT 'ID',
-  `uid` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '用户ID',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `uid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '用户ID',
   `username` varchar(255) NOT NULL DEFAULT '' COMMENT '昵称',
   `type` varchar(80) NOT NULL DEFAULT '' COMMENT '操作类型',
   `action` varchar(80) NOT NULL DEFAULT '' COMMENT '操作动作',
@@ -312,28 +317,46 @@ CREATE TABLE `xw_admin_log` (
   `function` varchar(32) NOT NULL DEFAULT '' COMMENT '方法',
   `rule_menu` varchar(255) NOT NULL DEFAULT '' COMMENT '节点权限路径',
   `ip` varchar(64) NOT NULL DEFAULT '' COMMENT '登录ip',
-  `item_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '操作数据id',
+  `item_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '操作数据id',
   `param` text COMMENT '参数json格式',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0删除 1正常',
-  `created_at` datetime NOT NULL COMMENT '创建时间'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='后台操作日志表';
+  `created_at` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COMMENT='后台操作日志表';
 
---
--- Dumping data for table `xw_admin_log`
---
+-- ----------------------------
+-- Records of xw_admin_log
+-- ----------------------------
+INSERT INTO `xw_admin_log` VALUES ('1', '1', 'admin', 'delete', '刪除', '功能菜單', '刪除', '超级管理员在2023-03-06 16:10:10刪除了功能菜單', 'admin', 'admin_menu', 'delete', '', '127.0.0.1', '161', '{\"id\":161,\"pid\":0,\"src\":\"\",\"title\":\"\\u5546\\u5bb6\\u7ba1\\u7406\",\"name\":\"\\u5546\\u5bb6\\u7ba1\\u7406\",\"icon\":\"bi-cart3\",\"menu\":1,\"sort_order\":9999,\"status\":1,\"module\":\"\",\"crud\":\"\",\"created_at\":\"2023-02-26 11:18:55\",\"updated_at\":\"2023-02-26 11:18:55\"}', '1', '2023-03-06 16:10:10');
+INSERT INTO `xw_admin_log` VALUES ('2', '1', 'admin', 'login', '登錄', '系統', '', '超级管理员在2023-03-07 14:58:08登錄了系統', 'admin', 'login', 'login', '', '127.0.0.1', '1', '{\"last_login_at\":\"2023-03-07 14:58:08\",\"last_login_ip\":\"127.0.0.1\",\"login_num\":71}', '1', '2023-03-07 14:58:08');
+INSERT INTO `xw_admin_log` VALUES ('3', '1', 'admin', 'edit', '編輯', '配置詳情', '編輯', '超级管理员在2023-03-09 09:15:21編輯了配置詳情', 'admin', 'conf', 'edit', '', '127.0.0.1', '1', '{\"id\":\"1\",\"admin_title\":\"\\u5927\\u5bcc\\u7fc1\\u5f8c\\u53f0\",\"title\":\"\\u5927\\u5bcc\\u7fc1\"}', '1', '2023-03-09 09:15:21');
+INSERT INTO `xw_admin_log` VALUES ('4', '1', 'admin', 'login', '登錄', '系統', '', '超级管理员在2023-03-09 14:30:47登錄了系統', 'admin', 'login', 'login', '', '127.0.0.1', '1', '{\"last_login_at\":\"2023-03-09 14:30:47\",\"last_login_ip\":\"127.0.0.1\",\"login_num\":72}', '1', '2023-03-09 14:30:47');
+INSERT INTO `xw_admin_log` VALUES ('5', '1', 'admin', 'delete', '刪除', '文章', '刪除', '超级管理员在2023-03-09 15:44:03刪除了文章', 'admin', 'article', 'delete', '', '127.0.0.1', '9', '{\"id\":9,\"lang\":\"\",\"cate_id\":2,\"title\":\"sdfa\",\"desc\":\"sdfasdfsdfadsf\",\"image\":22,\"content\":\"<p>dsfasdf<\\/p>\",\"read\":0,\"type\":0,\"sort_order\":0,\"status\":1,\"admin_id\":1,\"created_at\":\"0000-00-00 00:00:00\",\"updated_at\":\"2023-02-21 20:52:19\"}', '1', '2023-03-09 15:44:03');
+INSERT INTO `xw_admin_log` VALUES ('6', '1', 'admin', 'delete', '刪除', '文章', '刪除', '超级管理员在2023-03-09 15:48:02刪除了文章', 'admin', 'article', 'delete', '', '127.0.0.1', '1', '{\"id\":1,\"lang\":\"\",\"cate_id\":1,\"title\":\"23423\",\"desc\":\"23423\",\"image\":15,\"content\":\"<p>23423423<\\/p>\",\"read\":0,\"type\":0,\"sort_order\":234,\"status\":1,\"admin_id\":1,\"created_at\":\"2023-02-11 10:12:33\",\"updated_at\":\"2023-02-11 10:12:43\"}', '1', '2023-03-09 15:48:02');
+INSERT INTO `xw_admin_log` VALUES ('7', '1', 'admin', 'delete', '刪除', '文章', '刪除', '超级管理员在2023-03-09 15:48:05刪除了文章', 'admin', 'article', 'delete', '', '127.0.0.1', '2', '{\"id\":2,\"lang\":\"\",\"cate_id\":1,\"title\":\"\\u6e2c\\u8a66\",\"desc\":\"334322\",\"image\":16,\"content\":\"<p>23423423423<\\/p>\",\"read\":0,\"type\":0,\"sort_order\":3,\"status\":1,\"admin_id\":1,\"created_at\":\"2023-02-11 10:25:19\",\"updated_at\":\"2023-02-11 10:25:28\"}', '1', '2023-03-09 15:48:05');
+INSERT INTO `xw_admin_log` VALUES ('8', '1', 'admin', 'delete', '刪除', '文章', '刪除', '超级管理员在2023-03-09 15:48:07刪除了文章', 'admin', 'article', 'delete', '', '127.0.0.1', '3', '{\"id\":3,\"lang\":\"\",\"cate_id\":1,\"title\":\"sdfsdf\",\"desc\":\"2342342\",\"image\":17,\"content\":\"<p>32423423423<\\/p>\",\"read\":0,\"type\":0,\"sort_order\":23423,\"status\":1,\"admin_id\":1,\"created_at\":\"2023-02-11 10:26:35\",\"updated_at\":\"2023-02-11 10:26:35\"}', '1', '2023-03-09 15:48:07');
+INSERT INTO `xw_admin_log` VALUES ('9', '1', 'admin', 'delete', '刪除', '文章', '刪除', '超级管理员在2023-03-09 15:48:14刪除了文章', 'admin', 'article', 'delete', '', '127.0.0.1', '4', '{\"id\":4,\"lang\":\"\",\"cate_id\":1,\"title\":\"sdf\",\"desc\":\"sdf\",\"image\":0,\"content\":\"<p>sdfaf<\\/p>\",\"read\":0,\"type\":0,\"sort_order\":0,\"status\":1,\"admin_id\":1,\"created_at\":\"2023-02-11 10:29:09\",\"updated_at\":\"2023-02-11 17:38:51\"}', '1', '2023-03-09 15:48:14');
+INSERT INTO `xw_admin_log` VALUES ('10', '1', 'admin', 'delete', '刪除', '文章', '刪除', '超级管理员在2023-03-09 15:48:18刪除了文章', 'admin', 'article', 'delete', '', '127.0.0.1', '5', '{\"id\":5,\"lang\":\"\",\"cate_id\":4,\"title\":\"\\u5167\\u5bb91\",\"desc\":\"\",\"image\":0,\"content\":\"<p>\\u5167\\u5bb91\\u5167\\u5bb91\\u5167\\u5bb91\\u5167\\u5bb91<\\/p>\",\"read\":0,\"type\":0,\"sort_order\":0,\"status\":1,\"admin_id\":1,\"created_at\":\"2023-02-13 15:16:39\",\"updated_at\":\"2023-02-17 14:55:47\"}', '1', '2023-03-09 15:48:18');
+INSERT INTO `xw_admin_log` VALUES ('11', '1', 'admin', 'delete', '刪除', '文章', '刪除', '超级管理员在2023-03-09 15:48:22刪除了文章', 'admin', 'article', 'delete', '', '127.0.0.1', '6', '{\"id\":6,\"lang\":\"\",\"cate_id\":4,\"title\":\"\\u5167\\u5bb92\",\"desc\":\"\",\"image\":0,\"content\":\"<p>\\u5167\\u5bb92<span style=\\\"font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Oxygen, Ubuntu, Cantarell, \'Open Sans\', \'Helvetica Neue\', sans-serif;\\\">\\u5167\\u5bb92<\\/span><span style=\\\"font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Oxygen, Ubuntu, Cantarell, \'Open Sans\', \'Helvetica Neue\', sans-serif;\\\">\\u5167\\u5bb92<\\/span><span style=\\\"font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Oxygen, Ubuntu, Cantarell, \'Open Sans\', \'Helvetica Neue\', sans-serif;\\\">\\u5167\\u5bb92<\\/span><span style=\\\"font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Oxygen, Ubuntu, Cantarell, \'Open Sans\', \'Helvetica Neue\', sans-serif;\\\">\\u5167\\u5bb92<\\/span><\\/p>\",\"read\":0,\"type\":0,\"sort_order\":0,\"status\":1,\"admin_id\":1,\"created_at\":\"2023-02-13 15:16:55\",\"updated_at\":\"2023-02-13 15:16:55\"}', '1', '2023-03-09 15:48:22');
+INSERT INTO `xw_admin_log` VALUES ('12', '1', 'admin', 'delete', '刪除', '文章', '刪除', '超级管理员在2023-03-09 15:48:24刪除了文章', 'admin', 'article', 'delete', '', '127.0.0.1', '7', '{\"id\":7,\"lang\":\"\",\"cate_id\":6,\"title\":\"\\u6e2c\\u8a66\\u516c\\u544a\",\"desc\":\"\",\"image\":0,\"content\":\"<p>\\u6e2c\\u8a66\\u516c\\u544a\\u6e2c\\u8a66\\u516c\\u544a\\u6e2c\\u8a66\\u516c\\u544a\\u6e2c\\u8a66\\u516c\\u544a\\u6e2c\\u8a66\\u516c\\u544a<\\/p>\",\"read\":0,\"type\":0,\"sort_order\":0,\"status\":1,\"admin_id\":1,\"created_at\":\"2023-02-15 16:30:46\",\"updated_at\":\"2023-02-15 16:30:46\"}', '1', '2023-03-09 15:48:24');
+INSERT INTO `xw_admin_log` VALUES ('13', '1', 'admin', 'delete', '刪除', '文章', '刪除', '超级管理员在2023-03-09 15:48:26刪除了文章', 'admin', 'article', 'delete', '', '127.0.0.1', '10', '{\"id\":10,\"lang\":\"\",\"cate_id\":4,\"title\":\"sdfas\",\"desc\":\"sdfadsf\",\"image\":0,\"content\":\"<p>sdfsadf<\\/p>\",\"read\":0,\"type\":0,\"sort_order\":0,\"status\":1,\"admin_id\":1,\"created_at\":\"2023-02-21 20:52:13\",\"updated_at\":\"2023-02-21 20:52:13\"}', '1', '2023-03-09 15:48:26');
+INSERT INTO `xw_admin_log` VALUES ('14', '1', 'admin', 'delete', '刪除', '文章', '刪除', '超级管理员在2023-03-09 15:48:28刪除了文章', 'admin', 'article', 'delete', '', '127.0.0.1', '11', '{\"id\":11,\"lang\":\"\",\"cate_id\":7,\"title\":\"\\u6e2c\\u8a66\\u6700\\u65b0\\u8cc7\\u8a0a\",\"desc\":\"\\u6e2c\\u8a66\\u6700\\u65b0\\u8cc7\\u8a0a\\u6e2c\\u8a66\\u6700\\u65b0\\u8cc7\\u8a0a\",\"image\":24,\"content\":\"<p>\\u6e2c\\u8a66\\u6700\\u65b0\\u8cc7\\u8a0a\\u6e2c\\u8a66\\u6700\\u65b0\\u8cc7\\u8a0a\\u6e2c\\u8a66\\u6700\\u65b0\\u8cc7\\u8a0a\\u6e2c\\u8a66\\u6700\\u65b0\\u8cc7\\u8a0a\\u6e2c\\u8a66\\u6700\\u65b0\\u8cc7\\u8a0a\\u6e2c\\u8a66\\u6700\\u65b0\\u8cc7\\u8a0a\\u6e2c\\u8a66\\u6700\\u65b0\\u8cc7\\u8a0a\\u6e2c\\u8a66\\u6700\\u65b0\\u8cc7\\u8a0a<\\/p>\",\"read\":0,\"type\":0,\"sort_order\":0,\"status\":1,\"admin_id\":1,\"created_at\":\"2023-02-26 10:58:50\",\"updated_at\":\"2023-02-26 10:58:50\"}', '1', '2023-03-09 15:48:28');
+INSERT INTO `xw_admin_log` VALUES ('15', '1', 'admin', 'delete', '刪除', '文章', '刪除', '超级管理员在2023-03-09 15:48:31刪除了文章', 'admin', 'article', 'delete', '', '127.0.0.1', '12', '{\"id\":12,\"lang\":\"\",\"cate_id\":7,\"title\":\"\\u6e2c\\u8a66\\u6700\\u65b0\\u8cc7\\u8a0a2\",\"desc\":\"\\u6e2c\\u8a66\\u6700\\u65b0\\u8cc7\\u8a0a2\\u6e2c\\u8a66\\u6700\\u65b0\\u8cc7\\u8a0a2\\u6e2c\\u8a66\\u6700\\u65b0\\u8cc7\\u8a0a2\",\"image\":27,\"content\":\"<p>\\u6e2c\\u8a66\\u6700\\u65b0\\u8cc7\\u8a0a2\\u6e2c\\u8a66\\u6700\\u65b0\\u8cc7\\u8a0a2\\u6e2c\\u8a66\\u6700\\u65b0\\u8cc7\\u8a0a2\\u6e2c\\u8a66\\u6700\\u65b0\\u8cc7\\u8a0a2<img src=\\\"\\/storage\\/202302\\/3bc6466ed4b5d7a3cfe6ce9e2af5c42c.png\\\" alt=\\\"\\\" width=\\\"1000\\\" height=\\\"600\\\" \\/><\\/p>\",\"read\":0,\"type\":0,\"sort_order\":0,\"status\":1,\"admin_id\":1,\"created_at\":\"2023-02-26 10:59:37\",\"updated_at\":\"2023-02-26 10:59:37\"}', '1', '2023-03-09 15:48:31');
+INSERT INTO `xw_admin_log` VALUES ('16', '1', 'admin', 'delete', '刪除', '文章分類', '刪除', '超级管理员在2023-03-09 15:48:46刪除了文章分類', 'admin', 'article_cate', 'delete', '', '127.0.0.1', '2', '{\"id\":2,\"pid\":1,\"title\":\"sdf\",\"desc\":\"aafs\",\"sort_order\":0,\"status\":1,\"created_at\":\"2023-02-09 21:23:39\",\"updated_at\":\"2023-02-09 21:23:39\"}', '1', '2023-03-09 15:48:46');
+INSERT INTO `xw_admin_log` VALUES ('17', '1', 'admin', 'delete', '刪除', '文章分類', '刪除', '超级管理员在2023-03-09 15:48:48刪除了文章分類', 'admin', 'article_cate', 'delete', '', '127.0.0.1', '1', '{\"id\":1,\"pid\":0,\"title\":\"\\u6e2c\\u8a66\",\"desc\":\"\",\"sort_order\":999,\"status\":1,\"created_at\":\"2023-02-07 20:56:06\",\"updated_at\":\"2023-02-10 21:45:48\"}', '1', '2023-03-09 15:48:48');
+INSERT INTO `xw_admin_log` VALUES ('18', '1', 'admin', 'delete', '刪除', '文章分類', '刪除', '超级管理员在2023-03-09 15:51:18刪除了文章分類', 'admin', 'article_cate', 'delete', '', '127.0.0.1', '5', '{\"id\":5,\"pid\":3,\"title\":\"\\u5206\\u985e2\",\"desc\":\"\",\"sort_order\":0,\"status\":1,\"created_at\":\"2023-02-13 15:16:18\",\"updated_at\":\"2023-02-13 15:16:18\"}', '1', '2023-03-09 15:51:18');
+INSERT INTO `xw_admin_log` VALUES ('19', '1', 'admin', 'delete', '刪除', '文章分類', '刪除', '超级管理员在2023-03-09 15:51:20刪除了文章分類', 'admin', 'article_cate', 'delete', '', '127.0.0.1', '4', '{\"id\":4,\"pid\":3,\"title\":\"\\u5206\\u985e1\",\"desc\":\"\",\"sort_order\":0,\"status\":1,\"created_at\":\"2023-02-13 15:16:12\",\"updated_at\":\"2023-02-13 15:16:12\"}', '1', '2023-03-09 15:51:20');
+INSERT INTO `xw_admin_log` VALUES ('20', '1', 'admin', 'delete', '刪除', '文章分類', '刪除', '超级管理员在2023-03-09 15:51:23刪除了文章分類', 'admin', 'article_cate', 'delete', '', '127.0.0.1', '3', '{\"id\":3,\"pid\":0,\"title\":\"\\u5e6b\\u52a9\\u4e2d\\u5fc3\",\"desc\":\"\",\"sort_order\":0,\"status\":1,\"created_at\":\"2023-02-13 15:15:57\",\"updated_at\":\"2023-02-13 15:15:57\"}', '1', '2023-03-09 15:51:23');
+INSERT INTO `xw_admin_log` VALUES ('21', '1', 'admin', 'add', '新增', '文章分類', '新建', '超级管理员在2023-03-09 15:52:22新增了文章分類', 'admin', 'article_cate', 'add', '', '127.0.0.1', '8', '{\"pid\":\"0\",\"sort_order\":\"0\",\"title\":\"\\u4fc3\\u92b7\\u6d3b\\u52d5\",\"desc\":\"\\u4fc3\\u92b7\\u6d3b\\u52d5\",\"id\":\"0\"}', '1', '2023-03-09 15:52:22');
+INSERT INTO `xw_admin_log` VALUES ('22', '1', 'admin', 'add', '新增', '配置項', '新建/編輯', '超级管理员在2023-03-09 16:33:36新增了配置項', 'admin', 'conf', 'add', '', '127.0.0.1', '3', '{\"id\":\"0\",\"title\":\"\\u5927\\u5bcc\\u7fc1\\u53c3\\u6578\",\"status\":\"1\",\"name\":\"parameter\",\"created_at\":\"2023-03-09 16:33:36\"}', '1', '2023-03-09 16:33:36');
 
-INSERT INTO `xw_admin_log` (`id`, `uid`, `username`, `type`, `action`, `subject`, `title`, `content`, `module`, `controller`, `function`, `rule_menu`, `ip`, `item_id`, `param`, `status`, `created_at`) VALUES
-(1, 1, 'admin', 'delete', '刪除', '功能菜單', '刪除', '超级管理员在2023-03-06 16:10:10刪除了功能菜單', 'admin', 'admin_menu', 'delete', '', '127.0.0.1', 161, '{\"id\":161,\"pid\":0,\"src\":\"\",\"title\":\"\\u5546\\u5bb6\\u7ba1\\u7406\",\"name\":\"\\u5546\\u5bb6\\u7ba1\\u7406\",\"icon\":\"bi-cart3\",\"menu\":1,\"sort_order\":9999,\"status\":1,\"module\":\"\",\"crud\":\"\",\"created_at\":\"2023-02-26 11:18:55\",\"updated_at\":\"2023-02-26 11:18:55\"}', 1, '2023-03-06 16:10:10');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `xw_admin_menu`
---
-
+-- ----------------------------
+-- Table structure for xw_admin_menu
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_admin_menu`;
 CREATE TABLE `xw_admin_menu` (
-  `id` int(11) UNSIGNED NOT NULL,
-  `pid` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '父id',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `pid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '父id',
   `src` varchar(255) NOT NULL DEFAULT '' COMMENT 'url鏈接',
   `title` varchar(255) NOT NULL DEFAULT '' COMMENT '名稱',
   `name` varchar(255) NOT NULL DEFAULT '' COMMENT '日誌操作名稱',
@@ -344,179 +367,168 @@ CREATE TABLE `xw_admin_menu` (
   `module` varchar(255) NOT NULL DEFAULT '' COMMENT '所屬模組',
   `crud` varchar(255) NOT NULL DEFAULT '' COMMENT 'crud標識',
   `created_at` datetime NOT NULL COMMENT '創建時間',
-  `updated_at` datetime NOT NULL COMMENT '更新時間'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='菜單及許可權表';
+  `updated_at` datetime NOT NULL COMMENT '更新時間',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=177 DEFAULT CHARSET=utf8mb4 COMMENT='菜單及許可權表';
 
---
--- Dumping data for table `xw_admin_menu`
---
+-- ----------------------------
+-- Records of xw_admin_menu
+-- ----------------------------
+INSERT INTO `xw_admin_menu` VALUES ('1', '0', '', '系統管理', '系統管理', 'bi-gear', '1', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('2', '0', '', '系統工具', '系統工具', 'bi-briefcase', '1', '2', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('3', '0', '', '廣告管理', '廣告管理', 'bi-box', '1', '3', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('4', '0', '', '用戶管理', '用戶管理', 'bi-people', '1', '4', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('5', '0', '', '資訊中心', '資訊中心', 'bi-journal-text', '1', '7', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('8', '0', '', '單 頁 面', '單 頁 面', 'bi-stickies', '1', '8', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('9', '1', 'admin/conf/index', '系統配置', '系統配置', '', '1', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('10', '9', 'admin/conf/add', '新建/編輯', '配置項', '', '2', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('11', '9', 'admin/conf/delete', '刪除', '配置項', '', '2', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('12', '9', 'admin/conf/edit', '編輯', '配置詳情', '', '2', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('17', '1', 'admin/admin_menu/index', '功能菜單', '功能菜單', '', '1', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('18', '17', 'admin/admin_menu/add', '新建', '功能菜單', '', '2', '1', '1', '', '', '0000-00-00 00:00:00', '2023-02-21 22:38:07');
+INSERT INTO `xw_admin_menu` VALUES ('19', '17', 'admin/admin_menu/delete', '刪除', '功能菜單', '', '2', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('20', '1', 'admin/admin_role/index', '角色管理', '角色管理', '', '1', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('21', '20', 'admin/admin_role/add', '新建', '角色管理', '', '2', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('22', '20', 'admin/admin_role/delete', '刪除', '角色管理', '', '2', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('23', '1', 'admin/admin_department/index', '部門架構', '部門', '', '1', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('24', '23', 'admin/admin_department/add', '新建/編輯', '部門', '', '2', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('25', '23', 'admin/admin_department/delete', '刪除', '部門', '', '2', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('26', '1', 'admin/admin_position/index', '崗位職稱', '崗位職稱', '', '1', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('27', '26', 'admin/admin_position/add', '新建/編輯', '崗位職稱', '', '2', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('28', '26', 'admin/admin_position/delete', '刪除', '崗位職稱', '', '2', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('29', '1', 'admin/admin/index', '系統用戶', '系統用戶', '', '1', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('30', '29', 'admin/admin/add', '添加', '系統用戶', '', '2', '1', '1', '', '', '0000-00-00 00:00:00', '2023-02-21 22:50:07');
+INSERT INTO `xw_admin_menu` VALUES ('31', '29', 'admin/admin/view', '查看', '系統用戶', '', '2', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('32', '29', 'admin/admin/delete', '刪除', '系統用戶', '', '2', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('33', '2', 'admin/admin_log/index', '操作日誌', '操作日誌', '', '1', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('58', '3', 'admin/banner/cate_list', '廣告位', '輪播組', '', '1', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('59', '58', 'admin/banner/cate_add', '新建/編輯', '輪播組', '', '2', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('60', '58', 'admin/banner/cate_delete', '刪除', '輪播組', '', '2', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('61', '3', 'admin/banner/list', '輪播廣告管理', '輪播圖', '', '2', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('62', '61', 'admin/banner/add', '新建/編輯', '輪播圖', '', '2', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('63', '61', 'admin/banner/delete', '刪除', '輪播圖', '', '2', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('72', '4', 'admin/role/index', '用戶等級', '用戶等級', '', '1', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('73', '72', 'admin/role/add', '新建/編輯', '用戶等級', '', '2', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('74', '72', 'admin/role/disable', '禁用/啟用', '用戶等級', '', '2', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('75', '4', 'admin/member/index', '用戶管理', '用戶', '', '1', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('76', '75', 'admin/member/edit', '編輯', '用戶資訊', '', '2', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('77', '75', 'admin/member/view', '查看', '用戶資訊', '', '2', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('78', '75', 'admin/member/disable', '禁用/啟用', '用戶', '', '2', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('80', '4', 'admin/member/log', '操作日誌', '用戶操作日誌', '', '1', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('81', '5', 'admin/article_cate/index', '文章分類', '文章分類', '', '1', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('82', '81', 'admin/article_cate/add', '新建', '文章分類', '', '2', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('83', '81', 'admin/article_cate/edit', '編輯', '文章分類', '', '2', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('84', '81', 'admin/article_cate/delete', '刪除', '文章分類', '', '2', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('85', '5', 'admin/article/index', '文章列表', '文章', '', '1', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('86', '85', 'admin/article/add', '新建', '文章', '', '2', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('87', '85', 'admin/article/edit', '編輯', '文章', '', '2', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('89', '85', 'admin/article/delete', '刪除', '文章', '', '2', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('108', '8', 'admin/page/index', '單頁面列表', '單頁面', '', '1', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('109', '108', 'admin/page/add', '新建', '單頁面', '', '2', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('110', '108', 'admin/page/edit', '編輯', '單頁面', '', '2', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('111', '108', 'admin/page/delete', '刪除', '單頁面', '', '2', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('112', '3', 'admin/banner/info', '輪播廣告管理', '輪播圖', '', '2', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('113', '0', '', '幣鏈管理', '幣鏈管理', 'bi-x-diamond', '1', '5', '1', '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('114', '113', 'admin/currency/index', '貨幣管理', '貨幣管理', '', '1', '9999', '1', '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('115', '113', 'admin/chain/index', '公鏈管理', '公鏈管理', '', '1', '9999', '1', '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('116', '113', 'admin/currencychain/index', '幣鏈管理', '幣鏈管理', '', '1', '9999', '1', '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('117', '114', 'admin/currency/add', '新建', '貨幣管理', '', '2', '9999', '1', '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('118', '114', 'admin/currency/edit', '編輯', '貨幣管理', '', '2', '9999', '1', '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('119', '114', 'admin/currency/delete', '刪除', '貨幣管理', '', '2', '9999', '1', '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('120', '115', 'admin/chain/delete', '刪除', '公鏈管理', '', '2', '9999', '1', '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('121', '115', 'admin/chain/edit', '編輯', '公鏈管理', '', '2', '9999', '1', '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('122', '115', 'admin/chain/add', '新建', '公鏈管理', '', '2', '9999', '1', '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('123', '116', 'admin/currencychain/add', '新建', '幣鏈管理', '', '2', '9999', '1', '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('125', '116', 'admin/currencychain/delete', '刪除', '幣鏈管理', '', '2', '9999', '1', '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('126', '0', '', '資產管理', '資產管理', 'bi-window-desktop', '1', '6', '1', '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('127', '126', 'admin/account/index', '資產列表', '資產列表', '', '1', '9999', '1', '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('128', '126', 'admin/account_log/index', '資產日誌', '資產日誌', '', '1', '9999', '1', '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('129', '126', 'admin/withdraw/index', '提現列表', '提現列表', '', '1', '9999', '1', '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('130', '126', 'admin/recharge/index', '充值列表', '充值列表', '', '1', '9999', '1', '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('131', '126', 'admin/transfer/index', '內轉列表', '內轉列表', '', '1', '9999', '0', '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('132', '126', 'admin/reward/index', '獎勵列表', '獎勵列表', '', '1', '9999', '1', '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('133', '127', 'admin/account/edit', '編輯', '資產列表', '', '2', '9999', '1', '', '', '2023-02-06 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('134', '129', 'admin/withdraw/edit', '編輯', '提現列表', '', '2', '9999', '1', '', '', '2023-02-06 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('135', '116', 'admin/currencychain/edit', '編輯', '幣鏈管理', '', '2', '9999', '1', '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('153', '20', 'admin/admin_role/edit', '編輯', '角色管理', '', '2', '9999', '1', '', '', '2023-02-21 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('154', '17', 'admin/admin_menu/edit', '編輯', '功能菜單', '', '2', '1', '1', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_menu` VALUES ('158', '29', 'admin/admin/edit', '修改', '系統用戶', '', '2', '9999', '1', '', '', '2023-02-21 22:50:32', '2023-02-21 22:50:32');
+INSERT INTO `xw_admin_menu` VALUES ('159', '0', '', '錢包管理', '錢包管理', 'bi-wallet', '1', '9999', '1', '', '', '2023-02-22 19:54:15', '2023-02-22 19:54:15');
+INSERT INTO `xw_admin_menu` VALUES ('160', '159', 'admin/wallet/list', '地址管理', '錢包管理', '', '1', '9999', '1', '', '', '2023-02-22 19:54:40', '2023-02-22 19:54:40');
+INSERT INTO `xw_admin_menu` VALUES ('173', '126', 'admin/account_pair/list', '資產交易對', '資產管理', '', '1', '9999', '1', '', '', '2023-02-27 19:43:47', '2023-02-27 19:43:47');
+INSERT INTO `xw_admin_menu` VALUES ('174', '173', 'admin/account_pair/add', '新建', '資產管理', '', '2', '9999', '1', '', '', '2023-02-27 19:44:06', '2023-02-27 19:44:06');
+INSERT INTO `xw_admin_menu` VALUES ('175', '173', 'admin/account_pair/edit', '編輯', '資產管理', '', '2', '9999', '1', '', '', '2023-02-27 19:44:23', '2023-02-27 19:44:23');
+INSERT INTO `xw_admin_menu` VALUES ('176', '173', 'admin/account_pair/delete', '刪除', '資產管理', '', '2', '9999', '1', '', '', '2023-02-27 19:44:42', '2023-02-27 19:44:42');
 
-INSERT INTO `xw_admin_menu` (`id`, `pid`, `src`, `title`, `name`, `icon`, `menu`, `sort_order`, `status`, `module`, `crud`, `created_at`, `updated_at`) VALUES
-(1, 0, '', '系統管理', '系統管理', 'bi-gear', 1, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(2, 0, '', '系統工具', '系統工具', 'bi-briefcase', 1, 2, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(3, 0, '', '廣告管理', '廣告管理', 'bi-box', 1, 3, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(4, 0, '', '用戶管理', '用戶管理', 'bi-people', 1, 4, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(5, 0, '', '資訊中心', '資訊中心', 'bi-journal-text', 1, 7, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(8, 0, '', '單 頁 面', '單 頁 面', 'bi-stickies', 1, 8, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(9, 1, 'admin/conf/index', '系統配置', '系統配置', '', 1, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(10, 9, 'admin/conf/add', '新建/編輯', '配置項', '', 2, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(11, 9, 'admin/conf/delete', '刪除', '配置項', '', 2, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(12, 9, 'admin/conf/edit', '編輯', '配置詳情', '', 2, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(17, 1, 'admin/admin_menu/index', '功能菜單', '功能菜單', '', 1, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(18, 17, 'admin/admin_menu/add', '新建', '功能菜單', '', 2, 1, 1, '', '', '0000-00-00 00:00:00', '2023-02-21 22:38:07'),
-(19, 17, 'admin/admin_menu/delete', '刪除', '功能菜單', '', 2, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(20, 1, 'admin/admin_role/index', '角色管理', '角色管理', '', 1, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(21, 20, 'admin/admin_role/add', '新建', '角色管理', '', 2, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(22, 20, 'admin/admin_role/delete', '刪除', '角色管理', '', 2, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(23, 1, 'admin/admin_department/index', '部門架構', '部門', '', 1, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(24, 23, 'admin/admin_department/add', '新建/編輯', '部門', '', 2, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(25, 23, 'admin/admin_department/delete', '刪除', '部門', '', 2, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(26, 1, 'admin/admin_position/index', '崗位職稱', '崗位職稱', '', 1, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(27, 26, 'admin/admin_position/add', '新建/編輯', '崗位職稱', '', 2, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(28, 26, 'admin/admin_position/delete', '刪除', '崗位職稱', '', 2, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(29, 1, 'admin/admin/index', '系統用戶', '系統用戶', '', 1, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(30, 29, 'admin/admin/add', '添加', '系統用戶', '', 2, 1, 1, '', '', '0000-00-00 00:00:00', '2023-02-21 22:50:07'),
-(31, 29, 'admin/admin/view', '查看', '系統用戶', '', 2, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(32, 29, 'admin/admin/delete', '刪除', '系統用戶', '', 2, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(33, 2, 'admin/admin_log/index', '操作日誌', '操作日誌', '', 1, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(58, 3, 'admin/banner/cate_list', '廣告位', '輪播組', '', 1, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(59, 58, 'admin/banner/cate_add', '新建/編輯', '輪播組', '', 2, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(60, 58, 'admin/banner/cate_delete', '刪除', '輪播組', '', 2, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(61, 3, 'admin/banner/list', '輪播廣告管理', '輪播圖', '', 2, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(62, 61, 'admin/banner/add', '新建/編輯', '輪播圖', '', 2, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(63, 61, 'admin/banner/delete', '刪除', '輪播圖', '', 2, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(72, 4, 'admin/role/index', '用戶等級', '用戶等級', '', 1, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(73, 72, 'admin/role/add', '新建/編輯', '用戶等級', '', 2, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(74, 72, 'admin/role/disable', '禁用/啟用', '用戶等級', '', 2, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(75, 4, 'admin/member/index', '用戶管理', '用戶', '', 1, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(76, 75, 'admin/member/edit', '編輯', '用戶資訊', '', 2, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(77, 75, 'admin/member/view', '查看', '用戶資訊', '', 2, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(78, 75, 'admin/member/disable', '禁用/啟用', '用戶', '', 2, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(80, 4, 'admin/member/log', '操作日誌', '用戶操作日誌', '', 1, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(81, 5, 'admin/article_cate/index', '文章分類', '文章分類', '', 1, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(82, 81, 'admin/article_cate/add', '新建', '文章分類', '', 2, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(83, 81, 'admin/article_cate/edit', '編輯', '文章分類', '', 2, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(84, 81, 'admin/article_cate/delete', '刪除', '文章分類', '', 2, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(85, 5, 'admin/article/index', '文章列表', '文章', '', 1, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(86, 85, 'admin/article/add', '新建', '文章', '', 2, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(87, 85, 'admin/article/edit', '編輯', '文章', '', 2, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(89, 85, 'admin/article/delete', '刪除', '文章', '', 2, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(108, 8, 'admin/page/index', '單頁面列表', '單頁面', '', 1, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(109, 108, 'admin/page/add', '新建', '單頁面', '', 2, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(110, 108, 'admin/page/edit', '編輯', '單頁面', '', 2, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(111, 108, 'admin/page/delete', '刪除', '單頁面', '', 2, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(112, 3, 'admin/banner/info', '輪播廣告管理', '輪播圖', '', 2, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(113, 0, '', '幣鏈管理', '幣鏈管理', 'bi-x-diamond', 1, 5, 1, '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00'),
-(114, 113, 'admin/currency/index', '貨幣管理', '貨幣管理', '', 1, 9999, 1, '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00'),
-(115, 113, 'admin/chain/index', '公鏈管理', '公鏈管理', '', 1, 9999, 1, '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00'),
-(116, 113, 'admin/currencychain/index', '幣鏈管理', '幣鏈管理', '', 1, 9999, 1, '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00'),
-(117, 114, 'admin/currency/add', '新建', '貨幣管理', '', 2, 9999, 1, '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00'),
-(118, 114, 'admin/currency/edit', '編輯', '貨幣管理', '', 2, 9999, 1, '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00'),
-(119, 114, 'admin/currency/delete', '刪除', '貨幣管理', '', 2, 9999, 1, '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00'),
-(120, 115, 'admin/chain/delete', '刪除', '公鏈管理', '', 2, 9999, 1, '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00'),
-(121, 115, 'admin/chain/edit', '編輯', '公鏈管理', '', 2, 9999, 1, '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00'),
-(122, 115, 'admin/chain/add', '新建', '公鏈管理', '', 2, 9999, 1, '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00'),
-(123, 116, 'admin/currencychain/add', '新建', '幣鏈管理', '', 2, 9999, 1, '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00'),
-(125, 116, 'admin/currencychain/delete', '刪除', '幣鏈管理', '', 2, 9999, 1, '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00'),
-(126, 0, '', '資產管理', '資產管理', 'bi-window-desktop', 1, 6, 1, '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00'),
-(127, 126, 'admin/account/index', '資產列表', '資產列表', '', 1, 9999, 1, '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00'),
-(128, 126, 'admin/account_log/index', '資產日誌', '資產日誌', '', 1, 9999, 1, '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00'),
-(129, 126, 'admin/withdraw/index', '提現列表', '提現列表', '', 1, 9999, 1, '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00'),
-(130, 126, 'admin/recharge/index', '充值列表', '充值列表', '', 1, 9999, 1, '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00'),
-(131, 126, 'admin/transfer/index', '內轉列表', '內轉列表', '', 1, 9999, 0, '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00'),
-(132, 126, 'admin/reward/index', '獎勵列表', '獎勵列表', '', 1, 9999, 1, '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00'),
-(133, 127, 'admin/account/edit', '編輯', '資產列表', '', 2, 9999, 1, '', '', '2023-02-06 00:00:00', '0000-00-00 00:00:00'),
-(134, 129, 'admin/withdraw/edit', '編輯', '提現列表', '', 2, 9999, 1, '', '', '2023-02-06 00:00:00', '0000-00-00 00:00:00'),
-(135, 116, 'admin/currencychain/edit', '編輯', '幣鏈管理', '', 2, 9999, 1, '', '', '2023-02-02 00:00:00', '0000-00-00 00:00:00'),
-(153, 20, 'admin/admin_role/edit', '編輯', '角色管理', '', 2, 9999, 1, '', '', '2023-02-21 00:00:00', '0000-00-00 00:00:00'),
-(154, 17, 'admin/admin_menu/edit', '編輯', '功能菜單', '', 2, 1, 1, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(158, 29, 'admin/admin/edit', '修改', '系統用戶', '', 2, 9999, 1, '', '', '2023-02-21 22:50:32', '2023-02-21 22:50:32'),
-(159, 0, '', '錢包管理', '錢包管理', 'bi-wallet', 1, 9999, 1, '', '', '2023-02-22 19:54:15', '2023-02-22 19:54:15'),
-(160, 159, 'admin/wallet/list', '地址管理', '錢包管理', '', 1, 9999, 1, '', '', '2023-02-22 19:54:40', '2023-02-22 19:54:40'),
-(173, 126, 'admin/account_pair/list', '資產交易對', '資產管理', '', 1, 9999, 1, '', '', '2023-02-27 19:43:47', '2023-02-27 19:43:47'),
-(174, 173, 'admin/account_pair/add', '新建', '資產管理', '', 2, 9999, 1, '', '', '2023-02-27 19:44:06', '2023-02-27 19:44:06'),
-(175, 173, 'admin/account_pair/edit', '編輯', '資產管理', '', 2, 9999, 1, '', '', '2023-02-27 19:44:23', '2023-02-27 19:44:23'),
-(176, 173, 'admin/account_pair/delete', '刪除', '資產管理', '', 2, 9999, 1, '', '', '2023-02-27 19:44:42', '2023-02-27 19:44:42');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `xw_admin_position`
---
-
+-- ----------------------------
+-- Table structure for xw_admin_position
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_admin_position`;
 CREATE TABLE `xw_admin_position` (
-  `id` int(11) UNSIGNED NOT NULL,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(100) NOT NULL DEFAULT '' COMMENT '岗位名称',
   `remark` varchar(1000) DEFAULT '' COMMENT '备注',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态：-1删除 0禁用 1启用',
   `created_at` datetime NOT NULL COMMENT '创建时间',
-  `updated_at` datetime NOT NULL COMMENT '更新时间'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='岗位职称';
+  `updated_at` datetime NOT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COMMENT='岗位职称';
 
---
--- Dumping data for table `xw_admin_position`
---
+-- ----------------------------
+-- Records of xw_admin_position
+-- ----------------------------
+INSERT INTO `xw_admin_position` VALUES ('1', '董事長', '董事長', '1', '2023-01-30 15:44:12', '2023-01-30 15:44:12');
+INSERT INTO `xw_admin_position` VALUES ('2', '行政長官', '行政長官', '1', '2023-01-30 15:44:12', '2023-01-30 15:44:12');
+INSERT INTO `xw_admin_position` VALUES ('3', '開發工程師', '開發工程師', '1', '2023-01-30 15:44:12', '2023-01-30 15:44:12');
+INSERT INTO `xw_admin_position` VALUES ('4', '新聞編輯', '新聞編輯人员', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_position` VALUES ('5', 'sdfa', 'sdfasdf', '1', '2023-02-21 22:31:17', '2023-02-21 22:31:17');
 
-INSERT INTO `xw_admin_position` (`id`, `title`, `remark`, `status`, `created_at`, `updated_at`) VALUES
-(1, '董事長', '董事長', 1, '2023-01-30 15:44:12', '2023-01-30 15:44:12'),
-(2, '行政長官', '行政長官', 1, '2023-01-30 15:44:12', '2023-01-30 15:44:12'),
-(3, '開發工程師', '開發工程師', 1, '2023-01-30 15:44:12', '2023-01-30 15:44:12'),
-(4, '新聞編輯', '新聞編輯人员', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(5, 'sdfa', 'sdfasdf', 1, '2023-02-21 22:31:17', '2023-02-21 22:31:17');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `xw_admin_role`
---
-
+-- ----------------------------
+-- Table structure for xw_admin_role
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_admin_role`;
 CREATE TABLE `xw_admin_role` (
-  `id` int(11) UNSIGNED NOT NULL,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL DEFAULT '',
   `status` tinyint(1) NOT NULL DEFAULT '1',
   `rules` varchar(1000) DEFAULT '' COMMENT '用户组拥有的规则id， 多个规则","隔开',
   `desc` text COMMENT '备注',
   `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='权限分组表';
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COMMENT='权限分组表';
 
---
--- Dumping data for table `xw_admin_role`
---
+-- ----------------------------
+-- Records of xw_admin_role
+-- ----------------------------
+INSERT INTO `xw_admin_role` VALUES ('1', '超级管理员', '1', '1,9,10,11,12,17,18,19,154,20,21,22,153,23,24,25,26,27,28,29,30,31,32,158,2,33,3,58,59,60,61,62,63,112,4,72,73,74,75,76,77,78,80,113,114,117,118,119,115,120,121,122,116,123,125,135,126,127,133,128,129,134,130,132,173,174,175,176,5,81,82,83,84,85,86,87,89,8,108,109,110,111,159,160,161,162,163,164,165,166,167,168,169,170,171,172', '超级管理员，系统自动分配所有可操作权限及菜单。', '2023-01-30 21:09:03', '2023-02-27 19:44:51');
+INSERT INTO `xw_admin_role` VALUES ('2', '测试角色', '1', '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,81,83', '测试角色', '2023-01-30 21:09:08', '2023-01-30 21:09:10');
 
-INSERT INTO `xw_admin_role` (`id`, `title`, `status`, `rules`, `desc`, `created_at`, `updated_at`) VALUES
-(1, '超级管理员', 1, '1,9,10,11,12,17,18,19,154,20,21,22,153,23,24,25,26,27,28,29,30,31,32,158,2,33,3,58,59,60,61,62,63,112,4,72,73,74,75,76,77,78,80,113,114,117,118,119,115,120,121,122,116,123,125,135,126,127,133,128,129,134,130,132,173,174,175,176,5,81,82,83,84,85,86,87,89,8,108,109,110,111,159,160,161,162,163,164,165,166,167,168,169,170,171,172', '超级管理员，系统自动分配所有可操作权限及菜单。', '2023-01-30 21:09:03', '2023-02-27 19:44:51'),
-(2, '测试角色', 1, '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,81,83', '测试角色', '2023-01-30 21:09:08', '2023-01-30 21:09:10');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `xw_admin_role_access`
---
-
+-- ----------------------------
+-- Table structure for xw_admin_role_access
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_admin_role_access`;
 CREATE TABLE `xw_admin_role_access` (
-  `uid` int(11) UNSIGNED DEFAULT NULL,
+  `uid` int(11) unsigned DEFAULT NULL,
   `role_id` int(11) DEFAULT NULL,
   `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL
+  `updated_at` datetime NOT NULL,
+  UNIQUE KEY `uid_group_id` (`uid`,`role_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='权限分组和管理员的关联表';
 
---
--- Dumping data for table `xw_admin_role_access`
---
+-- ----------------------------
+-- Records of xw_admin_role_access
+-- ----------------------------
+INSERT INTO `xw_admin_role_access` VALUES ('2', '3', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `xw_admin_role_access` VALUES ('1', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
-INSERT INTO `xw_admin_role_access` (`uid`, `role_id`, `created_at`, `updated_at`) VALUES
-(2, 3, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(1, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `xw_article`
---
-
+-- ----------------------------
+-- Table structure for xw_article
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_article`;
 CREATE TABLE `xw_article` (
-  `id` int(11) UNSIGNED NOT NULL,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `lang` varchar(20) NOT NULL,
   `cate_id` int(11) NOT NULL DEFAULT '0' COMMENT '所属分类',
   `title` varchar(255) NOT NULL DEFAULT '' COMMENT '标题',
@@ -527,68 +539,49 @@ CREATE TABLE `xw_article` (
   `type` tinyint(2) NOT NULL DEFAULT '0' COMMENT '属性:1~10',
   `sort_order` int(114) NOT NULL DEFAULT '9999' COMMENT '排序',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态:1正常,0下架',
-  `admin_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '创建人',
+  `admin_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建人',
   `created_at` datetime NOT NULL COMMENT '创建时间',
-  `updated_at` datetime NOT NULL COMMENT '更新时间'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='文章詳情';
+  `updated_at` datetime NOT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `cate_id` (`cate_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COMMENT='文章詳情';
 
---
--- Dumping data for table `xw_article`
---
+-- ----------------------------
+-- Records of xw_article
+-- ----------------------------
 
-INSERT INTO `xw_article` (`id`, `lang`, `cate_id`, `title`, `desc`, `image`, `content`, `read`, `type`, `sort_order`, `status`, `admin_id`, `created_at`, `updated_at`) VALUES
-(1, '', 1, '23423', '23423', 15, '<p>23423423</p>', 0, 0, 234, 1, 1, '2023-02-11 10:12:33', '2023-02-11 10:12:43'),
-(2, '', 1, '測試', '334322', 16, '<p>23423423423</p>', 0, 0, 3, 1, 1, '2023-02-11 10:25:19', '2023-02-11 10:25:28'),
-(3, '', 1, 'sdfsdf', '2342342', 17, '<p>32423423423</p>', 0, 0, 23423, 1, 1, '2023-02-11 10:26:35', '2023-02-11 10:26:35'),
-(4, '', 1, 'sdf', 'sdf', 0, '<p>sdfaf</p>', 0, 0, 0, 1, 1, '2023-02-11 10:29:09', '2023-02-11 17:38:51'),
-(5, '', 4, '內容1', '', 0, '<p>內容1內容1內容1內容1</p>', 0, 0, 0, 1, 1, '2023-02-13 15:16:39', '2023-02-17 14:55:47'),
-(6, '', 4, '內容2', '', 0, '<p>內容2<span style=\"font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Oxygen, Ubuntu, Cantarell, \'Open Sans\', \'Helvetica Neue\', sans-serif;\">內容2</span><span style=\"font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Oxygen, Ubuntu, Cantarell, \'Open Sans\', \'Helvetica Neue\', sans-serif;\">內容2</span><span style=\"font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Oxygen, Ubuntu, Cantarell, \'Open Sans\', \'Helvetica Neue\', sans-serif;\">內容2</span><span style=\"font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Oxygen, Ubuntu, Cantarell, \'Open Sans\', \'Helvetica Neue\', sans-serif;\">內容2</span></p>', 0, 0, 0, 1, 1, '2023-02-13 15:16:55', '2023-02-13 15:16:55'),
-(7, '', 6, '測試公告', '', 0, '<p>測試公告測試公告測試公告測試公告測試公告</p>', 0, 0, 0, 1, 1, '2023-02-15 16:30:46', '2023-02-15 16:30:46'),
-(9, '', 2, 'sdfa', 'sdfasdfsdfadsf', 22, '<p>dsfasdf</p>', 0, 0, 0, 1, 1, '0000-00-00 00:00:00', '2023-02-21 20:52:19'),
-(10, '', 4, 'sdfas', 'sdfadsf', 0, '<p>sdfsadf</p>', 0, 0, 0, 1, 1, '2023-02-21 20:52:13', '2023-02-21 20:52:13'),
-(11, '', 7, '測試最新資訊', '測試最新資訊測試最新資訊', 24, '<p>測試最新資訊測試最新資訊測試最新資訊測試最新資訊測試最新資訊測試最新資訊測試最新資訊測試最新資訊</p>', 0, 0, 0, 1, 1, '2023-02-26 10:58:50', '2023-02-26 10:58:50'),
-(12, '', 7, '測試最新資訊2', '測試最新資訊2測試最新資訊2測試最新資訊2', 27, '<p>測試最新資訊2測試最新資訊2測試最新資訊2測試最新資訊2<img src=\"/storage/202302/3bc6466ed4b5d7a3cfe6ce9e2af5c42c.png\" alt=\"\" width=\"1000\" height=\"600\" /></p>', 0, 0, 0, 1, 1, '2023-02-26 10:59:37', '2023-02-26 10:59:37');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `xw_article_cate`
---
-
+-- ----------------------------
+-- Table structure for xw_article_cate
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_article_cate`;
 CREATE TABLE `xw_article_cate` (
-  `id` int(11) UNSIGNED NOT NULL,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `pid` int(11) NOT NULL DEFAULT '0' COMMENT '父类ID',
   `title` varchar(255) NOT NULL DEFAULT '' COMMENT '分类名称',
   `desc` varchar(1000) DEFAULT '' COMMENT '描述',
   `sort_order` int(5) NOT NULL DEFAULT '9999' COMMENT '排序',
   `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` datetime NOT NULL COMMENT '添加时间',
-  `updated_at` datetime NOT NULL COMMENT '修改时间'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='文章分类';
+  `updated_at` datetime NOT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`),
+  KEY `pid` (`pid`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COMMENT='文章分类';
 
---
--- Dumping data for table `xw_article_cate`
---
+-- ----------------------------
+-- Records of xw_article_cate
+-- ----------------------------
+INSERT INTO `xw_article_cate` VALUES ('6', '0', '公告', '', '0', '1', '2023-02-15 16:30:26', '2023-02-15 16:30:26');
+INSERT INTO `xw_article_cate` VALUES ('7', '0', '最新資訊', '', '0', '1', '2023-02-26 10:57:13', '2023-02-26 10:57:13');
+INSERT INTO `xw_article_cate` VALUES ('8', '0', '促銷活動', '促銷活動', '0', '1', '2023-03-09 15:52:22', '2023-03-09 15:52:22');
 
-INSERT INTO `xw_article_cate` (`id`, `pid`, `title`, `desc`, `sort_order`, `status`, `created_at`, `updated_at`) VALUES
-(1, 0, '測試', '', 999, 1, '2023-02-07 20:56:06', '2023-02-10 21:45:48'),
-(2, 1, 'sdf', 'aafs', 0, 1, '2023-02-09 21:23:39', '2023-02-09 21:23:39'),
-(3, 0, '幫助中心', '', 0, 1, '2023-02-13 15:15:57', '2023-02-13 15:15:57'),
-(4, 3, '分類1', '', 0, 1, '2023-02-13 15:16:12', '2023-02-13 15:16:12'),
-(5, 3, '分類2', '', 0, 1, '2023-02-13 15:16:18', '2023-02-13 15:16:18'),
-(6, 0, '公告', '', 0, 1, '2023-02-15 16:30:26', '2023-02-15 16:30:26'),
-(7, 0, '最新資訊', '', 0, 1, '2023-02-26 10:57:13', '2023-02-26 10:57:13');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `xw_banner`
---
-
+-- ----------------------------
+-- Table structure for xw_banner
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_banner`;
 CREATE TABLE `xw_banner` (
-  `id` int(11) UNSIGNED NOT NULL,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `lang` varchar(30) NOT NULL,
-  `cate_id` int(11) UNSIGNED NOT NULL DEFAULT '0',
+  `cate_id` int(11) unsigned NOT NULL DEFAULT '0',
   `title` varchar(255) DEFAULT NULL,
   `desc` varchar(1000) DEFAULT NULL,
   `img` varchar(255) NOT NULL DEFAULT '',
@@ -596,40 +589,42 @@ CREATE TABLE `xw_banner` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1可用-1禁用',
   `sort_order` int(4) NOT NULL DEFAULT '9999',
   `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `cate_id` (`cate_id`),
+  KEY `lang` (`lang`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='幻灯片详情表';
 
--- --------------------------------------------------------
+-- ----------------------------
+-- Records of xw_banner
+-- ----------------------------
 
---
--- Table structure for table `xw_banner_cate`
---
-
+-- ----------------------------
+-- Table structure for xw_banner_cate
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_banner_cate`;
 CREATE TABLE `xw_banner_cate` (
-  `id` int(11) UNSIGNED NOT NULL,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL DEFAULT '',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1可用-1禁用',
   `desc` varchar(1000) DEFAULT NULL,
   `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='幻灯片表';
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COMMENT='幻灯片表';
 
---
--- Dumping data for table `xw_banner_cate`
---
+-- ----------------------------
+-- Records of xw_banner_cate
+-- ----------------------------
+INSERT INTO `xw_banner_cate` VALUES ('1', '首页轮播', '1', '首页轮播组。', '2023-02-08 19:47:40', '2023-02-11 00:00:00');
+INSERT INTO `xw_banner_cate` VALUES ('2', '测试', '1', '11', '2023-02-08 00:00:00', '2023-02-10 00:00:00');
 
-INSERT INTO `xw_banner_cate` (`id`, `title`, `status`, `desc`, `created_at`, `updated_at`) VALUES
-(1, '首页轮播', 1, '首页轮播组。', '2023-02-08 19:47:40', '2023-02-11 00:00:00'),
-(2, '测试', 1, '11', '2023-02-08 00:00:00', '2023-02-10 00:00:00');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `xw_chain`
---
-
+-- ----------------------------
+-- Table structure for xw_chain
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_chain`;
 CREATE TABLE `xw_chain` (
-  `id` int(8) NOT NULL,
+  `id` int(8) NOT NULL AUTO_INCREMENT,
   `chain_name` varchar(50) CHARACTER SET utf8 NOT NULL COMMENT '链名称',
   `base_chain` varchar(50) CHARACTER SET utf8 NOT NULL COMMENT '底层链名称',
   `base_chain_protocol` varchar(50) CHARACTER SET utf8 NOT NULL COMMENT '底层链协议',
@@ -641,50 +636,45 @@ CREATE TABLE `xw_chain` (
   `bg_color` varchar(10) CHARACTER SET utf8 NOT NULL COMMENT '背景色',
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '链的状态',
   `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `xw_chain`
---
+-- ----------------------------
+-- Records of xw_chain
+-- ----------------------------
+INSERT INTO `xw_chain` VALUES ('1', '以太坊链', 'ETH', 'ERC20', '1', '', '9997', '#FFFFFF', '#d1d5db', '#3e5bf2', '1', null, null);
+INSERT INTO `xw_chain` VALUES ('2', '波場', 'TRX', 'TRC20', '0', '', '9998', '#FFFFFF', '#d1d5db', '#d80917', '1', null, null);
+INSERT INTO `xw_chain` VALUES ('3', '幣安智能鏈', 'BSC', 'BEP20', '1', '', '9999', '#181A20', '#707A8A', '#f3ba2f', '1', null, null);
 
-INSERT INTO `xw_chain` (`id`, `chain_name`, `base_chain`, `base_chain_protocol`, `has_0x`, `rpc_url`, `sort_order`, `text_color`, `address_color`, `bg_color`, `status`, `created_at`, `updated_at`) VALUES
-(1, '以太坊链', 'ETH', 'ERC20', 1, '', 9997, '#FFFFFF', '#d1d5db', '#3e5bf2', 1, NULL, NULL),
-(2, '波場', 'TRX', 'TRC20', 0, '', 9998, '#FFFFFF', '#d1d5db', '#d80917', 1, NULL, NULL),
-(3, '幣安智能鏈', 'BSC', 'BEP20', 1, '', 9999, '#181A20', '#707A8A', '#f3ba2f', 1, NULL, NULL);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `xw_config`
---
-
+-- ----------------------------
+-- Table structure for xw_config
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_config`;
 CREATE TABLE `xw_config` (
-  `id` int(11) UNSIGNED NOT NULL,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL DEFAULT '' COMMENT '配置名称',
   `name` varchar(255) NOT NULL DEFAULT '' COMMENT '配置标识',
   `content` text COMMENT '配置内容',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态：0禁用 1启用',
   `created_at` datetime NOT NULL COMMENT '创建时间',
-  `updated_at` datetime NOT NULL COMMENT '更新时间'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统配置表';
+  `updated_at` datetime NOT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COMMENT='系统配置表';
 
---
--- Dumping data for table `xw_config`
---
+-- ----------------------------
+-- Records of xw_config
+-- ----------------------------
+INSERT INTO `xw_config` VALUES ('1', '基本配置', 'base', 'a:3:{s:2:\"id\";s:1:\"1\";s:11:\"admin_title\";s:15:\"大富翁後台\";s:5:\"title\";s:9:\"大富翁\";}', '1', '2023-01-28 15:25:55', '2023-03-09 09:15:21');
+INSERT INTO `xw_config` VALUES ('2', 'apiToken', 'token', 'a:5:{s:2:\"id\";s:1:\"2\";s:3:\"iss\";s:6:\"234234\";s:3:\"aud\";s:5:\"23423\";s:7:\"secrect\";s:6:\"dsfsdf\";s:7:\"exptime\";s:5:\"36000\";}', '1', '2023-01-28 15:25:55', '2023-02-21 21:45:12');
+INSERT INTO `xw_config` VALUES ('3', '大富翁參數', 'parameter', null, '1', '2023-03-09 16:33:36', '0000-00-00 00:00:00');
 
-INSERT INTO `xw_config` (`id`, `title`, `name`, `content`, `status`, `created_at`, `updated_at`) VALUES
-(1, '基本配置', 'base', 'a:3:{s:2:\"id\";s:1:\"1\";s:11:\"admin_title\";s:12:\"蜜蜂後台\";s:5:\"title\";s:12:\"蜜蜂錢包\";}', 1, '2023-01-28 15:25:55', '2023-03-01 14:34:14'),
-(2, 'apiToken', 'token', 'a:5:{s:2:\"id\";s:1:\"2\";s:3:\"iss\";s:6:\"234234\";s:3:\"aud\";s:5:\"23423\";s:7:\"secrect\";s:6:\"dsfsdf\";s:7:\"exptime\";s:5:\"36000\";}', 1, '2023-01-28 15:25:55', '2023-02-21 21:45:12');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `xw_currency`
---
-
+-- ----------------------------
+-- Table structure for xw_currency
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_currency`;
 CREATE TABLE `xw_currency` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `image` varchar(255) CHARACTER SET utf8 NOT NULL COMMENT '代表图片',
   `name_cn` varchar(16) CHARACTER SET utf8 NOT NULL COMMENT '中文名',
   `name_en` varchar(16) CHARACTER SET utf8 NOT NULL COMMENT '英文名',
@@ -704,32 +694,33 @@ CREATE TABLE `xw_currency` (
   `sort_order` int(4) NOT NULL COMMENT '排序',
   `status` tinyint(1) NOT NULL COMMENT '状态',
   `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='币种设置';
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `code` (`code`),
+  UNIQUE KEY `name_en` (`name_en`),
+  KEY `status` (`status`),
+  KEY `sort_order` (`sort_order`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COMMENT='币种设置';
 
---
--- Dumping data for table `xw_currency`
---
+-- ----------------------------
+-- Records of xw_currency
+-- ----------------------------
+INSERT INTO `xw_currency` VALUES ('2', 'coin/20210224/7736c3471b3514851627cf9d1abcb374.png', '泰達幣', 'USDT', 'USDT', '4', '', '', '0000-00-00', '', '0.0000', '1', '', '1', '1', '1', '1', '997', '1', '2021-06-05 21:40:17', '2021-06-05 21:40:17');
+INSERT INTO `xw_currency` VALUES ('3', '19', '比特币', 'BITCOIN', 'BTC', '0', '中本聰創建', '32423', '2020-10-01', '234342', '0.0000', '0', '', '1', '0', '0', '1', '999', '1', '2021-06-05 21:40:17', '2023-02-26 13:29:26');
+INSERT INTO `xw_currency` VALUES ('4', '20', '以太坊', 'etherum', 'ETH', '6', '簡介簡介簡介簡介簡介簡介', 'https://etherscan.io/', '2017-03-01', 'https://etherscan.io/', '352342342.0000', '0', '', '1', '1', '1', '1', '998', '1', '2021-06-05 21:41:42', '2023-02-15 21:39:47');
+INSERT INTO `xw_currency` VALUES ('5', '', '波场', 'tron', 'TRX', '6', '', '', '0000-00-00', '', '0.0000', '0', '', '1', '1', '1', '1', '996', '1', '2021-06-05 21:42:50', '2021-06-05 21:42:50');
+INSERT INTO `xw_currency` VALUES ('6', '', '狗狗币', 'doge', 'DOGE', '6', '', '', '0000-00-00', '', '0.0000', '0', '', '1', '1', '1', '1', '996', '1', '2021-06-05 21:42:50', '2021-06-05 21:42:50');
+INSERT INTO `xw_currency` VALUES ('7', '', 'Link', 'ChainLink', 'LINK', '4', '', '', '0000-00-00', '', '0.0000', '1', '', '0', '0', '0', '0', '0', '1', '2021-06-10 18:30:04', '2021-06-10 18:30:04');
+INSERT INTO `xw_currency` VALUES ('8', '', '萊特幣', 'ltccoin', 'LTC', '4', '', '', '0000-00-00', '', '0.0000', '1', '', '0', '0', '0', '0', '0', '1', '2021-06-10 20:19:02', '2021-06-10 20:19:02');
+INSERT INTO `xw_currency` VALUES ('9', '', '柚子幣', 'Eoscoin', 'EOS', '4', '', '', '0000-00-00', '', '0.0000', '1', '', '1', '0', '0', '0', '0', '1', '2021-06-10 20:21:16', '2022-03-08 20:23:41');
+INSERT INTO `xw_currency` VALUES ('10', '', '幣安幣', 'BNB', 'BNB', '6', '', '', '0000-00-00', '', '0.0000', '1', '', '1', '0', '0', '0', '0', '1', '2021-06-10 20:21:16', '2022-03-08 20:23:41');
 
-INSERT INTO `xw_currency` (`id`, `image`, `name_cn`, `name_en`, `code`, `decimal`, `desc`, `link`, `start_at`, `explorer`, `turnover`, `account_type`, `recharge_address`, `is_trade`, `is_recharge`, `is_withdraw`, `is_transfer`, `sort_order`, `status`, `created_at`, `updated_at`) VALUES
-(2, 'coin/20210224/7736c3471b3514851627cf9d1abcb374.png', '泰達幣', 'USDT', 'USDT', 4, '', '', '0000-00-00', '', '0.0000', 1, '', 1, 1, 1, 1, 997, 1, '2021-06-05 21:40:17', '2021-06-05 21:40:17'),
-(3, '19', '比特币', 'BITCOIN', 'BTC', 0, '中本聰創建', '32423', '2020-10-01', '234342', '0.0000', 0, '', 1, 0, 0, 1, 999, 1, '2021-06-05 21:40:17', '2023-02-26 13:29:26'),
-(4, '20', '以太坊', 'etherum', 'ETH', 6, '簡介簡介簡介簡介簡介簡介', 'https://etherscan.io/', '2017-03-01', 'https://etherscan.io/', '352342342.0000', 0, '', 1, 1, 1, 1, 998, 1, '2021-06-05 21:41:42', '2023-02-15 21:39:47'),
-(5, '', '波场', 'tron', 'TRX', 6, '', '', '0000-00-00', '', '0.0000', 0, '', 1, 1, 1, 1, 996, 1, '2021-06-05 21:42:50', '2021-06-05 21:42:50'),
-(6, '', '狗狗币', 'doge', 'DOGE', 6, '', '', '0000-00-00', '', '0.0000', 0, '', 1, 1, 1, 1, 996, 1, '2021-06-05 21:42:50', '2021-06-05 21:42:50'),
-(7, '', 'Link', 'ChainLink', 'LINK', 4, '', '', '0000-00-00', '', '0.0000', 1, '', 0, 0, 0, 0, 0, 1, '2021-06-10 18:30:04', '2021-06-10 18:30:04'),
-(8, '', '萊特幣', 'ltccoin', 'LTC', 4, '', '', '0000-00-00', '', '0.0000', 1, '', 0, 0, 0, 0, 0, 1, '2021-06-10 20:19:02', '2021-06-10 20:19:02'),
-(9, '', '柚子幣', 'Eoscoin', 'EOS', 4, '', '', '0000-00-00', '', '0.0000', 1, '', 1, 0, 0, 0, 0, 1, '2021-06-10 20:21:16', '2022-03-08 20:23:41'),
-(10, '', '幣安幣', 'BNB', 'BNB', 6, '', '', '0000-00-00', '', '0.0000', 1, '', 1, 0, 0, 0, 0, 1, '2021-06-10 20:21:16', '2022-03-08 20:23:41');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `xw_currency_chain`
---
-
+-- ----------------------------
+-- Table structure for xw_currency_chain
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_currency_chain`;
 CREATE TABLE `xw_currency_chain` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `currency_id` int(8) NOT NULL,
   `chain_id` int(8) NOT NULL,
   `decimal` int(20) NOT NULL COMMENT '链上小数位',
@@ -757,55 +748,55 @@ CREATE TABLE `xw_currency_chain` (
   `sort_order` int(4) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '状态',
   `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `currency_id` (`currency_id`),
+  KEY `chain_id` (`chain_id`),
+  KEY `status` (`status`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `xw_currency_chain`
---
+-- ----------------------------
+-- Records of xw_currency_chain
+-- ----------------------------
+INSERT INTO `xw_currency_chain` VALUES ('1', '2', '1', '6', 'usdt_erc20', '0xdac17f958d2ee523a2206206994597c13d831ec7', '0', '12', '12', '1.0000', '1', '10.0000', '1000000.0000', '1000000.0000', '0.0000', '0.0000', '6', 'fixed', '2.0000', '1.0000', '10.0000', '1.0000', '1', '', 'ud', '999', '1', null, null);
+INSERT INTO `xw_currency_chain` VALUES ('2', '2', '2', '6', 'usdt_trc20', 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t', '0', '12', '12', '1.0000', '1', '10.0000', '1000000.0000', '1000000.0000', '0.0000', '0.0000', '6', 'fixed', '2.0000', '1.0000', '10.0000', '1.0000', '1', '', 'ud', '999', '1', null, null);
+INSERT INTO `xw_currency_chain` VALUES ('3', '5', '2', '0', 'trx_trc20', '', '0', '12', '12', '100.0000', '1', '10.0000', '1000000.0000', '1000000.0000', '0.0000', '0.0000', '6', 'fixed', '2.0000', '1.0000', '10.0000', '1.0000', '1', '', 'ud', '999', '1', null, null);
+INSERT INTO `xw_currency_chain` VALUES ('4', '4', '1', '0', 'eth_erc20', '', '0', '12', '12', '1.0000', '1', '10.0000', '1000000.0000', '1000000.0000', '0.0000', '0.0000', '6', 'fixed', '2.0000', '1.0000', '10.0000', '1.0000', '1', '', 'ud', '999', '1', null, null);
+INSERT INTO `xw_currency_chain` VALUES ('5', '2', '3', '18', 'usdt_bep20', '0x55d398326f99059fF775485246999027B3197955', '0', '12', '12', '1.0000', '1', '10.0000', '1000000.0000', '1000000.0000', '0.0000', '0.0000', '6', 'fixed', '2.0000', '1.0000', '10.0000', '1.0000', '1', '', 'ud', '999', '1', null, null);
+INSERT INTO `xw_currency_chain` VALUES ('6', '10', '3', '18', 'bnb_bep20', '', '0', '12', '12', '1.0000', '1', '10.0000', '1000000.0000', '1000000.0000', '0.0000', '0.0000', '6', 'fixed', '2.0000', '1.0000', '10.0000', '1.0000', '1', '', 'ud', '999', '1', null, null);
 
-INSERT INTO `xw_currency_chain` (`id`, `currency_id`, `chain_id`, `decimal`, `display_name`, `contract_address`, `is_dynamic`, `num_confirmations`, `num_fast_confirmations`, `min_recharge_amount`, `is_recharge`, `min_withdraw_amount`, `max_withdraw_amount`, `withdraw_quota_perday`, `withdraw_quota_peryear`, `withdraw_quota_total`, `withdraw_precision`, `withdraw_fee_type`, `transact_fee_fithdraw`, `min_transact_fee_withdraw`, `max_transact_fee_withdraw`, `transact_fee_rate_withdraw`, `is_withdraw`, `rpc_url`, `wallet_api`, `sort_order`, `status`, `created_at`, `updated_at`) VALUES
-(1, 2, 1, 6, 'usdt_erc20', '0xdac17f958d2ee523a2206206994597c13d831ec7', 0, 12, 12, '1.0000', 1, '10.0000', '1000000.0000', '1000000.0000', '0.0000', '0.0000', 6, 'fixed', '2.0000', '1.0000', '10.0000', '1.0000', 1, '', 'ud', 999, 1, NULL, NULL),
-(2, 2, 2, 6, 'usdt_trc20', 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t', 0, 12, 12, '1.0000', 1, '10.0000', '1000000.0000', '1000000.0000', '0.0000', '0.0000', 6, 'fixed', '2.0000', '1.0000', '10.0000', '1.0000', 1, '', 'ud', 999, 1, NULL, NULL),
-(3, 5, 2, 0, 'trx_trc20', '', 0, 12, 12, '100.0000', 1, '10.0000', '1000000.0000', '1000000.0000', '0.0000', '0.0000', 6, 'fixed', '2.0000', '1.0000', '10.0000', '1.0000', 1, '', 'ud', 999, 1, NULL, NULL),
-(4, 4, 1, 0, 'eth_erc20', '', 0, 12, 12, '1.0000', 1, '10.0000', '1000000.0000', '1000000.0000', '0.0000', '0.0000', 6, 'fixed', '2.0000', '1.0000', '10.0000', '1.0000', 1, '', 'ud', 999, 1, NULL, NULL),
-(5, 2, 3, 18, 'usdt_bep20', '0x55d398326f99059fF775485246999027B3197955', 0, 12, 12, '1.0000', 1, '10.0000', '1000000.0000', '1000000.0000', '0.0000', '0.0000', 6, 'fixed', '2.0000', '1.0000', '10.0000', '1.0000', 1, '', 'ud', 999, 1, NULL, NULL),
-(6, 10, 3, 18, 'bnb_bep20', '', 0, 12, 12, '1.0000', 1, '10.0000', '1000000.0000', '1000000.0000', '0.0000', '0.0000', 6, 'fixed', '2.0000', '1.0000', '10.0000', '1.0000', 1, '', 'ud', 999, 1, NULL, NULL);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `xw_exchange`
---
-
+-- ----------------------------
+-- Table structure for xw_exchange
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_exchange`;
 CREATE TABLE `xw_exchange` (
-  `id` int(8) NOT NULL,
+  `id` int(8) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) CHARACTER SET utf8 NOT NULL COMMENT '交易所名称',
   `code` varchar(50) CHARACTER SET utf8 NOT NULL COMMENT '代码',
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否使用',
   `sort_order` int(4) NOT NULL COMMENT '排序',
   `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `code` (`code`),
+  KEY `status` (`status`),
+  KEY `sort_order` (`sort_order`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `xw_exchange`
---
+-- ----------------------------
+-- Records of xw_exchange
+-- ----------------------------
+INSERT INTO `xw_exchange` VALUES ('1', '自营', 'owner', '1', '0', '2023-02-09 18:49:42', '2023-02-09 18:49:42');
+INSERT INTO `xw_exchange` VALUES ('2', '火币', 'Huobi', '1', '0', '2023-02-09 18:49:42', '2023-02-09 18:49:42');
+INSERT INTO `xw_exchange` VALUES ('3', '币安', 'Binance', '1', '0', null, '2023-02-09 18:49:42');
+INSERT INTO `xw_exchange` VALUES ('4', 'dex', 'dex', '1', '0', '2023-02-09 18:49:42', '2023-02-09 18:49:42');
 
-INSERT INTO `xw_exchange` (`id`, `name`, `code`, `status`, `sort_order`, `created_at`, `updated_at`) VALUES
-(1, '自营', 'owner', 1, 0, '2023-02-09 18:49:42', '2023-02-09 18:49:42'),
-(2, '火币', 'Huobi', 1, 0, '2023-02-09 18:49:42', '2023-02-09 18:49:42'),
-(3, '币安', 'Binance', 1, 0, NULL, '2023-02-09 18:49:42'),
-(4, 'dex', 'dex', 1, 0, '2023-02-09 18:49:42', '2023-02-09 18:49:42');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `xw_file`
---
-
+-- ----------------------------
+-- Table structure for xw_file
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_file`;
 CREATE TABLE `xw_file` (
-  `id` int(11) UNSIGNED NOT NULL,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `module` varchar(15) NOT NULL DEFAULT '' COMMENT '所属模块',
   `sha1` varchar(60) NOT NULL COMMENT 'sha1',
   `md5` varchar(60) NOT NULL COMMENT 'md5',
@@ -815,7 +806,7 @@ CREATE TABLE `xw_file` (
   `filesize` int(10) NOT NULL DEFAULT '0' COMMENT '文件大小',
   `fileext` varchar(10) NOT NULL DEFAULT '' COMMENT '文件后缀',
   `mimetype` varchar(100) NOT NULL DEFAULT '' COMMENT '文件类型',
-  `user_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '上传会员ID',
+  `user_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '上传会员ID',
   `uploadip` varchar(15) NOT NULL DEFAULT '' COMMENT '上传IP',
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0未审核1已审核-1不通过',
   `created_at` datetime NOT NULL,
@@ -823,75 +814,148 @@ CREATE TABLE `xw_file` (
   `audit_time` int(11) NOT NULL DEFAULT '0' COMMENT '审核时间',
   `action` varchar(50) NOT NULL DEFAULT '' COMMENT '来源模块功能',
   `use` varchar(255) DEFAULT NULL COMMENT '用处',
-  `download` int(11) NOT NULL DEFAULT '0' COMMENT '下载量'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='文件表';
+  `download` int(11) NOT NULL DEFAULT '0' COMMENT '下载量',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COMMENT='文件表';
 
---
--- Dumping data for table `xw_file`
---
+-- ----------------------------
+-- Records of xw_file
+-- ----------------------------
+INSERT INTO `xw_file` VALUES ('1', 'admin', '5125347886f07f48f7003825660117039eb8784f', '563e5e8f48e607ed54461796b0cb4844', 'f95982689eb222b84e999122a50b3780.jpg', 'f95982689eb222b84e999122a50b3780.jpg', 'https://blog.gougucms.com/storage/202202/f95982689eb222b84e999122a50b3780.jpg', '62609', 'jpg', 'image/jpeg', '1', '127.0.0.1', '1', '0000-00-00 00:00:00', '1', '1645057433', 'upload', 'thumb', '0');
+INSERT INTO `xw_file` VALUES ('2', 'admin', '5125347886f07f48f7003825660117039eb8784f', '563e5e8f48e607ed54461796b0cb4844', 'e729477de18e3be7e7eb4ec7fe2f821e.jpg', 'e729477de18e3be7e7eb4ec7fe2f821e.jpg', 'https://blog.gougucms.com/storage/202202/e729477de18e3be7e7eb4ec7fe2f821e.jpg', '62609', 'jpg', 'image/jpeg', '1', '127.0.0.1', '1', '0000-00-00 00:00:00', '1', '1645057433', 'upload', 'thumb', '0');
+INSERT INTO `xw_file` VALUES ('3', 'admin', '5125347886f07f48f7003825660117039eb8784f', '563e5e8f48e607ed54461796b0cb4844', '1193f7a1585b9f6e8a97ae17718018b3.jpg', 'images/1193f7a1585b9f6e8a97ae17718018b3.jpg', 'https://blog.gougucms.com/storage/202204/1193f7a1585b9f6e8a97ae17718018b3.jpg', '62609', 'jpg', 'image/jpeg', '1', '127.0.0.1', '1', '0000-00-00 00:00:00', '1', '1645057433', 'upload', 'thumb', '0');
+INSERT INTO `xw_file` VALUES ('4', 'admin', '5125347886f07f48f7003825660117039eb8784f', '563e5e8f48e607ed54461796b0cb4844', '0f22a5ba4797b2fa22049ea73e6f779c.jpg', 'images/0f22a5ba4797b2fa22049ea73e6f779c.jpg', 'https://blog.gougucms.com/storage/202202/0f22a5ba4797b2fa22049ea73e6f779c.jpg', '62609', 'jpg', 'image/jpeg', '1', '127.0.0.1', '1', '0000-00-00 00:00:00', '1', '1645057433', 'upload', 'thumb', '0');
+INSERT INTO `xw_file` VALUES ('5', 'admin', '135232feb2e4d9647d1c9652b262e0c77869183a', '9ef296dcc0f19c6d03caac968ccba23f', 'photo_2023-02-03_22-18-47.jpg', '202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '/storage/202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '74305', 'jpg', 'image/jpeg', '1', '::1', '1', '2023-02-07 21:37:18', '1', '1675777038', 'upload', 'thumb', '0');
+INSERT INTO `xw_file` VALUES ('6', 'admin', '135232feb2e4d9647d1c9652b262e0c77869183a', '9ef296dcc0f19c6d03caac968ccba23f', 'photo_2023-02-03_22-18-47.jpg', '202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '/storage/202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '74305', 'jpg', 'image/jpeg', '1', '127.0.0.1', '1', '2023-02-08 21:05:18', '1', '1675861518', 'upload', 'thumb', '0');
+INSERT INTO `xw_file` VALUES ('7', 'admin', '5101d69389ee607456a74ff4d6bf142b677f2174', 'a173b6c611cc3347c232e2607cef096e', 'photo_2023-02-03_22-43-17.jpg', '202302/a173b6c611cc3347c232e2607cef096e.jpg', '/storage/202302/a173b6c611cc3347c232e2607cef096e.jpg', '81371', 'jpg', 'image/jpeg', '1', '127.0.0.1', '1', '2023-02-08 21:05:34', '1', '1675861534', 'upload', 'thumb', '0');
+INSERT INTO `xw_file` VALUES ('8', 'admin', '135232feb2e4d9647d1c9652b262e0c77869183a', '9ef296dcc0f19c6d03caac968ccba23f', 'photo_2023-02-03_22-18-47.jpg', '202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '/storage/202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '74305', 'jpg', 'image/jpeg', '1', '127.0.0.1', '1', '2023-02-09 21:25:40', '1', '1675949140', 'upload', 'thumb', '0');
+INSERT INTO `xw_file` VALUES ('9', 'admin', '135232feb2e4d9647d1c9652b262e0c77869183a', '9ef296dcc0f19c6d03caac968ccba23f', 'photo_2023-02-03_22-18-47.jpg', '202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '/storage/202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '74305', 'jpg', 'image/jpeg', '1', '127.0.0.1', '1', '2023-02-10 21:49:09', '1', '1676036949', 'upload', 'thumb', '0');
+INSERT INTO `xw_file` VALUES ('10', 'admin', 'e9aa863e59d974b5914a426fe99b84828ec18f9d', '62e583c9f8219ba594cf2cf7d425a0ef', 'photo_2023-02-03_19-40-18.jpg', '202302/62e583c9f8219ba594cf2cf7d425a0ef.jpg', '/storage/202302/62e583c9f8219ba594cf2cf7d425a0ef.jpg', '138589', 'jpg', 'image/jpeg', '1', '127.0.0.1', '1', '2023-02-10 21:51:28', '1', '1676037088', 'upload', 'thumb', '0');
+INSERT INTO `xw_file` VALUES ('11', 'admin', '135232feb2e4d9647d1c9652b262e0c77869183a', '9ef296dcc0f19c6d03caac968ccba23f', 'photo_2023-02-03_22-18-47.jpg', '202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '/storage/202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '74305', 'jpg', 'image/jpeg', '1', '127.0.0.1', '1', '2023-02-10 21:55:27', '1', '1676037327', 'upload', 'thumb', '0');
+INSERT INTO `xw_file` VALUES ('12', 'admin', '135232feb2e4d9647d1c9652b262e0c77869183a', '9ef296dcc0f19c6d03caac968ccba23f', 'photo_2023-02-03_22-18-47.jpg', '202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '/storage/202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '74305', 'jpg', 'image/jpeg', '1', '127.0.0.1', '1', '2023-02-10 21:58:37', '1', '1676037517', 'upload', 'thumb', '0');
+INSERT INTO `xw_file` VALUES ('13', 'admin', '135232feb2e4d9647d1c9652b262e0c77869183a', '9ef296dcc0f19c6d03caac968ccba23f', 'photo_2023-02-03_22-18-47.jpg', '202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '/storage/202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '74305', 'jpg', 'image/jpeg', '1', '127.0.0.1', '1', '2023-02-11 10:06:08', '1', '1676081168', 'upload', 'thumb', '0');
+INSERT INTO `xw_file` VALUES ('14', 'admin', '5101d69389ee607456a74ff4d6bf142b677f2174', 'a173b6c611cc3347c232e2607cef096e', 'photo_2023-02-03_22-43-17.jpg', '202302/a173b6c611cc3347c232e2607cef096e.jpg', '/storage/202302/a173b6c611cc3347c232e2607cef096e.jpg', '81371', 'jpg', 'image/jpeg', '1', '127.0.0.1', '1', '2023-02-11 10:08:16', '1', '1676081296', 'upload', 'thumb', '0');
+INSERT INTO `xw_file` VALUES ('15', 'admin', '135232feb2e4d9647d1c9652b262e0c77869183a', '9ef296dcc0f19c6d03caac968ccba23f', 'photo_2023-02-03_22-18-47.jpg', '202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '/storage/202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '74305', 'jpg', 'image/jpeg', '1', '127.0.0.1', '1', '2023-02-11 10:10:56', '1', '1676081456', 'upload', 'thumb', '0');
+INSERT INTO `xw_file` VALUES ('16', 'admin', '135232feb2e4d9647d1c9652b262e0c77869183a', '9ef296dcc0f19c6d03caac968ccba23f', 'photo_2023-02-03_22-18-47.jpg', '202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '/storage/202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '74305', 'jpg', 'image/jpeg', '1', '127.0.0.1', '1', '2023-02-11 10:25:17', '1', '1676082317', 'upload', 'thumb', '0');
+INSERT INTO `xw_file` VALUES ('17', 'admin', '135232feb2e4d9647d1c9652b262e0c77869183a', '9ef296dcc0f19c6d03caac968ccba23f', 'photo_2023-02-03_22-18-47.jpg', '202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '/storage/202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '74305', 'jpg', 'image/jpeg', '1', '127.0.0.1', '1', '2023-02-11 10:26:35', '1', '1676082395', 'upload', 'thumb', '0');
+INSERT INTO `xw_file` VALUES ('18', 'admin', '135232feb2e4d9647d1c9652b262e0c77869183a', '9ef296dcc0f19c6d03caac968ccba23f', 'photo_2023-02-03_22-18-47.jpg', '202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '/storage/202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '74305', 'jpg', 'image/jpeg', '1', '127.0.0.1', '1', '2023-02-11 17:34:04', '1', '1676108044', 'upload', 'thumb', '0');
+INSERT INTO `xw_file` VALUES ('19', 'admin', '135232feb2e4d9647d1c9652b262e0c77869183a', '9ef296dcc0f19c6d03caac968ccba23f', 'photo_2023-02-03_22-18-47.jpg', '202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '/storage/202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '74305', 'jpg', 'image/jpeg', '1', '127.0.0.1', '1', '2023-02-15 21:39:06', '1', '1676468346', 'upload', 'thumb', '0');
+INSERT INTO `xw_file` VALUES ('20', 'admin', '135232feb2e4d9647d1c9652b262e0c77869183a', '9ef296dcc0f19c6d03caac968ccba23f', 'photo_2023-02-03_22-18-47.jpg', '202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '/storage/202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '74305', 'jpg', 'image/jpeg', '1', '127.0.0.1', '1', '2023-02-15 21:39:46', '1', '1676468386', 'upload', 'thumb', '0');
+INSERT INTO `xw_file` VALUES ('21', 'admin', '135232feb2e4d9647d1c9652b262e0c77869183a', '9ef296dcc0f19c6d03caac968ccba23f', 'photo_2023-02-03_22-18-47.jpg', '202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '/storage/202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '74305', 'jpg', 'image/jpeg', '1', '127.0.0.1', '1', '2023-02-15 21:41:44', '1', '1676468504', 'upload', 'thumb', '0');
+INSERT INTO `xw_file` VALUES ('22', 'admin', '135232feb2e4d9647d1c9652b262e0c77869183a', '9ef296dcc0f19c6d03caac968ccba23f', 'photo_2023-02-03_22-18-47.jpg', '202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '/storage/202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '74305', 'jpg', 'image/jpeg', '1', '127.0.0.1', '1', '2023-02-21 20:51:10', '1', '1676983870', 'upload', 'thumb', '0');
+INSERT INTO `xw_file` VALUES ('23', 'admin', '01a4574e9f61e9084f6449f768fcfa540033bd42', '35673c037d4d3dca6277214105992003', 'pic-80.png', '202302/35673c037d4d3dca6277214105992003.png', '/storage/202302/35673c037d4d3dca6277214105992003.png', '322324', 'png', 'image/png', '1', '127.0.0.1', '1', '2023-02-26 10:58:25', '1', '1677380305', 'upload', 'thumb', '0');
+INSERT INTO `xw_file` VALUES ('24', 'admin', '0e745fff7a108d6bc5f544faddb7d384ff5271a9', '7e5dde1f7f327ec686e4cba28b136b51', 'default_bg.png', '202302/7e5dde1f7f327ec686e4cba28b136b51.png', '/storage/202302/7e5dde1f7f327ec686e4cba28b136b51.png', '83983', 'png', 'image/png', '1', '127.0.0.1', '1', '2023-02-26 10:58:43', '1', '1677380323', 'upload', 'thumb', '0');
+INSERT INTO `xw_file` VALUES ('25', 'admin', '2346003a6e9d79ef41e14a5e3fae22f31e8aca57', '3bc6466ed4b5d7a3cfe6ce9e2af5c42c', 'about_bg.png', '202302/3bc6466ed4b5d7a3cfe6ce9e2af5c42c.png', '/storage/202302/3bc6466ed4b5d7a3cfe6ce9e2af5c42c.png', '304264', 'png', 'image/png', '1', '127.0.0.1', '1', '2023-02-26 10:59:22', '1', '1677380362', 'upload', 'thumb', '0');
+INSERT INTO `xw_file` VALUES ('26', 'admin', '8fbb623cb96085171402130af41a85f4d5bb6131', 'b5408110499a88bd67120115f47e6336', 'member_bg.png', '202302/b5408110499a88bd67120115f47e6336.png', '/storage/202302/b5408110499a88bd67120115f47e6336.png', '70859', 'png', 'image/png', '1', '127.0.0.1', '1', '2023-02-26 10:59:31', '1', '1677380371', 'upload', 'thumb', '0');
+INSERT INTO `xw_file` VALUES ('27', 'admin', '0e745fff7a108d6bc5f544faddb7d384ff5271a9', '7e5dde1f7f327ec686e4cba28b136b51', 'default_bg.png', '202302/7e5dde1f7f327ec686e4cba28b136b51.png', '/storage/202302/7e5dde1f7f327ec686e4cba28b136b51.png', '83983', 'png', 'image/png', '1', '127.0.0.1', '1', '2023-02-26 10:59:36', '1', '1677380376', 'upload', 'thumb', '0');
+INSERT INTO `xw_file` VALUES ('28', 'admin', '2346003a6e9d79ef41e14a5e3fae22f31e8aca57', '3bc6466ed4b5d7a3cfe6ce9e2af5c42c', 'about_bg.png', '202302/3bc6466ed4b5d7a3cfe6ce9e2af5c42c.png', '/storage/202302/3bc6466ed4b5d7a3cfe6ce9e2af5c42c.png', '304264', 'png', 'image/png', '1', '127.0.0.1', '1', '2023-02-26 13:28:31', '1', '1677389311', 'upload', 'thumb', '0');
+INSERT INTO `xw_file` VALUES ('29', 'admin', '2346003a6e9d79ef41e14a5e3fae22f31e8aca57', '3bc6466ed4b5d7a3cfe6ce9e2af5c42c', 'about_bg.png', '202302/3bc6466ed4b5d7a3cfe6ce9e2af5c42c.png', '/storage/202302/3bc6466ed4b5d7a3cfe6ce9e2af5c42c.png', '304264', 'png', 'image/png', '1', '127.0.0.1', '1', '2023-02-26 13:44:51', '1', '1677390291', 'upload', 'thumb', '0');
 
-INSERT INTO `xw_file` (`id`, `module`, `sha1`, `md5`, `name`, `filename`, `filepath`, `filesize`, `fileext`, `mimetype`, `user_id`, `uploadip`, `status`, `created_at`, `admin_id`, `audit_time`, `action`, `use`, `download`) VALUES
-(1, 'admin', '5125347886f07f48f7003825660117039eb8784f', '563e5e8f48e607ed54461796b0cb4844', 'f95982689eb222b84e999122a50b3780.jpg', 'f95982689eb222b84e999122a50b3780.jpg', 'https://blog.gougucms.com/storage/202202/f95982689eb222b84e999122a50b3780.jpg', 62609, 'jpg', 'image/jpeg', 1, '127.0.0.1', 1, '0000-00-00 00:00:00', 1, 1645057433, 'upload', 'thumb', 0),
-(2, 'admin', '5125347886f07f48f7003825660117039eb8784f', '563e5e8f48e607ed54461796b0cb4844', 'e729477de18e3be7e7eb4ec7fe2f821e.jpg', 'e729477de18e3be7e7eb4ec7fe2f821e.jpg', 'https://blog.gougucms.com/storage/202202/e729477de18e3be7e7eb4ec7fe2f821e.jpg', 62609, 'jpg', 'image/jpeg', 1, '127.0.0.1', 1, '0000-00-00 00:00:00', 1, 1645057433, 'upload', 'thumb', 0),
-(3, 'admin', '5125347886f07f48f7003825660117039eb8784f', '563e5e8f48e607ed54461796b0cb4844', '1193f7a1585b9f6e8a97ae17718018b3.jpg', 'images/1193f7a1585b9f6e8a97ae17718018b3.jpg', 'https://blog.gougucms.com/storage/202204/1193f7a1585b9f6e8a97ae17718018b3.jpg', 62609, 'jpg', 'image/jpeg', 1, '127.0.0.1', 1, '0000-00-00 00:00:00', 1, 1645057433, 'upload', 'thumb', 0),
-(4, 'admin', '5125347886f07f48f7003825660117039eb8784f', '563e5e8f48e607ed54461796b0cb4844', '0f22a5ba4797b2fa22049ea73e6f779c.jpg', 'images/0f22a5ba4797b2fa22049ea73e6f779c.jpg', 'https://blog.gougucms.com/storage/202202/0f22a5ba4797b2fa22049ea73e6f779c.jpg', 62609, 'jpg', 'image/jpeg', 1, '127.0.0.1', 1, '0000-00-00 00:00:00', 1, 1645057433, 'upload', 'thumb', 0),
-(5, 'admin', '135232feb2e4d9647d1c9652b262e0c77869183a', '9ef296dcc0f19c6d03caac968ccba23f', 'photo_2023-02-03_22-18-47.jpg', '202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '/storage/202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', 74305, 'jpg', 'image/jpeg', 1, '::1', 1, '2023-02-07 21:37:18', 1, 1675777038, 'upload', 'thumb', 0),
-(6, 'admin', '135232feb2e4d9647d1c9652b262e0c77869183a', '9ef296dcc0f19c6d03caac968ccba23f', 'photo_2023-02-03_22-18-47.jpg', '202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '/storage/202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', 74305, 'jpg', 'image/jpeg', 1, '127.0.0.1', 1, '2023-02-08 21:05:18', 1, 1675861518, 'upload', 'thumb', 0),
-(7, 'admin', '5101d69389ee607456a74ff4d6bf142b677f2174', 'a173b6c611cc3347c232e2607cef096e', 'photo_2023-02-03_22-43-17.jpg', '202302/a173b6c611cc3347c232e2607cef096e.jpg', '/storage/202302/a173b6c611cc3347c232e2607cef096e.jpg', 81371, 'jpg', 'image/jpeg', 1, '127.0.0.1', 1, '2023-02-08 21:05:34', 1, 1675861534, 'upload', 'thumb', 0),
-(8, 'admin', '135232feb2e4d9647d1c9652b262e0c77869183a', '9ef296dcc0f19c6d03caac968ccba23f', 'photo_2023-02-03_22-18-47.jpg', '202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '/storage/202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', 74305, 'jpg', 'image/jpeg', 1, '127.0.0.1', 1, '2023-02-09 21:25:40', 1, 1675949140, 'upload', 'thumb', 0),
-(9, 'admin', '135232feb2e4d9647d1c9652b262e0c77869183a', '9ef296dcc0f19c6d03caac968ccba23f', 'photo_2023-02-03_22-18-47.jpg', '202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '/storage/202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', 74305, 'jpg', 'image/jpeg', 1, '127.0.0.1', 1, '2023-02-10 21:49:09', 1, 1676036949, 'upload', 'thumb', 0),
-(10, 'admin', 'e9aa863e59d974b5914a426fe99b84828ec18f9d', '62e583c9f8219ba594cf2cf7d425a0ef', 'photo_2023-02-03_19-40-18.jpg', '202302/62e583c9f8219ba594cf2cf7d425a0ef.jpg', '/storage/202302/62e583c9f8219ba594cf2cf7d425a0ef.jpg', 138589, 'jpg', 'image/jpeg', 1, '127.0.0.1', 1, '2023-02-10 21:51:28', 1, 1676037088, 'upload', 'thumb', 0),
-(11, 'admin', '135232feb2e4d9647d1c9652b262e0c77869183a', '9ef296dcc0f19c6d03caac968ccba23f', 'photo_2023-02-03_22-18-47.jpg', '202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '/storage/202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', 74305, 'jpg', 'image/jpeg', 1, '127.0.0.1', 1, '2023-02-10 21:55:27', 1, 1676037327, 'upload', 'thumb', 0),
-(12, 'admin', '135232feb2e4d9647d1c9652b262e0c77869183a', '9ef296dcc0f19c6d03caac968ccba23f', 'photo_2023-02-03_22-18-47.jpg', '202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '/storage/202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', 74305, 'jpg', 'image/jpeg', 1, '127.0.0.1', 1, '2023-02-10 21:58:37', 1, 1676037517, 'upload', 'thumb', 0),
-(13, 'admin', '135232feb2e4d9647d1c9652b262e0c77869183a', '9ef296dcc0f19c6d03caac968ccba23f', 'photo_2023-02-03_22-18-47.jpg', '202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '/storage/202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', 74305, 'jpg', 'image/jpeg', 1, '127.0.0.1', 1, '2023-02-11 10:06:08', 1, 1676081168, 'upload', 'thumb', 0),
-(14, 'admin', '5101d69389ee607456a74ff4d6bf142b677f2174', 'a173b6c611cc3347c232e2607cef096e', 'photo_2023-02-03_22-43-17.jpg', '202302/a173b6c611cc3347c232e2607cef096e.jpg', '/storage/202302/a173b6c611cc3347c232e2607cef096e.jpg', 81371, 'jpg', 'image/jpeg', 1, '127.0.0.1', 1, '2023-02-11 10:08:16', 1, 1676081296, 'upload', 'thumb', 0),
-(15, 'admin', '135232feb2e4d9647d1c9652b262e0c77869183a', '9ef296dcc0f19c6d03caac968ccba23f', 'photo_2023-02-03_22-18-47.jpg', '202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '/storage/202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', 74305, 'jpg', 'image/jpeg', 1, '127.0.0.1', 1, '2023-02-11 10:10:56', 1, 1676081456, 'upload', 'thumb', 0),
-(16, 'admin', '135232feb2e4d9647d1c9652b262e0c77869183a', '9ef296dcc0f19c6d03caac968ccba23f', 'photo_2023-02-03_22-18-47.jpg', '202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '/storage/202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', 74305, 'jpg', 'image/jpeg', 1, '127.0.0.1', 1, '2023-02-11 10:25:17', 1, 1676082317, 'upload', 'thumb', 0),
-(17, 'admin', '135232feb2e4d9647d1c9652b262e0c77869183a', '9ef296dcc0f19c6d03caac968ccba23f', 'photo_2023-02-03_22-18-47.jpg', '202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '/storage/202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', 74305, 'jpg', 'image/jpeg', 1, '127.0.0.1', 1, '2023-02-11 10:26:35', 1, 1676082395, 'upload', 'thumb', 0),
-(18, 'admin', '135232feb2e4d9647d1c9652b262e0c77869183a', '9ef296dcc0f19c6d03caac968ccba23f', 'photo_2023-02-03_22-18-47.jpg', '202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '/storage/202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', 74305, 'jpg', 'image/jpeg', 1, '127.0.0.1', 1, '2023-02-11 17:34:04', 1, 1676108044, 'upload', 'thumb', 0),
-(19, 'admin', '135232feb2e4d9647d1c9652b262e0c77869183a', '9ef296dcc0f19c6d03caac968ccba23f', 'photo_2023-02-03_22-18-47.jpg', '202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '/storage/202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', 74305, 'jpg', 'image/jpeg', 1, '127.0.0.1', 1, '2023-02-15 21:39:06', 1, 1676468346, 'upload', 'thumb', 0),
-(20, 'admin', '135232feb2e4d9647d1c9652b262e0c77869183a', '9ef296dcc0f19c6d03caac968ccba23f', 'photo_2023-02-03_22-18-47.jpg', '202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '/storage/202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', 74305, 'jpg', 'image/jpeg', 1, '127.0.0.1', 1, '2023-02-15 21:39:46', 1, 1676468386, 'upload', 'thumb', 0),
-(21, 'admin', '135232feb2e4d9647d1c9652b262e0c77869183a', '9ef296dcc0f19c6d03caac968ccba23f', 'photo_2023-02-03_22-18-47.jpg', '202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '/storage/202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', 74305, 'jpg', 'image/jpeg', 1, '127.0.0.1', 1, '2023-02-15 21:41:44', 1, 1676468504, 'upload', 'thumb', 0),
-(22, 'admin', '135232feb2e4d9647d1c9652b262e0c77869183a', '9ef296dcc0f19c6d03caac968ccba23f', 'photo_2023-02-03_22-18-47.jpg', '202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', '/storage/202302/9ef296dcc0f19c6d03caac968ccba23f.jpg', 74305, 'jpg', 'image/jpeg', 1, '127.0.0.1', 1, '2023-02-21 20:51:10', 1, 1676983870, 'upload', 'thumb', 0),
-(23, 'admin', '01a4574e9f61e9084f6449f768fcfa540033bd42', '35673c037d4d3dca6277214105992003', 'pic-80.png', '202302/35673c037d4d3dca6277214105992003.png', '/storage/202302/35673c037d4d3dca6277214105992003.png', 322324, 'png', 'image/png', 1, '127.0.0.1', 1, '2023-02-26 10:58:25', 1, 1677380305, 'upload', 'thumb', 0),
-(24, 'admin', '0e745fff7a108d6bc5f544faddb7d384ff5271a9', '7e5dde1f7f327ec686e4cba28b136b51', 'default_bg.png', '202302/7e5dde1f7f327ec686e4cba28b136b51.png', '/storage/202302/7e5dde1f7f327ec686e4cba28b136b51.png', 83983, 'png', 'image/png', 1, '127.0.0.1', 1, '2023-02-26 10:58:43', 1, 1677380323, 'upload', 'thumb', 0),
-(25, 'admin', '2346003a6e9d79ef41e14a5e3fae22f31e8aca57', '3bc6466ed4b5d7a3cfe6ce9e2af5c42c', 'about_bg.png', '202302/3bc6466ed4b5d7a3cfe6ce9e2af5c42c.png', '/storage/202302/3bc6466ed4b5d7a3cfe6ce9e2af5c42c.png', 304264, 'png', 'image/png', 1, '127.0.0.1', 1, '2023-02-26 10:59:22', 1, 1677380362, 'upload', 'thumb', 0),
-(26, 'admin', '8fbb623cb96085171402130af41a85f4d5bb6131', 'b5408110499a88bd67120115f47e6336', 'member_bg.png', '202302/b5408110499a88bd67120115f47e6336.png', '/storage/202302/b5408110499a88bd67120115f47e6336.png', 70859, 'png', 'image/png', 1, '127.0.0.1', 1, '2023-02-26 10:59:31', 1, 1677380371, 'upload', 'thumb', 0),
-(27, 'admin', '0e745fff7a108d6bc5f544faddb7d384ff5271a9', '7e5dde1f7f327ec686e4cba28b136b51', 'default_bg.png', '202302/7e5dde1f7f327ec686e4cba28b136b51.png', '/storage/202302/7e5dde1f7f327ec686e4cba28b136b51.png', 83983, 'png', 'image/png', 1, '127.0.0.1', 1, '2023-02-26 10:59:36', 1, 1677380376, 'upload', 'thumb', 0),
-(28, 'admin', '2346003a6e9d79ef41e14a5e3fae22f31e8aca57', '3bc6466ed4b5d7a3cfe6ce9e2af5c42c', 'about_bg.png', '202302/3bc6466ed4b5d7a3cfe6ce9e2af5c42c.png', '/storage/202302/3bc6466ed4b5d7a3cfe6ce9e2af5c42c.png', 304264, 'png', 'image/png', 1, '127.0.0.1', 1, '2023-02-26 13:28:31', 1, 1677389311, 'upload', 'thumb', 0),
-(29, 'admin', '2346003a6e9d79ef41e14a5e3fae22f31e8aca57', '3bc6466ed4b5d7a3cfe6ce9e2af5c42c', 'about_bg.png', '202302/3bc6466ed4b5d7a3cfe6ce9e2af5c42c.png', '/storage/202302/3bc6466ed4b5d7a3cfe6ce9e2af5c42c.png', 304264, 'png', 'image/png', 1, '127.0.0.1', 1, '2023-02-26 13:44:51', 1, 1677390291, 'upload', 'thumb', 0);
+-- ----------------------------
+-- Table structure for xw_house
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_house`;
+CREATE TABLE `xw_house` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `pid` int(11) NOT NULL DEFAULT '0' COMMENT '裂变的上级id 0表示原始房子',
+  `cate_id` int(11) NOT NULL DEFAULT '0' COMMENT '所属房产分类',
+  `owner_id` int(11) NOT NULL DEFAULT '0' COMMENT '当前所属人 0属于系统 其它用member表主键',
+  `title` varchar(255) NOT NULL DEFAULT '' COMMENT '标题',
+  `price` decimal(30,4) DEFAULT NULL,
+  `desc` varchar(1000) DEFAULT '' COMMENT '摘要',
+  `image` int(11) NOT NULL DEFAULT '0' COMMENT '缩略图:附件id',
+  `content` text NOT NULL COMMENT '内容',
+  `read` int(11) NOT NULL DEFAULT '0' COMMENT '阅读量',
+  `sort_order` int(114) NOT NULL DEFAULT '9999' COMMENT '排序',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否在挂卖:1是、0否',
+  `admin_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建人',
+  `created_at` datetime NOT NULL COMMENT '创建时间',
+  `updated_at` datetime NOT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `cate_id` (`cate_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COMMENT='文章詳情';
 
--- --------------------------------------------------------
+-- ----------------------------
+-- Records of xw_house
+-- ----------------------------
+INSERT INTO `xw_house` VALUES ('1', '0', '1', '0', '23423', null, '23423', '15', '<p>23423423</p>', '0', '234', '1', '1', '2023-02-11 10:12:33', '2023-02-11 10:12:43');
+INSERT INTO `xw_house` VALUES ('2', '0', '1', '0', '測試', null, '334322', '16', '<p>23423423423</p>', '0', '3', '1', '1', '2023-02-11 10:25:19', '2023-02-11 10:25:28');
+INSERT INTO `xw_house` VALUES ('3', '0', '1', '0', 'sdfsdf', null, '2342342', '17', '<p>32423423423</p>', '0', '23423', '1', '1', '2023-02-11 10:26:35', '2023-02-11 10:26:35');
+INSERT INTO `xw_house` VALUES ('4', '0', '1', '0', 'sdf', null, 'sdf', '0', '<p>sdfaf</p>', '0', '0', '1', '1', '2023-02-11 10:29:09', '2023-02-11 17:38:51');
+INSERT INTO `xw_house` VALUES ('5', '0', '4', '0', '內容1', null, '', '0', '<p>內容1內容1內容1內容1</p>', '0', '0', '1', '1', '2023-02-13 15:16:39', '2023-02-17 14:55:47');
+INSERT INTO `xw_house` VALUES ('6', '0', '4', '0', '內容2', null, '', '0', '<p>內容2<span style=\"font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Oxygen, Ubuntu, Cantarell, \'Open Sans\', \'Helvetica Neue\', sans-serif;\">內容2</span><span style=\"font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Oxygen, Ubuntu, Cantarell, \'Open Sans\', \'Helvetica Neue\', sans-serif;\">內容2</span><span style=\"font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Oxygen, Ubuntu, Cantarell, \'Open Sans\', \'Helvetica Neue\', sans-serif;\">內容2</span><span style=\"font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Oxygen, Ubuntu, Cantarell, \'Open Sans\', \'Helvetica Neue\', sans-serif;\">內容2</span></p>', '0', '0', '1', '1', '2023-02-13 15:16:55', '2023-02-13 15:16:55');
+INSERT INTO `xw_house` VALUES ('7', '0', '6', '0', '測試公告', null, '', '0', '<p>測試公告測試公告測試公告測試公告測試公告</p>', '0', '0', '1', '1', '2023-02-15 16:30:46', '2023-02-15 16:30:46');
+INSERT INTO `xw_house` VALUES ('9', '0', '2', '0', 'sdfa', null, 'sdfasdfsdfadsf', '22', '<p>dsfasdf</p>', '0', '0', '1', '1', '0000-00-00 00:00:00', '2023-02-21 20:52:19');
+INSERT INTO `xw_house` VALUES ('10', '0', '4', '0', 'sdfas', null, 'sdfadsf', '0', '<p>sdfsadf</p>', '0', '0', '1', '1', '2023-02-21 20:52:13', '2023-02-21 20:52:13');
+INSERT INTO `xw_house` VALUES ('11', '0', '7', '0', '測試最新資訊', null, '測試最新資訊測試最新資訊', '24', '<p>測試最新資訊測試最新資訊測試最新資訊測試最新資訊測試最新資訊測試最新資訊測試最新資訊測試最新資訊</p>', '0', '0', '1', '1', '2023-02-26 10:58:50', '2023-02-26 10:58:50');
+INSERT INTO `xw_house` VALUES ('12', '0', '7', '0', '測試最新資訊2', null, '測試最新資訊2測試最新資訊2測試最新資訊2', '27', '<p>測試最新資訊2測試最新資訊2測試最新資訊2測試最新資訊2<img src=\"/storage/202302/3bc6466ed4b5d7a3cfe6ce9e2af5c42c.png\" alt=\"\" width=\"1000\" height=\"600\" /></p>', '0', '0', '1', '1', '2023-02-26 10:59:37', '2023-02-26 10:59:37');
 
---
--- Table structure for table `xw_lang`
---
+-- ----------------------------
+-- Table structure for xw_house_cate
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_house_cate`;
+CREATE TABLE `xw_house_cate` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL DEFAULT '' COMMENT '地區名',
+  `min_price` decimal(30,4) NOT NULL,
+  `max_price` decimal(30,4) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1可用、-1禁用',
+  `desc` varchar(1000) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COMMENT='幻灯片表';
 
+-- ----------------------------
+-- Records of xw_house_cate
+-- ----------------------------
+INSERT INTO `xw_house_cate` VALUES ('1', '首页轮播', '0.0000', '0.0000', '1', '首页轮播组。', '2023-02-08 19:47:40', '2023-02-11 00:00:00');
+INSERT INTO `xw_house_cate` VALUES ('2', '测试', '0.0000', '0.0000', '1', '11', '2023-02-08 00:00:00', '2023-02-10 00:00:00');
+
+-- ----------------------------
+-- Table structure for xw_house_order
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_house_order`;
+CREATE TABLE `xw_house_order` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `cate_id` int(11) NOT NULL,
+  `house_id` int(11) NOT NULL,
+  `member_id` int(11) NOT NULL,
+  `price` decimal(30,4) NOT NULL,
+  `created_at` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of xw_house_order
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for xw_lang
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_lang`;
 CREATE TABLE `xw_lang` (
-  `id` int(2) NOT NULL,
+  `id` int(2) NOT NULL AUTO_INCREMENT,
   `name` varchar(20) CHARACTER SET utf8 NOT NULL COMMENT '名稱',
   `code` varchar(20) CHARACTER SET utf8 NOT NULL COMMENT '代號',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否啟動',
-  `created_at` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `created_at` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `xw_lang`
---
+-- ----------------------------
+-- Records of xw_lang
+-- ----------------------------
+INSERT INTO `xw_lang` VALUES ('1', '简体中文', 'cn', '1', '2021-06-08 11:36:24');
+INSERT INTO `xw_lang` VALUES ('2', '繁體中文', 'tw', '1', '2021-06-08 11:36:46');
+INSERT INTO `xw_lang` VALUES ('3', 'English', 'en', '1', '2021-06-08 11:37:55');
 
-INSERT INTO `xw_lang` (`id`, `name`, `code`, `status`, `created_at`) VALUES
-(1, '简体中文', 'cn', 1, '2021-06-08 11:36:24'),
-(2, '繁體中文', 'tw', 1, '2021-06-08 11:36:46'),
-(3, 'English', 'en', 1, '2021-06-08 11:37:55');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `xw_member`
---
-
+-- ----------------------------
+-- Table structure for xw_member
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_member`;
 CREATE TABLE `xw_member` (
-  `id` int(11) UNSIGNED NOT NULL COMMENT '用户ID',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '用户ID',
   `pid` int(11) NOT NULL DEFAULT '0' COMMENT '推荐人ID,默认是0',
   `role_id` int(2) NOT NULL DEFAULT '0',
   `invite_code` int(8) NOT NULL DEFAULT '0' COMMENT '邀請碼',
@@ -900,6 +964,8 @@ CREATE TABLE `xw_member` (
   `safe_password` varchar(100) NOT NULL,
   `email` varchar(50) NOT NULL DEFAULT '' COMMENT '邮箱',
   `mobile` varchar(20) NOT NULL DEFAULT '' COMMENT '手机（也可以作为登录账号)',
+  `sieve_total` int(10) NOT NULL DEFAULT '0' COMMENT '总共可用次数',
+  `sieve_today` int(10) NOT NULL DEFAULT '0' COMMENT '今天可用次数',
   `desc` varchar(1000) NOT NULL DEFAULT '' COMMENT '个人简介',
   `status` int(2) NOT NULL DEFAULT '1' COMMENT '状态 0禁用 1正常',
   `last_login_ip` varchar(64) NOT NULL DEFAULT '' COMMENT '最后登录IP',
@@ -907,31 +973,31 @@ CREATE TABLE `xw_member` (
   `register_ip` varchar(64) NOT NULL DEFAULT '' COMMENT '注册IP',
   `created_at` datetime NOT NULL COMMENT '注册时间',
   `last_login_at` datetime DEFAULT NULL COMMENT '最后登录时间',
-  `updated_at` datetime NOT NULL COMMENT '信息更新时间'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
+  `updated_at` datetime NOT NULL COMMENT '信息更新时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`),
+  KEY `pid` (`pid`),
+  KEY `invite_code` (`invite_code`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
 
---
--- Dumping data for table `xw_member`
---
+-- ----------------------------
+-- Records of xw_member
+-- ----------------------------
+INSERT INTO `xw_member` VALUES ('1', '0', '4', '882326', 'demo333', '88316675d7882e3fdbe066000273842c', 'e10adc3949ba59abbe56e057f20f883e', '333@gmail.com', '', '0', '0', '', '1', '127.0.0.1', '72', '127.0.0.1', '2023-02-08 14:16:33', '2023-03-05 16:35:41', '2023-03-05 16:35:41');
+INSERT INTO `xw_member` VALUES ('2', '1', '3', '206042', 'dem3o', 'e10adc3949ba59abbe56e057f20f883e', '', '', '', '0', '0', '', '1', '', '0', '127.0.0.1', '2023-02-08 14:19:38', null, '2023-02-08 14:19:38');
+INSERT INTO `xw_member` VALUES ('3', '2', '2', '331213', 'de3m43o', 'e10adc3949ba59abbe56e057f20f883e', '', '', '', '0', '0', '', '1', '127.0.0.1', '2', '127.0.0.1', '2023-02-08 14:20:24', '2023-02-08 15:29:04', '2023-02-08 15:29:04');
+INSERT INTO `xw_member` VALUES ('4', '3', '1', '525005', 'de3m433o', 'e10adc3949ba59abbe56e057f20f883e', '', 'de3mo@gmail.com', '', '0', '0', '', '1', '', '0', '127.0.0.1', '2023-02-08 14:21:54', null, '2023-02-08 15:07:10');
+INSERT INTO `xw_member` VALUES ('5', '1', '1', '411695', 'de3m433o3', 'e10adc3949ba59abbe56e057f20f883e', '', 'demo.com', '', '0', '0', '', '1', '', '0', '127.0.0.1', '2023-02-08 15:10:02', null, '2023-02-08 15:10:02');
+INSERT INTO `xw_member` VALUES ('6', '2', '1', '212907', 'de3o3', 'fcea920f7412b5da7be0cf42b8c93759', 'e10adc3949ba59abbe56e057f20f883e', 'demo@gmail.com', '', '0', '0', '', '1', '127.0.0.1', '1', '127.0.0.1', '2023-02-08 15:10:31', '2023-02-08 15:30:08', '0000-00-00 00:00:00');
+INSERT INTO `xw_member` VALUES ('7', '1', '1', '716938', 'sdfasdf', 'e10adc3949ba59abbe56e057f20f883e', '', 'demo@gmail.com', '', '0', '0', '', '1', '', '0', '127.0.0.1', '2023-02-09 16:39:03', null, '2023-02-09 16:39:03');
+INSERT INTO `xw_member` VALUES ('12', '2', '0', '159085', 'sdfasdfs', 'e10adc3949ba59abbe56e057f20f883e', '', '', '', '0', '0', '', '1', '', '0', '127.0.0.1', '2023-02-17 11:37:04', null, '2023-02-21 11:39:40');
 
-INSERT INTO `xw_member` (`id`, `pid`, `role_id`, `invite_code`, `username`, `password`, `safe_password`, `email`, `mobile`, `desc`, `status`, `last_login_ip`, `login_num`, `register_ip`, `created_at`, `last_login_at`, `updated_at`) VALUES
-(1, 0, 4, 882326, 'demo333', '88316675d7882e3fdbe066000273842c', 'e10adc3949ba59abbe56e057f20f883e', '333@gmail.com', '', '', 1, '127.0.0.1', 72, '127.0.0.1', '2023-02-08 14:16:33', '2023-03-05 16:35:41', '2023-03-05 16:35:41'),
-(2, 1, 3, 206042, 'dem3o', 'e10adc3949ba59abbe56e057f20f883e', '', '', '', '', 1, '', 0, '127.0.0.1', '2023-02-08 14:19:38', NULL, '2023-02-08 14:19:38'),
-(3, 2, 2, 331213, 'de3m43o', 'e10adc3949ba59abbe56e057f20f883e', '', '', '', '', 1, '127.0.0.1', 2, '127.0.0.1', '2023-02-08 14:20:24', '2023-02-08 15:29:04', '2023-02-08 15:29:04'),
-(4, 3, 1, 525005, 'de3m433o', 'e10adc3949ba59abbe56e057f20f883e', '', 'de3mo@gmail.com', '', '', 1, '', 0, '127.0.0.1', '2023-02-08 14:21:54', NULL, '2023-02-08 15:07:10'),
-(5, 1, 1, 411695, 'de3m433o3', 'e10adc3949ba59abbe56e057f20f883e', '', 'demo.com', '', '', 1, '', 0, '127.0.0.1', '2023-02-08 15:10:02', NULL, '2023-02-08 15:10:02'),
-(6, 2, 1, 212907, 'de3o3', 'fcea920f7412b5da7be0cf42b8c93759', 'e10adc3949ba59abbe56e057f20f883e', 'demo@gmail.com', '', '', 1, '127.0.0.1', 1, '127.0.0.1', '2023-02-08 15:10:31', '2023-02-08 15:30:08', '0000-00-00 00:00:00'),
-(7, 1, 1, 716938, 'sdfasdf', 'e10adc3949ba59abbe56e057f20f883e', '', 'demo@gmail.com', '', '', 1, '', 0, '127.0.0.1', '2023-02-09 16:39:03', NULL, '2023-02-09 16:39:03'),
-(12, 2, 0, 159085, 'sdfasdfs', 'e10adc3949ba59abbe56e057f20f883e', '', '', '', '', 1, '', 0, '127.0.0.1', '2023-02-17 11:37:04', NULL, '2023-02-21 11:39:40');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `xw_member_address`
---
-
+-- ----------------------------
+-- Table structure for xw_member_address
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_member_address`;
 CREATE TABLE `xw_member_address` (
-  `id` int(8) NOT NULL,
+  `id` int(8) NOT NULL AUTO_INCREMENT,
   `chain_id` int(4) NOT NULL,
   `member_id` int(8) NOT NULL,
   `name` varchar(20) CHARACTER SET utf8 NOT NULL,
@@ -939,31 +1005,29 @@ CREATE TABLE `xw_member_address` (
   `client_id` varchar(100) CHARACTER SET utf8 NOT NULL COMMENT '客戶端id',
   `remark` varchar(255) CHARACTER SET utf8 NOT NULL,
   `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `chain_id` (`chain_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `xw_member_address`
---
+-- ----------------------------
+-- Records of xw_member_address
+-- ----------------------------
+INSERT INTO `xw_member_address` VALUES ('1', '1', '0', '測試', '23423423423423', 'bc5e19a9-cea3-446a-bb91-fef21bcc9149', '23423', '2022-05-26 20:12:53', '2022-05-26 20:12:53');
+INSERT INTO `xw_member_address` VALUES ('2', '2', '0', 'trxdemo', '23423423423', 'bc5e19a9-cea3-446a-bb91-fef21bcc9149', '3242', '2022-05-26 20:43:36', '2022-05-26 20:43:36');
+INSERT INTO `xw_member_address` VALUES ('3', '1', '0', 'ethdemo', 'sdfsdfsdfsadfasdfasdf', 'bc5e19a9-cea3-446a-bb91-fef21bcc9149', 'sf', '2022-05-26 20:43:51', '2022-05-26 20:43:51');
+INSERT INTO `xw_member_address` VALUES ('4', '2', '0', '测试', 'kjkjnon', '356ea582-dfb8-4440-b4a5-f80a3c7e081a', '', '2022-05-27 10:51:48', '2022-05-27 10:51:48');
+INSERT INTO `xw_member_address` VALUES ('5', '1', '0', '23423', '0x4e8b9a637753b5ab166d4812c3898e69cd4325f1', 'bc5e19a9-cea3-446a-bb91-fef21bcc9149', '234234', '2022-08-09 12:03:48', '2022-08-09 12:03:48');
+INSERT INTO `xw_member_address` VALUES ('6', '2', '0', 'ceshi', 'sdfsdfsdfasdfas', '', '234234', '2023-02-13 13:20:44', '2023-02-13 13:20:44');
+INSERT INTO `xw_member_address` VALUES ('7', '2', '1', 'SDFSDFSA', '234234', '', '2342342', '2023-02-13 13:22:05', '2023-02-13 13:22:05');
 
-INSERT INTO `xw_member_address` (`id`, `chain_id`, `member_id`, `name`, `address`, `client_id`, `remark`, `created_at`, `updated_at`) VALUES
-(1, 1, 0, '測試', '23423423423423', 'bc5e19a9-cea3-446a-bb91-fef21bcc9149', '23423', '2022-05-26 20:12:53', '2022-05-26 20:12:53'),
-(2, 2, 0, 'trxdemo', '23423423423', 'bc5e19a9-cea3-446a-bb91-fef21bcc9149', '3242', '2022-05-26 20:43:36', '2022-05-26 20:43:36'),
-(3, 1, 0, 'ethdemo', 'sdfsdfsdfsadfasdfasdf', 'bc5e19a9-cea3-446a-bb91-fef21bcc9149', 'sf', '2022-05-26 20:43:51', '2022-05-26 20:43:51'),
-(4, 2, 0, '测试', 'kjkjnon', '356ea582-dfb8-4440-b4a5-f80a3c7e081a', '', '2022-05-27 10:51:48', '2022-05-27 10:51:48'),
-(5, 1, 0, '23423', '0x4e8b9a637753b5ab166d4812c3898e69cd4325f1', 'bc5e19a9-cea3-446a-bb91-fef21bcc9149', '234234', '2022-08-09 12:03:48', '2022-08-09 12:03:48'),
-(6, 2, 0, 'ceshi', 'sdfsdfsdfasdfas', '', '234234', '2023-02-13 13:20:44', '2023-02-13 13:20:44'),
-(7, 2, 1, 'SDFSDFSA', '234234', '', '2342342', '2023-02-13 13:22:05', '2023-02-13 13:22:05');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `xw_member_log`
---
-
+-- ----------------------------
+-- Table structure for xw_member_log
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_member_log`;
 CREATE TABLE `xw_member_log` (
-  `id` int(11) UNSIGNED NOT NULL COMMENT 'ID',
-  `member_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '用户ID',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `member_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '用户ID',
   `username` varchar(255) NOT NULL DEFAULT '' COMMENT '昵称',
   `type` varchar(80) NOT NULL DEFAULT '' COMMENT '操作类型',
   `title` varchar(80) NOT NULL DEFAULT '' COMMENT '操作标题',
@@ -972,79 +1036,77 @@ CREATE TABLE `xw_member_log` (
   `controller` varchar(32) NOT NULL DEFAULT '' COMMENT '控制器',
   `function` varchar(32) NOT NULL DEFAULT '' COMMENT '方法',
   `ip` varchar(64) NOT NULL DEFAULT '' COMMENT '登录ip',
-  `item_id` int(11) UNSIGNED NOT NULL COMMENT '操作ID',
+  `item_id` int(11) unsigned NOT NULL COMMENT '操作ID',
   `param` text COMMENT '参数json格式',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0删除 1正常',
-  `created_at` datetime NOT NULL COMMENT '创建时间'
+  `created_at` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  KEY `member_id` (`member_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户操作日志表';
 
--- --------------------------------------------------------
+-- ----------------------------
+-- Records of xw_member_log
+-- ----------------------------
 
---
--- Table structure for table `xw_member_role`
---
-
+-- ----------------------------
+-- Table structure for xw_member_role
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_member_role`;
 CREATE TABLE `xw_member_role` (
-  `id` int(11) UNSIGNED NOT NULL,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(10) NOT NULL DEFAULT '' COMMENT '等級名稱',
   `desc` varchar(50) DEFAULT NULL,
   `reward_fee` decimal(10,2) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '狀態:0禁用,1正常',
   `created_at` datetime NOT NULL COMMENT '創建時間',
-  `updated_at` datetime NOT NULL COMMENT '更新時間'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='會員等級表';
+  `updated_at` datetime NOT NULL COMMENT '更新時間',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COMMENT='會員等級表';
 
---
--- Dumping data for table `xw_member_role`
---
+-- ----------------------------
+-- Records of xw_member_role
+-- ----------------------------
+INSERT INTO `xw_member_role` VALUES ('1', 'L1', '備註', '0.10', '1', '2023-02-02 10:12:21', '2023-02-21 20:56:51');
+INSERT INTO `xw_member_role` VALUES ('2', 'L2', '', '0.20', '1', '2023-02-02 10:12:21', '2023-02-21 10:33:09');
+INSERT INTO `xw_member_role` VALUES ('3', 'L3', '', '0.30', '1', '2023-02-02 10:12:21', '2023-02-02 10:12:21');
+INSERT INTO `xw_member_role` VALUES ('4', 'L4', '', '0.40', '1', '2023-02-02 10:12:21', '2023-02-02 10:12:21');
+INSERT INTO `xw_member_role` VALUES ('5', 'L5', '', '0.50', '1', '2023-02-02 10:12:21', '2023-02-02 10:12:21');
+INSERT INTO `xw_member_role` VALUES ('6', 'L6', '', '0.60', '1', '2023-02-02 10:12:21', '2023-02-02 10:12:21');
+INSERT INTO `xw_member_role` VALUES ('7', 'L7', '', '0.70', '1', '2023-02-02 10:12:21', '2023-02-02 10:12:21');
+INSERT INTO `xw_member_role` VALUES ('8', 'L8', '', '0.80', '1', '2023-02-02 10:12:21', '2023-02-02 10:12:21');
+INSERT INTO `xw_member_role` VALUES ('9', 'L9', '', '0.90', '1', '2023-02-02 10:12:21', '2023-02-02 10:12:21');
+INSERT INTO `xw_member_role` VALUES ('10', 'L10', '', '1.00', '1', '2023-02-02 10:12:21', '2023-02-02 10:12:21');
 
-INSERT INTO `xw_member_role` (`id`, `name`, `desc`, `reward_fee`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'L1', '備註', '0.10', 1, '2023-02-02 10:12:21', '2023-02-21 20:56:51'),
-(2, 'L2', '', '0.20', 1, '2023-02-02 10:12:21', '2023-02-21 10:33:09'),
-(3, 'L3', '', '0.30', 1, '2023-02-02 10:12:21', '2023-02-02 10:12:21'),
-(4, 'L4', '', '0.40', 1, '2023-02-02 10:12:21', '2023-02-02 10:12:21'),
-(5, 'L5', '', '0.50', 1, '2023-02-02 10:12:21', '2023-02-02 10:12:21'),
-(6, 'L6', '', '0.60', 1, '2023-02-02 10:12:21', '2023-02-02 10:12:21'),
-(7, 'L7', '', '0.70', 1, '2023-02-02 10:12:21', '2023-02-02 10:12:21'),
-(8, 'L8', '', '0.80', 1, '2023-02-02 10:12:21', '2023-02-02 10:12:21'),
-(9, 'L9', '', '0.90', 1, '2023-02-02 10:12:21', '2023-02-02 10:12:21'),
-(10, 'L10', '', '1.00', 1, '2023-02-02 10:12:21', '2023-02-02 10:12:21');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `xw_page`
---
-
+-- ----------------------------
+-- Table structure for xw_page
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_page`;
 CREATE TABLE `xw_page` (
-  `id` int(11) UNSIGNED NOT NULL,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(200) NOT NULL DEFAULT '' COMMENT '页面名称',
   `desc` varchar(1000) NOT NULL DEFAULT '' COMMENT '页面摘要',
   `content` text NOT NULL COMMENT '内容',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '页面状态:0下架,1正常',
-  `read` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '阅读量',
-  `sort_order` int(4) UNSIGNED NOT NULL DEFAULT '9999' COMMENT '排序',
+  `read` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '阅读量',
+  `sort_order` int(4) unsigned NOT NULL DEFAULT '9999' COMMENT '排序',
   `name` varchar(200) NOT NULL DEFAULT '' COMMENT 'url文件名',
   `template` varchar(200) NOT NULL DEFAULT '' COMMENT '前端模板',
   `created_at` datetime NOT NULL COMMENT '创建时间',
-  `updated_at` datetime NOT NULL COMMENT '编辑时间'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='单页面';
+  `updated_at` datetime NOT NULL COMMENT '编辑时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='单页面';
 
---
--- Dumping data for table `xw_page`
---
+-- ----------------------------
+-- Records of xw_page
+-- ----------------------------
+INSERT INTO `xw_page` VALUES ('1', '关于我们', '', '<p>&nbsp;</p>\n<p>3<img src=\"/storage/202302/9ef296dcc0f19c6d03caac968ccba23f.jpg\" alt=\"\" width=\"960\" height=\"1280\" /></p>', '1', '1', '0', '', 'default', '0000-00-00 00:00:00', '2023-02-21 21:42:10');
 
-INSERT INTO `xw_page` (`id`, `title`, `desc`, `content`, `status`, `read`, `sort_order`, `name`, `template`, `created_at`, `updated_at`) VALUES
-(1, '关于我们', '', '<p>&nbsp;</p>\n<p>3<img src=\"/storage/202302/9ef296dcc0f19c6d03caac968ccba23f.jpg\" alt=\"\" width=\"960\" height=\"1280\" /></p>', 1, 1, 0, '', 'default', '0000-00-00 00:00:00', '2023-02-21 21:42:10');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `xw_spot_pair`
---
-
+-- ----------------------------
+-- Table structure for xw_spot_pair
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_spot_pair`;
 CREATE TABLE `xw_spot_pair` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `code` varchar(32) CHARACTER SET utf8 NOT NULL COMMENT '交易對',
   `last_price` decimal(30,16) NOT NULL,
   `exchange_id` int(2) NOT NULL COMMENT '所属交易所',
@@ -1074,52 +1136,55 @@ CREATE TABLE `xw_spot_pair` (
   `is_limit_buy` tinyint(1) NOT NULL DEFAULT '0' COMMENT '现价买',
   `is_limit_sell` tinyint(1) NOT NULL DEFAULT '0' COMMENT '现价卖',
   `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='币币设置';
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `pair` (`code`),
+  KEY `exchange_id` (`exchange_id`),
+  KEY `cate_id` (`cate_id`),
+  KEY `base_currency_id` (`base_id`),
+  KEY `quote_currency_id` (`quote_id`),
+  KEY `is_recommend` (`is_recommend`),
+  KEY `is_show` (`is_show`),
+  KEY `is_trade` (`is_trade`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COMMENT='币币设置';
 
---
--- Dumping data for table `xw_spot_pair`
---
+-- ----------------------------
+-- Records of xw_spot_pair
+-- ----------------------------
+INSERT INTO `xw_spot_pair` VALUES ('1', 'btcusdt', '23931.6100000000000000', '3', '1', '/', '3', '2', '1', '0.0000', '6', '2', '0', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '9999', '1', '1', '1', '0', '0', '0', '0', '2021-06-10 17:55:17', '2023-02-22 10:34:34');
+INSERT INTO `xw_spot_pair` VALUES ('2', 'ethusdt', '1628.7700000000000000', '3', '1', '/', '4', '2', '1', '0.0000', '4', '2', '0', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '9998', '1', '1', '1', '0', '0', '0', '0', '2021-06-10 17:55:31', '2023-02-22 10:34:34');
+INSERT INTO `xw_spot_pair` VALUES ('3', 'trxusdt', '0.0684300000000000', '3', '1', '/', '5', '2', '1', '0.0000', '6', '2', '6', '10.00', '10000.00', '10.00', '10000.00', '0.00', '0.00', '0.00', '0.00', '9997', '1', '1', '1', '0', '0', '1', '1', '2021-06-10 17:55:50', '2023-02-22 10:34:34');
+INSERT INTO `xw_spot_pair` VALUES ('4', 'dogeusdt', '0.0000000000000000', '3', '1', '/', '6', '2', '2', '2.0000', '6', '2', '6', '10.00', '10000.00', '10.00', '10000.00', '0.00', '0.00', '0.00', '0.00', '0', '0', '1', '0', '0', '0', '0', '0', '2021-06-10 17:55:50', '2022-03-09 02:53:35');
+INSERT INTO `xw_spot_pair` VALUES ('5', 'ltcusdt', '93.8800000000000000', '3', '1', '/', '8', '2', '1', '1.0000', '6', '2', '6', '10.00', '10000.00', '10.00', '10000.00', '0.00', '0.00', '0.00', '0.00', '0', '0', '1', '0', '0', '0', '0', '0', '2021-06-10 17:55:50', '2023-02-22 10:34:35');
+INSERT INTO `xw_spot_pair` VALUES ('6', 'linkusdt', '7.4200000000000000', '3', '1', '/', '7', '2', '1', '0.0000', '6', '2', '6', '10.00', '10000.00', '10.00', '10000.00', '0.00', '0.00', '0.00', '0.00', '0', '0', '1', '0', '0', '0', '0', '0', '2021-06-10 17:55:50', '2023-02-22 10:34:34');
+INSERT INTO `xw_spot_pair` VALUES ('7', 'eosusdt', '1.1860000000000000', '3', '1', '/', '9', '2', '1', '0.0000', '6', '2', '6', '10.00', '10000.00', '10.00', '10000.00', '0.00', '0.00', '0.00', '0.00', '0', '0', '1', '0', '0', '0', '0', '0', '2021-06-10 17:55:50', '2023-02-22 10:34:34');
+INSERT INTO `xw_spot_pair` VALUES ('8', 'bnbusdt', '1.1860000000000000', '3', '1', '/', '10', '2', '1', '0.0000', '6', '2', '6', '10.00', '10000.00', '10.00', '10000.00', '0.00', '0.00', '0.00', '0.00', '0', '0', '0', '0', '0', '0', '0', '0', '2021-06-10 17:55:50', '2023-02-22 10:34:34');
 
-INSERT INTO `xw_spot_pair` (`id`, `code`, `last_price`, `exchange_id`, `cate_id`, `delimiter`, `base_id`, `quote_id`, `fee_type`, `fee`, `price_decimal`, `amount_decimal`, `order_decimal`, `order_min_price`, `order_max_price`, `limit_min_amount`, `limit_max_amount`, `market_buy_min_price`, `market_buy_max_price`, `market_sell_min_amount`, `market_sell_max_amount`, `sort_order`, `is_recommend`, `is_show`, `is_trade`, `is_market_buy`, `is_market_sell`, `is_limit_buy`, `is_limit_sell`, `created_at`, `updated_at`) VALUES
-(1, 'btcusdt', '23931.6100000000000000', 3, 1, '/', 3, 2, 1, '0.0000', 6, 2, 0, '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 9999, 1, 1, 1, 0, 0, 0, 0, '2021-06-10 17:55:17', '2023-02-22 10:34:34'),
-(2, 'ethusdt', '1628.7700000000000000', 3, 1, '/', 4, 2, 1, '0.0000', 4, 2, 0, '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 9998, 1, 1, 1, 0, 0, 0, 0, '2021-06-10 17:55:31', '2023-02-22 10:34:34'),
-(3, 'trxusdt', '0.0684300000000000', 3, 1, '/', 5, 2, 1, '0.0000', 6, 2, 6, '10.00', '10000.00', '10.00', '10000.00', '0.00', '0.00', '0.00', '0.00', 9997, 1, 1, 1, 0, 0, 1, 1, '2021-06-10 17:55:50', '2023-02-22 10:34:34'),
-(4, 'dogeusdt', '0.0000000000000000', 3, 1, '/', 6, 2, 2, '2.0000', 6, 2, 6, '10.00', '10000.00', '10.00', '10000.00', '0.00', '0.00', '0.00', '0.00', 0, 0, 1, 0, 0, 0, 0, 0, '2021-06-10 17:55:50', '2022-03-09 02:53:35'),
-(5, 'ltcusdt', '93.8800000000000000', 3, 1, '/', 8, 2, 1, '1.0000', 6, 2, 6, '10.00', '10000.00', '10.00', '10000.00', '0.00', '0.00', '0.00', '0.00', 0, 0, 1, 0, 0, 0, 0, 0, '2021-06-10 17:55:50', '2023-02-22 10:34:35'),
-(6, 'linkusdt', '7.4200000000000000', 3, 1, '/', 7, 2, 1, '0.0000', 6, 2, 6, '10.00', '10000.00', '10.00', '10000.00', '0.00', '0.00', '0.00', '0.00', 0, 0, 1, 0, 0, 0, 0, 0, '2021-06-10 17:55:50', '2023-02-22 10:34:34'),
-(7, 'eosusdt', '1.1860000000000000', 3, 1, '/', 9, 2, 1, '0.0000', 6, 2, 6, '10.00', '10000.00', '10.00', '10000.00', '0.00', '0.00', '0.00', '0.00', 0, 0, 1, 0, 0, 0, 0, 0, '2021-06-10 17:55:50', '2023-02-22 10:34:34'),
-(8, 'bnbusdt', '1.1860000000000000', 3, 1, '/', 10, 2, 1, '0.0000', 6, 2, 6, '10.00', '10000.00', '10.00', '10000.00', '0.00', '0.00', '0.00', '0.00', 0, 0, 0, 0, 0, 0, 0, 0, '2021-06-10 17:55:50', '2023-02-22 10:34:34');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `xw_task_log`
---
-
+-- ----------------------------
+-- Table structure for xw_task_log
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_task_log`;
 CREATE TABLE `xw_task_log` (
-  `id` int(8) NOT NULL,
+  `id` int(8) NOT NULL AUTO_INCREMENT,
   `item` varchar(50) CHARACTER SET utf8 NOT NULL,
   `content` text CHARACTER SET utf8 NOT NULL COMMENT '备注',
-  `created_at` timestamp NOT NULL,
-  `finished_at` datetime NOT NULL COMMENT '完成时间'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `finished_at` datetime NOT NULL COMMENT '完成时间',
+  PRIMARY KEY (`id`),
+  KEY `item` (`item`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `xw_task_log`
---
+-- ----------------------------
+-- Records of xw_task_log
+-- ----------------------------
+INSERT INTO `xw_task_log` VALUES ('1', 'reward_swap_fee', 'a:3:{s:9:\"startTime\";s:19:\"2023-02-21 00:00:00\";s:7:\"endTime\";s:19:\"2023-02-21 23:59:59\";s:5:\"total\";i:2;}', '2023-02-22 12:57:01', '2023-02-22 12:57:01');
 
-INSERT INTO `xw_task_log` (`id`, `item`, `content`, `created_at`, `finished_at`) VALUES
-(1, 'reward_swap_fee', 'a:3:{s:9:\"startTime\";s:19:\"2023-02-21 00:00:00\";s:7:\"endTime\";s:19:\"2023-02-21 23:59:59\";s:5:\"total\";i:2;}', '2023-02-22 04:57:01', '2023-02-22 12:57:01');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `xw_wallet`
---
-
+-- ----------------------------
+-- Table structure for xw_wallet
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_wallet`;
 CREATE TABLE `xw_wallet` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `client_id` varchar(50) CHARACTER SET utf8 NOT NULL COMMENT '客户端id',
   `chain_id` int(11) NOT NULL COMMENT '币链id',
   `member_id` int(11) NOT NULL COMMENT '用户ID',
@@ -1137,474 +1202,19 @@ CREATE TABLE `xw_wallet` (
   `is_back` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否備份',
   `is_delete` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `xw_wallet`
---
-
-INSERT INTO `xw_wallet` (`id`, `client_id`, `chain_id`, `member_id`, `wallet_id`, `name`, `password`, `password_tip`, `address`, `memo`, `is_default`, `has_mnemonic`, `eye`, `is_import`, `is_show`, `is_back`, `is_delete`, `created_at`, `updated_at`) VALUES
-(1, 'fc8f9481-ffe0-4fa7-9408-7c09254e65c3', 2, 1, '2996cff3-7105-4693-9a90-2754cef82e8e', 'aaa', 'e10adc3949ba59abbe56e057f20f883e', '1', 'TG4YUkqW7kNWarjvSriuFV3omCThMfMwaf', '', 0, 0, 'close', 0, 1, 0, 0, '2023-02-13 22:01:38', '2023-02-27 19:34:09'),
-(2, 'fc8f9481-ffe0-4fa7-9408-7c09254e65c3', 3, 1, '3541d065-ef4e-4cc6-9ddb-5670d8c897ad', 'demo6', 'e10adc3949ba59abbe56e057f20f883e', '1', '0xae5fedf5a1f20d266aa40186fa60d2eedc82a54a', '', 1, 0, 'close', 0, 1, 0, 0, '2023-02-14 11:30:45', '2023-02-28 12:35:40'),
-(3, 'fc8f9481-ffe0-4fa7-9408-7c09254e65c3', 3, 1, 'd963fa58-db40-4bc8-b7e6-68e0134adea9', 'demo2', 'e10adc3949ba59abbe56e057f20f883e', '1', '0xa352c79d2acf0af83eb07aa132c0c038a3dd0dea', '', 0, 0, 'close', 0, 1, 0, 0, '2023-02-23 23:20:31', '2023-02-28 12:24:57');
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `xw_account`
---
-ALTER TABLE `xw_account`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `member_id_2` (`member_id`,`currency_id`,`asset_type`),
-  ADD KEY `member_id` (`member_id`),
-  ADD KEY `asset_type` (`asset_type`),
-  ADD KEY `currency_id` (`currency_id`);
-
---
--- Indexes for table `xw_account_log`
---
-ALTER TABLE `xw_account_log`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `currency_id` (`currency_id`),
-  ADD KEY `member_id` (`member_id`),
-  ADD KEY `scene` (`scene`),
-  ADD KEY `asset_type` (`asset_type`);
-
---
--- Indexes for table `xw_account_pair`
---
-ALTER TABLE `xw_account_pair`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `is_show` (`status`);
-
---
--- Indexes for table `xw_account_recharge`
---
-ALTER TABLE `xw_account_recharge`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `trx_id` (`tx_id`(255)) USING BTREE,
-  ADD KEY `member_id` (`member_id`) USING BTREE;
-
---
--- Indexes for table `xw_account_reward`
---
-ALTER TABLE `xw_account_reward`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `member_id` (`member_id`),
-  ADD KEY `amount` (`amount`),
-  ADD KEY `currency_id` (`currency_id`),
-  ADD KEY `asset_type` (`asset_type`),
-  ADD KEY `created_at` (`created_at`);
-
---
--- Indexes for table `xw_account_transfer`
---
-ALTER TABLE `xw_account_transfer`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `from_account` (`from_member`),
-  ADD KEY `to_account` (`to_member`),
-  ADD KEY `currency_id` (`currency_id`);
-
---
--- Indexes for table `xw_account_withdraw`
---
-ALTER TABLE `xw_account_withdraw`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `member_id` (`member_id`) USING BTREE,
-  ADD KEY `currency_chain_id` (`cc_id`);
-
---
--- Indexes for table `xw_admin`
---
-ALTER TABLE `xw_admin`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `id` (`id`) USING BTREE;
-
---
--- Indexes for table `xw_admin_department`
---
-ALTER TABLE `xw_admin_department`
-  ADD PRIMARY KEY (`id`) USING BTREE;
-
---
--- Indexes for table `xw_admin_log`
---
-ALTER TABLE `xw_admin_log`
-  ADD PRIMARY KEY (`id`) USING BTREE;
-
---
--- Indexes for table `xw_admin_menu`
---
-ALTER TABLE `xw_admin_menu`
-  ADD PRIMARY KEY (`id`) USING BTREE;
-
---
--- Indexes for table `xw_admin_position`
---
-ALTER TABLE `xw_admin_position`
-  ADD PRIMARY KEY (`id`) USING BTREE;
-
---
--- Indexes for table `xw_admin_role`
---
-ALTER TABLE `xw_admin_role`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `id` (`id`) USING BTREE;
-
---
--- Indexes for table `xw_admin_role_access`
---
-ALTER TABLE `xw_admin_role_access`
-  ADD UNIQUE KEY `uid_group_id` (`uid`,`role_id`) USING BTREE;
-
---
--- Indexes for table `xw_article`
---
-ALTER TABLE `xw_article`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `cate_id` (`cate_id`);
-
---
--- Indexes for table `xw_article_cate`
---
-ALTER TABLE `xw_article_cate`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `pid` (`pid`);
-
---
--- Indexes for table `xw_banner`
---
-ALTER TABLE `xw_banner`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `cate_id` (`cate_id`),
-  ADD KEY `lang` (`lang`);
-
---
--- Indexes for table `xw_banner_cate`
---
-ALTER TABLE `xw_banner_cate`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `xw_chain`
---
-ALTER TABLE `xw_chain`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `xw_config`
---
-ALTER TABLE `xw_config`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `xw_currency`
---
-ALTER TABLE `xw_currency`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `code` (`code`),
-  ADD UNIQUE KEY `name_en` (`name_en`),
-  ADD KEY `status` (`status`),
-  ADD KEY `sort_order` (`sort_order`);
-
---
--- Indexes for table `xw_currency_chain`
---
-ALTER TABLE `xw_currency_chain`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `currency_id` (`currency_id`),
-  ADD KEY `chain_id` (`chain_id`),
-  ADD KEY `status` (`status`);
-
---
--- Indexes for table `xw_exchange`
---
-ALTER TABLE `xw_exchange`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `code` (`code`),
-  ADD KEY `status` (`status`),
-  ADD KEY `sort_order` (`sort_order`);
-
---
--- Indexes for table `xw_file`
---
-ALTER TABLE `xw_file`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `xw_lang`
---
-ALTER TABLE `xw_lang`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `xw_member`
---
-ALTER TABLE `xw_member`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `username` (`username`),
-  ADD KEY `pid` (`pid`),
-  ADD KEY `invite_code` (`invite_code`);
-
---
--- Indexes for table `xw_member_address`
---
-ALTER TABLE `xw_member_address`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `chain_id` (`chain_id`);
-
---
--- Indexes for table `xw_member_log`
---
-ALTER TABLE `xw_member_log`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `member_id` (`member_id`);
-
---
--- Indexes for table `xw_member_role`
---
-ALTER TABLE `xw_member_role`
-  ADD PRIMARY KEY (`id`) USING BTREE;
-
---
--- Indexes for table `xw_page`
---
-ALTER TABLE `xw_page`
-  ADD PRIMARY KEY (`id`) USING BTREE;
-
---
--- Indexes for table `xw_spot_pair`
---
-ALTER TABLE `xw_spot_pair`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `pair` (`code`),
-  ADD KEY `exchange_id` (`exchange_id`),
-  ADD KEY `cate_id` (`cate_id`),
-  ADD KEY `base_currency_id` (`base_id`),
-  ADD KEY `quote_currency_id` (`quote_id`),
-  ADD KEY `is_recommend` (`is_recommend`),
-  ADD KEY `is_show` (`is_show`),
-  ADD KEY `is_trade` (`is_trade`);
-
---
--- Indexes for table `xw_task_log`
---
-ALTER TABLE `xw_task_log`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `item` (`item`);
-
---
--- Indexes for table `xw_wallet`
---
-ALTER TABLE `xw_wallet`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `wallet_id` (`wallet_id`),
-  ADD UNIQUE KEY `currency_chain_id_2` (`chain_id`,`member_id`,`address`),
-  ADD KEY `member_id` (`member_id`) USING BTREE,
-  ADD KEY `currency_chain_id` (`chain_id`),
-  ADD KEY `client_id` (`client_id`),
-  ADD KEY `address` (`address`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `xw_account`
---
-ALTER TABLE `xw_account`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `xw_account_log`
---
-ALTER TABLE `xw_account_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
-
---
--- AUTO_INCREMENT for table `xw_account_pair`
---
-ALTER TABLE `xw_account_pair`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `xw_account_recharge`
---
-ALTER TABLE `xw_account_recharge`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `xw_account_reward`
---
-ALTER TABLE `xw_account_reward`
-  MODIFY `id` int(8) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `xw_account_transfer`
---
-ALTER TABLE `xw_account_transfer`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `xw_account_withdraw`
---
-ALTER TABLE `xw_account_withdraw`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT for table `xw_admin`
---
-ALTER TABLE `xw_admin`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `xw_admin_department`
---
-ALTER TABLE `xw_admin_department`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
-
---
--- AUTO_INCREMENT for table `xw_admin_log`
---
-ALTER TABLE `xw_admin_log`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID', AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `xw_admin_menu`
---
-ALTER TABLE `xw_admin_menu`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=177;
-
---
--- AUTO_INCREMENT for table `xw_admin_position`
---
-ALTER TABLE `xw_admin_position`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT for table `xw_admin_role`
---
-ALTER TABLE `xw_admin_role`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT for table `xw_article`
---
-ALTER TABLE `xw_article`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
-
---
--- AUTO_INCREMENT for table `xw_article_cate`
---
-ALTER TABLE `xw_article_cate`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
---
--- AUTO_INCREMENT for table `xw_banner`
---
-ALTER TABLE `xw_banner`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `xw_banner_cate`
---
-ALTER TABLE `xw_banner_cate`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT for table `xw_chain`
---
-ALTER TABLE `xw_chain`
-  MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT for table `xw_config`
---
-ALTER TABLE `xw_config`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT for table `xw_currency`
---
-ALTER TABLE `xw_currency`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
-
---
--- AUTO_INCREMENT for table `xw_currency_chain`
---
-ALTER TABLE `xw_currency_chain`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
--- AUTO_INCREMENT for table `xw_exchange`
---
-ALTER TABLE `xw_exchange`
-  MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT for table `xw_file`
---
-ALTER TABLE `xw_file`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
-
---
--- AUTO_INCREMENT for table `xw_lang`
---
-ALTER TABLE `xw_lang`
-  MODIFY `id` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT for table `xw_member`
---
-ALTER TABLE `xw_member`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '用户ID', AUTO_INCREMENT=13;
-
---
--- AUTO_INCREMENT for table `xw_member_address`
---
-ALTER TABLE `xw_member_address`
-  MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
---
--- AUTO_INCREMENT for table `xw_member_log`
---
-ALTER TABLE `xw_member_log`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID';
-
---
--- AUTO_INCREMENT for table `xw_member_role`
---
-ALTER TABLE `xw_member_role`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
-
---
--- AUTO_INCREMENT for table `xw_page`
---
-ALTER TABLE `xw_page`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `xw_spot_pair`
---
-ALTER TABLE `xw_spot_pair`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-
---
--- AUTO_INCREMENT for table `xw_task_log`
---
-ALTER TABLE `xw_task_log`
-  MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `xw_wallet`
---
-ALTER TABLE `xw_wallet`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `wallet_id` (`wallet_id`),
+  UNIQUE KEY `currency_chain_id_2` (`chain_id`,`member_id`,`address`),
+  KEY `member_id` (`member_id`) USING BTREE,
+  KEY `currency_chain_id` (`chain_id`),
+  KEY `client_id` (`client_id`),
+  KEY `address` (`address`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of xw_wallet
+-- ----------------------------
+INSERT INTO `xw_wallet` VALUES ('1', 'fc8f9481-ffe0-4fa7-9408-7c09254e65c3', '2', '1', '2996cff3-7105-4693-9a90-2754cef82e8e', 'aaa', 'e10adc3949ba59abbe56e057f20f883e', '1', 'TG4YUkqW7kNWarjvSriuFV3omCThMfMwaf', '', '0', '0', 'close', '0', '1', '0', '0', '2023-02-13 22:01:38', '2023-02-27 19:34:09');
+INSERT INTO `xw_wallet` VALUES ('2', 'fc8f9481-ffe0-4fa7-9408-7c09254e65c3', '3', '1', '3541d065-ef4e-4cc6-9ddb-5670d8c897ad', 'demo6', 'e10adc3949ba59abbe56e057f20f883e', '1', '0xae5fedf5a1f20d266aa40186fa60d2eedc82a54a', '', '1', '0', 'close', '0', '1', '0', '0', '2023-02-14 11:30:45', '2023-02-28 12:35:40');
+INSERT INTO `xw_wallet` VALUES ('3', 'fc8f9481-ffe0-4fa7-9408-7c09254e65c3', '3', '1', 'd963fa58-db40-4bc8-b7e6-68e0134adea9', 'demo2', 'e10adc3949ba59abbe56e057f20f883e', '1', '0xa352c79d2acf0af83eb07aa132c0c038a3dd0dea', '', '0', '0', 'close', '0', '1', '0', '0', '2023-02-23 23:20:31', '2023-02-28 12:24:57');
