@@ -8,7 +8,7 @@
 <script type="text/html" id="status">
 	<i class="layui-icon {{#  if(d.status == 1){ }}layui-icon-ok{{#  } else { }}layui-icon-close{{#  } }}"></i>
 </script>
-<script type="text/html" id="toolbarDemo">
+<script type="text/html" id="toolbar">
 	<div class="flex items-center">
 		<div class="layui-btn-container">
 			<button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="add">+ 添加配置項</button>
@@ -28,7 +28,7 @@
 		layui.pageTable = table.render({
 			elem: '#conf',
 			title: '配置列表',
-			toolbar: '#toolbarDemo',
+			toolbar: '#toolbar',
 			url: "/admin/conf/index",
 			page: true, //開啟分頁
 			limit: 20,

@@ -60,13 +60,8 @@ class BaseValidate extends Validate
 
     protected function checkStatus($value, $rule, $data = [])
     {
-        try {
-            $status = Db::name($data['table'])->where('id', $data['id'])->value('status');
-            return $status == 1;
-        } catch (\Exception $e) {
-            return false;
-        }
-
+        $status = Db::name($data['table'])->where('id', $data['id'])->value('status');
+        return $status == 1;
     }
 
 }

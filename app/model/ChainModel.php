@@ -12,8 +12,7 @@ class ChainModel extends BaseModel
 
     public function getChainList($where = [])
     {
-        $list = $this->where($where)->order(['sort_order' => 'desc', 'id' => 'desc'])->select();
-        return $list;
+        return $this->where($where)->order(['sort_order' => 'desc', 'id' => 'desc'])->select();
     }
 
 

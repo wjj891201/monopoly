@@ -1,0 +1,167 @@
+{extend name="common/base"/}
+<!-- 主體 -->
+{block name="body"}
+<style>
+    tbody .layui-table-cell {
+        height: auto;
+        line-height: normal;
+    }
+</style>
+<div class="p-3">
+    <form class="layui-form gg-form-bar border-t border-x">
+        <div class="layui-input-inline" style="width:300px;">
+            <input type="text" name="keywords" placeholder="請輸入關鍵字" class="layui-input" autocomplete="off"/>
+        </div>
+        <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="searchform">提交搜索</button>
+    </form>
+    <table class="layui-hide" id="datalist" lay-filter="datalist"></table>
+</div>
+
+<!--<script type="text/html" id="toolbarDemo">-->
+<!--    <div class="layui-btn-container">-->
+<!--        <span class="layui-btn layui-btn-sm layui-btn-normal" lay-event="add" data-title="添加訂單">+ 添加訂單</span>-->
+<!--    </div>-->
+<!--</script>-->
+
+<script type="text/html" id="barDemo">
+    <div class="layui-btn-group"><a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit">編輯</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">刪除</a></div>
+</script>
+
+
+<script type="text/html" id="store">
+    <div>
+        商戶名稱：{{d.store_name}}
+    </div>
+    <div>
+        店主帳號：{{d.manager_username}}
+    </div>
+</script>
+
+<script type="text/html" id="datetime">
+    <div>
+        創建時間：{{d.created_at}}
+    </div>
+    {{#  if(d.finished_at != '0000-00-00 00:00:00'){ }}
+    <div>
+        完成時間：{{d.finished_at}}
+    </div>
+    {{#  } }}
+    {{#  if(d.cancel_at != '0000-00-00 00:00:00'){ }}
+    <div>
+        撤銷時間：{{d.cancel_at}}
+    </div>
+    {{#  } }}
+    {{#  if(d.settled_at != '0000-00-00 00:00:00'){ }}
+    <div>
+        撤銷時間：{{d.settled_at}}
+    </div>
+    {{#  } }}
+</script>
+
+{/block}
+<!-- /主體 -->
+
+<!-- 腳本 -->
+{block name="script"}
+<script>
+    const moduleInit = ['tool'];
+
+    function xuwenInit() {
+        var table = layui.table, tool = layui.tool, form = layui.form;
+        layui.pageTable = table.render({
+            elem: '#datalist',
+            title: '列表',
+            // toolbar: '#toolbarDemo',
+            url: '/store/store_order/list',
+            page: true,
+            limit: 20,
+            cellMinWidth: 300,
+            cols: [
+                [
+                    {
+                        field: 'id',
+                        title: '編號',
+                        align: 'center',
+                        width: 80
+                    }, {
+                    field: 'order_sn',
+                    title: '訂單編號',
+                    align: 'center',
+                    width: 200
+                }, {
+                    title: '商戶名稱',
+                    toolbar: '#store',
+                    width: 300
+                },  {
+                    field: 'username',
+                    title: '用戶名稱',
+                    align: 'center',
+                    width: 200
+                },{
+                    field: 'amount',
+                    title: '金額',
+                    align: 'center',
+                    width: 200
+                }, {
+                    field: 'status_name',
+                    title: '狀態',
+                    align: 'center',
+                    width: 200
+                },{
+                    title: '創建時間',
+                    align: 'center',
+                    toolbar: '#datetime',
+                }
+                ]
+            ]
+        });
+
+        //監聽表頭工具欄事件
+        table.on('toolbar(datalist)', function (obj) {
+            if (obj.event === 'add') {
+                tool.side("/store/store_order/add");
+                return false;
+            }
+        });
+
+        //監聽表格行工具事件
+        table.on('tool(datalist)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {
+                tool.side('/store/store_order/edit?id=' + obj.data.id);
+            } else if (obj.event === 'del') {
+                layer.confirm('確定要刪除該記錄嗎?', {
+                    icon: 3,
+                    title: '提示'
+                }, function (index) {
+                    let callback = function (e) {
+                        layer.msg(e.msg);
+                        if (e.code == 0) {
+                            obj.del();
+                        }
+                    }
+                    tool.delete("/store/store_order/delete", {id: data.id}, callback);
+                    layer.close(index);
+                });
+            }
+            return false;
+        });
+
+
+        //監聽搜索提交
+        form.on('submit(searchform)', function (data) {
+            layui.pageTable.reload({
+                where: {
+                    keywords: data.field.keywords,
+                },
+                page: {
+                    curr: 1
+                }
+            });
+            return false;
+        });
+    }
+</script>
+{/block}
+<!-- /腳本 -->

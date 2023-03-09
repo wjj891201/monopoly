@@ -9,6 +9,68 @@ use think\facade\Request;
 use think\facade\Session;
 
 
+function search_where($param, $whereArr)
+{
+    if (!is_array($whereArr)) {
+        return [];
+    }
+    $where = [];
+    foreach ($whereArr as $value) {
+        if (!is_array($value) || empty($value)) continue;
+        $temp = match (count($value)) {
+            3 => create_where($param, $value[0], $value[1], $value[2]),
+            2 => create_where($param, $value[0], $value[1]),
+            1 => create_where($param, $value[0]),
+            default => [],
+        };
+        if (!empty($temp)) {
+            $where[] = $temp;
+        }
+    }
+    return $where;
+}
+
+
+function create_where($param, $field, $operate = '', $key = '')
+{
+    $operate = $operate == '' ? '=' : $operate;
+    if ($key == '') {
+        $fieldArr = explode('.', $field);
+        $key = count($fieldArr) == 2 ? $fieldArr[1] : $fieldArr[0];
+    }
+    if (!empty($param[$key])) {
+        $value = match ($operate) {
+            'like' => '%' . $param[$key] . '%',
+            default => $param[$key],
+        };
+        return [$field, $operate, $value];
+    }
+    return [];
+}
+
+
+function search_date($param, $field = 'created_at')
+{
+    $where = [];
+    $start_time = $param['start_time'] ?? 0;
+    $end_time = $param['end_time'] ?? 0;
+
+    if ($start_time > 0 && $end_time > 0) {
+        if ($start_time === $end_time) {
+            $where[] = [$field, '=', $start_time];
+        } else {
+            $where[] = [$field, '>=', $start_time];
+            $where[] = [$field, '<=', $end_time];
+        }
+    } elseif ($start_time > 0 && $end_time == 0) {
+        $where[] = [$field, '>=', $start_time];
+    } elseif ($start_time == 0 && $end_time > 0) {
+        $where[] = [$field, '<=', $end_time];
+    }
+    return $where;
+}
+
+
 //设置缓存
 function set_cache($key, $value, $date = 86400)
 {

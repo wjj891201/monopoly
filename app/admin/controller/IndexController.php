@@ -27,7 +27,9 @@ class IndexController extends BaseController
                 $v = explode(',', $v);
                 $adminMenus = array_merge($adminMenus, $v);
             }
-            $menu = Db::name('admin_menu')->where(['menu' => 1, 'status' => 1])->where('id', 'in', $adminMenus)->order('sort_order asc')->select()->toArray();
+            $menu = Db::name('admin_menu')
+                ->where(['menu' => 1, 'status' => 1])
+                ->where('id', 'in', $adminMenus)->order('sort_order asc')->select()->toArray();
             $list = list_to_tree($menu);
             Cache::tag('adminMenu')->set('menu' . $admin['id'], $list);
         }
@@ -66,16 +68,27 @@ class IndexController extends BaseController
                 ['created_at', '<=', $value['end']]
             ])->count();
 
-//            $orderCount[$key] = Db::name('store_order')->where([
-//                ['status', '=', 'finish'],
-//                ['created_at', '>=', $value['start']],
-//                ['created_at', '<=', $value['end']]
-//            ])->count();
+            $orderCount[$key] = Db::name('store_order')->where([
+                ['status', '=', 'finish'],
+                ['created_at', '>=', $value['start']],
+                ['created_at', '<=', $value['end']]
+            ])->count();
 
+            $walletCount[$key] = Db::name('wallet')->where([
+                ['created_at', '>=', $value['start']],
+                ['created_at', '<=', $value['end']]
+            ])->count();
 
+            $storeCount[$key] = Db::name('store')->where([
+                ['created_at', '>=', $value['start']],
+                ['created_at', '<=', $value['end']]
+            ])->count();
         }
 
         View::assign('member_count', $memberCount);
+        View::assign('order_count', $orderCount);
+        View::assign('wallet_count', $walletCount);
+        View::assign('store_count', $storeCount);
 
 
         //當前可用

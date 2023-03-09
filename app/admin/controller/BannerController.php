@@ -20,10 +20,11 @@ class BannerController extends BaseController
     {
         if (request()->isAjax()) {
             $param = get_param();
-            $where = array();
-            if (!empty($param['keywords'])) {
-                $where[] = ['id|name|title|desc', 'like', '%' . $param['keywords'] . '%'];
-            }
+
+            $where = search_where($param,[
+                ['id|name|title|desc', 'like', 'keywords'],
+            ]);
+
             $rows = empty($param['limit']) ? get_config('app.page_size') : $param['limit'];
             $slide = BannerCateModel::where($where)
                 ->order('created_at asc')

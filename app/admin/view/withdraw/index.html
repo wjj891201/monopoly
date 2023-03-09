@@ -39,7 +39,7 @@
     </div>
 </script>
 
-<script type="text/html" id="barDemo">
+<script type="text/html" id="bar">
     <div class="layui-btn-group">
         <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit">編輯</a>
     </div>
@@ -100,7 +100,7 @@
                 },{
                     field: 'right',
                     title: '操作',
-                    toolbar: '#barDemo',
+                    toolbar: '#bar',
                     width: 136,
                     align: 'center'
                 }
@@ -118,9 +118,7 @@
         //監聽搜索提交
         form.on('submit(searchform)', function (data) {
             layui.pageTable.reload({
-                where: {
-                    keywords: data.field.keywords,
-                },
+                where: data.field,
                 page: {
                     curr: 1
                 }

@@ -14,7 +14,7 @@
 {block name="body"}
 <style type="text/css">
 
-    [type=button]{
+    [type=button] {
         background-color: #448ff7;
     }
 </style>
@@ -54,7 +54,8 @@
             <td>
                 <select name="type">
                     {volist name="type_list" id="v" key="key}
-                    <option value="{$key}" {eq name="$item.type" value="$key" }selected{/eq}>{$v}</option>
+                    <option value="{$key}" {eq name="$item.type" value="$key" }selected{
+                    /eq}>{$v}</option>
                     {/volist}
                 </select>
             </td>
@@ -79,7 +80,6 @@
                 </div>
             </td>
         </tr>
-
         <tr>
             <td colspan="6">
                 <textarea placeholder="請輸入內容" class="layui-textarea" id="container_content">{$item.content}</textarea>
@@ -104,41 +104,21 @@
     function xuwenInit() {
         var form = layui.form, tool = layui.tool;
 
-        //上传缩略图
-        var upload_thumb = layui.upload.render({
-            elem: '#upload_btn_thumb',
-            url: '/admin/api/upload',
-            done: function (res) {
-                //如果上传失败
-                if (res.code == 1) {
-                    layer.msg('上传失败');
-                    return false;
-                }
-                //上传成功
-                $('#upload_box_thumb input').attr('value', res.data.id);
-                $('#upload_box_thumb img').attr('src', res.data.filepath);
-            }
-        });
+        //生出上传按钮
+        tool.renderUpload();
 
-        var editor = layui.tinymce;
-        var edit = editor.render({
-            selector: "#container_content",
-            height: 500
-        });
+        //生出编辑器
+        tool.renderTinymce();
+
         //監聽提交
         form.on('submit(webform)', function (data) {
             data.field.content = tinyMCE.editors['container_content'].getContent();
-            if (data.field.content == '') {
+            if (data.field.content === '') {
                 layer.msg('請先完善文章內容');
                 return false;
             }
-            let callback = function (e) {
-                layer.msg(e.msg);
-                if (e.code == 0) {
-                    tool.sideClose(1000);
-                }
-            }
-            tool.post("/admin/article/edit", data.field, callback);
+            tool.btnLoading(true)
+            tool.post("/admin/article/edit", data.field, tool.reqCallBack(true));
             return false;
         });
     }

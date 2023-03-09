@@ -39,16 +39,13 @@ class ArticleController extends BaseController
     public function info()
     {
         $param = get_param();
-        try {
-            $param = get_param();
-            validate(CommonValidate::class)->scene('id')->check($param);
-            $item = $this->articleService->getArticleById($param['id']);
-            if (empty($item)) {
-                throw new RespException(1, '數據不存在');
-            }
-            return $this->apiData($item);
-        } catch (\Exception $e) {
-            return $this->apiError($e->getMessage());
+        if (empty($param['id'])) {
+            return $this->apiError('参数错误');
         }
+        $item = $this->articleService->getArticleById($param['id']);
+        if (empty($item) || $item['status'] == 0) {
+            return $this->apiError('数据不存在');
+        }
+        $this->apiData($item);
     }
 }

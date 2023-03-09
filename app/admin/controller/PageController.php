@@ -28,10 +28,11 @@ class PageController extends BaseController
     {
         $param = get_param();
         if (request()->isAjax()) {
-            $where = [];
-            if (!empty($param['keywords'])) {
-                $where[] = ['title', 'like', '%' . $param['keywords'] . '%'];
-            }
+
+            $where = search_where($param,[
+                ['title', 'like', 'keywords'],
+            ]);
+
             $list = $this->pageModel->getPageList($where, $param);
             return $this->apiTable($list);
         } else {

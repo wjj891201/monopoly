@@ -70,7 +70,7 @@
         layui.pageTable = table.render({
             elem: '#user',
             title: '用戶列表',
-            // toolbar: '#toolbarDemo',
+            // toolbar: '#toolbar',
             url: '/admin/member/index', //數據介面
             page: true, //開啟分頁
             limit: 20,
@@ -137,13 +137,7 @@
 
         //监听指定开关
         form.on('switch(status)', function(data){
-            let callback = function (e) {
-                layer.msg(e.msg);
-                if (e.code == 0) {
-                    parent.layui.tool.close(1000);
-                }
-            }
-            tool.post("/admin/index/status",{table:'member',id:data.value}, callback);
+            tool.post("/admin/index/status",{table:'member',id:data.value}, tool.reqCallBack(false));
 
         });
 
@@ -151,11 +145,7 @@
         //監聽搜索提交
         form.on('submit(webform)', function (data) {
             layui.pageTable.reload({
-                where: {
-                    keywords: data.field.keywords,
-                    start_time: data.field.start_time,
-                    end_time: data.field.end_time
-                },
+                where: data.field,
                 page: {
                     curr: 1
                 }

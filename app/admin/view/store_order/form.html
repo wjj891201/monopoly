@@ -1,0 +1,164 @@
+{extend name="common/base"/}
+{block name="style"}
+<style type="text/css">
+    .editormd-code-toolbar select {
+        display: inline-block
+    }
+
+    .editormd li {
+        list-style: inherit;
+    }
+</style>
+{/block}
+<!-- 主體 -->
+{block name="body"}
+<style type="text/css">
+
+    [type=button] {
+        background-color: #448ff7;
+    }
+</style>
+<form class="layui-form p-4">
+    <h3 class="pb-3">商戶</h3>
+    <table class="layui-table layui-table-form">
+        <tr>
+            <td class="layui-td-gray">商戶名稱<span>*</span></td>
+            <td><input type="text" name="title" lay-verify="required" lay-reqText="請輸入文章標題"
+                       autocomplete="off" placeholder="請輸入文章標題" class="layui-input" value="{$item.title}">
+            </td>
+
+            <td class="layui-td-gray">屬性</td>
+            <td>
+                <select name="type">
+                    {volist name="type_list" id="v" key="key}
+                    <option value="{$key}" {eq name="$item.type" value="$key" }selected{
+                    /eq}>{$v}</option>
+                    {/volist}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td class="layui-td-gray">店主賬號<span>*</span></td>
+            <td><input type="text" name="manager_username" lay-verify="required" lay-reqText="請輸入店主賬號"
+                       autocomplete="off" placeholder="請輸入店主賬號" class="layui-input" value="{$item.manager_username}">
+            </td>
+            <td class="layui-td-gray">商戶分類<span>*</span></td>
+            <td>
+                <select name="cate_id" lay-verify="required" lay-reqText="請選擇分類">
+                    <option value="">請選擇分類</option>
+                    {volist name="$cate_list" id="v"}
+                    <option value="{$v.id}" {eq name="$item.cate_id" value="$v.id" }selected{/eq}>{$v.title}
+                    </option>
+                    {/volist}
+                </select>
+            </td>
+
+        </tr>
+        <tr>
+            <td class="layui-td-gray">營業時間<span>*</span></td>
+            <td colspan="3"><input type="text" name="days" lay-verify="required" lay-reqText="請輸入營業時間"
+                       autocomplete="off" placeholder="請輸入營業時間" class="layui-input" value="{$item.days}">
+            </td>
+
+        </tr>
+        <tr>
+            <td class="layui-td-gray">開市時間<span>*</span></td>
+            <td><input type="text" name="open_at" lay-verify="required" lay-reqText="請輸入開市時間"
+                       autocomplete="off" placeholder="請輸入開市時間" class="layui-input" value="{$item.open_at}">
+            </td>
+            <td class="layui-td-gray">打烊時間<span>*</span></td>
+            <td><input type="text" name="close_at" lay-verify="required" lay-reqText="請輸入打烊時間"
+                       autocomplete="off" placeholder="請輸入打烊時間" class="layui-input" value="{$item.close_at}">
+            </td>
+
+        </tr>
+        <tr>
+            <td class="layui-td-gray">地址<span>*</span></td>
+            <td><input type="text" name="address" lay-verify="required" lay-reqText="請輸入地址"
+                       autocomplete="off" placeholder="請輸入地址" class="layui-input" value="{$item.address}">
+            </td>
+            <td class="layui-td-gray">聯繫電話<span>*</span></td>
+            <td><input type="text" name="mobile" lay-verify="required" lay-reqText="請輸入聯繫電話"
+                       autocomplete="off" placeholder="請輸入聯繫電話" class="layui-input" value="{$item.mobile}">
+            </td>
+
+        </tr>
+        <tr>
+            <td class="layui-td-gray">狀態<span>*</span></td>
+            <td>
+                <input type="radio" name="status" value="1" title="正常" {eq name="$item.status" value="1" }checked{/eq}>
+                <input type="radio" name="status" value="0" title="暫停" {eq name="$item.status" value="0" }checked{/eq}>
+            </td>
+            <td class="layui-td-gray">排序</td>
+            <td>
+                <input type="text" name="sort_order" placeholder="請輸入排序，數字" autocomplete="off" class="layui-input"
+                       value="{$item.sort_order}">
+            </td>
+
+        </tr>
+        <tr>
+            <td class="layui-td-gray" style="vertical-align:top;">簡介</td>
+            <td>
+                <textarea name="desc" placeholder="請輸入簡介，不能超過200個字" class="layui-textarea">{$item.desc}</textarea>
+            </td>
+
+            <td class="layui-td-gray" style="vertical-align:top;">店面</td>
+            <td>
+                <div class="layui-upload">
+                    <button type="button" class="layui-btn layui-btn-sm" id="upload_btn_thumb">上传店面
+                    </button>
+                    <div class="layui-upload-list" id="upload_box_thumb"
+                         style="width: 120px; height:66px; overflow: hidden;">
+                        <img src="{:get_file($item.image)}"
+                             onerror="javascript:this.src='{__ASSETS__}/xuwen/images/nonepic600x360.jpg';this.onerror=null;"
+                             style="max-width: 100%; height:66px;"/>
+                        <input type="hidden" name="image" value="{$item.image}">
+                    </div>
+                </div>
+            </td>
+
+        </tr>
+
+        <tr>
+            <td colspan="4">
+                <textarea placeholder="請輸入內容" class="layui-textarea" id="container_content">{$item.content}</textarea>
+            </td>
+        </tr>
+
+    </table>
+    <div class="flex justify-center py-4">
+        <input type="hidden" name="id" value="{$item.id}"/>
+        <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="webform">立即提交</button>
+        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+</form>
+{/block}
+<!-- /主體 -->
+
+<!-- 腳本 -->
+{block name="script"}
+<script>
+    moduleInit = ['tool', 'tinymce'];
+
+    function xuwenInit() {
+        var form = layui.form, tool = layui.tool;
+
+        //上传缩略图
+       tool.renderUpload()
+
+        tool.renderTinymce()
+        //監聽提交
+        form.on('submit(webform)', function (data) {
+            data.field.content = tinyMCE.editors['container_content'].getContent();
+            if (data.field.content == '') {
+                layer.msg('請先完善文章內容');
+                return false;
+            }
+            tool.btnLoading(true)
+            tool.post("/admin/store/edit", data.field, tool.reqCallBack());
+            return false;
+        });
+    }
+</script>
+{/block}
+<!-- /腳本 -->

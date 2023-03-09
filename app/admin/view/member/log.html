@@ -16,7 +16,7 @@
 		</div>
 		<button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="webform">搜索</button>
 	</form>
-	<table class="layui-hide" id="log" lay-filter="log"></table>
+	<table class="layui-hide" id="datalist" lay-filter="datalist"></table>
 </div>
 {/block}
 <!-- /主體 -->
@@ -28,9 +28,9 @@
 	function xuwenInit() {
 		var table = layui.table, form = layui.form;
 		var tableIns = table.render({
-			elem: '#log',
+			elem: '#datalist',
 			title: '用戶操作日誌列表',
-			// toolbar: '#toolbarDemo',
+			// toolbar: '#toolbar',
 			url: '/admin/member/log', //數據介面
 			page: true, //開啟分頁
 			limit: 20,
@@ -81,10 +81,7 @@
 		//監聽搜索提交
 		form.on('submit(webform)', function (data) {
 			tableIns.reload({
-				where: {
-					keywords: data.field.keywords,
-					action: data.field.action
-				},
+				where: data.field,
 				page: {
 					curr: 1
 				}

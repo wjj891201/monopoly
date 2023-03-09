@@ -1,0 +1,123 @@
+{extend name="common/base"/}
+<!-- 主體 -->
+{block name="body"}
+<style>
+    tbody .layui-table-cell {
+        height: auto;
+        line-height: normal;
+    }
+</style>
+<div class="p-3">
+    <table class="layui-hide" id="datalist" lay-filter="datalist"></table>
+</div>
+<script type="text/html" id="status">
+    {{#  if(d.status==1){ }}
+    開啟
+    {{#  } else { }}
+    暫停
+    {{#  } }}
+</script>
+
+<script type="text/html" id="qrcode">
+    <img src="{{d.qrcode}}" alt="">
+</script>
+
+
+<script type="text/html" id="barDemo">
+    <div class="layui-btn-group"><a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit">編輯</a></div>
+</script>
+
+
+
+{/block}
+<!-- /主體 -->
+
+<!-- 腳本 -->
+{block name="script"}
+<script>
+    const moduleInit = ['tool'];
+
+    function xuwenInit() {
+        var table = layui.table, tool = layui.tool, form = layui.form;
+        layui.pageTable = table.render({
+            elem: '#datalist',
+            title: '列表',
+            toolbar: '#toolbarDemo',
+            url: '/store/store/list',
+            page: true,
+            limit: 20,
+            cellMinWidth: 300,
+            cols: [
+                [
+                    {
+                        field: 'id',
+                        title: '編號',
+                        align: 'center',
+                        width: 80
+                    }, {
+                    field: 'cate_title',
+                    title: '分類',
+                    align: 'center',
+                    width: 120
+                }, {
+                    field: 'title',
+                    title: '店鋪名稱',
+
+                }, {
+                    field: 'manager_username',
+                    title: '店主',
+                    align: 'center',
+                    width: 200
+                },
+                    {
+                        title: '店鋪二維碼',
+                        align: 'center',
+                        toolbar: '#qrcode',
+                        width: 150
+                    }, {
+                    field: 'type_name',
+                    title: '屬性',
+                    align: 'center',
+                    width: 90
+                }, {
+                    field: 'status',
+                    title: '狀態',
+                    toolbar: '#status',
+                    align: 'center',
+                    width: 200
+                }, {
+                    field: 'created_at',
+                    title: '創建時間',
+                    align: 'center',
+                    width: 200
+                }, {
+                    field: 'right',
+                    title: '操作',
+                    toolbar: '#barDemo',
+                    align: 'center',
+                    width: 200
+                }
+                ]
+            ]
+        });
+
+        //監聽表頭工具欄事件
+        table.on('toolbar(datalist)', function (obj) {
+            if (obj.event === 'add') {
+                tool.side("/store/store/add");
+                return false;
+            }
+        });
+
+        //監聽表格行工具事件
+        table.on('tool(datalist)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {
+                tool.side('/store/store/edit?id=' + obj.data.id);
+            }
+            return false;
+        });
+    }
+</script>
+{/block}
+<!-- /腳本 -->

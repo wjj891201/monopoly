@@ -2,7 +2,10 @@
 <!-- 主體 -->
 {block name="body"}
 <style>
-    tbody .layui-table-cell{height:auto;line-height: normal;}
+    tbody .layui-table-cell {
+        height: auto;
+        line-height: normal;
+    }
 </style>
 <div class="p-3">
     <form class="layui-form gg-form-bar border-t border-x">
@@ -36,7 +39,7 @@
         layui.pageTable = table.render({
             elem: '#datalist',
             title: '轉賬列表',
-            toolbar: '#toolbarDemo',
+            toolbar: '#toolbar',
             url: '/admin/transfer/index',
             page: true,
             limit: 20,
@@ -78,9 +81,7 @@
         //監聽搜索提交
         form.on('submit(searchform)', function (data) {
             layui.pageTable.reload({
-                where: {
-                    keywords: data.field.keywords,
-                },
+                where: data.field,
                 page: {
                     curr: 1
                 }

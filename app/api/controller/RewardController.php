@@ -17,14 +17,8 @@ class RewardController extends CommonController
     public function list()
     {
         $param = get_param();
-        try {
-
-            $where[] = ['r.member_id','=',JWT_UID];
-            $list = $this->rewardModel->getRewardList($where,$param);
-            return $this->apiData($list);
-
-        } catch (\Exception $e) {
-            return $this->apiError($e->getMessage());
-        }
+        $where[] = ['r.member_id','=',JWT_UID];
+        $list = $this->rewardModel->getRewardList($where,$param);
+        return $this->apiData($list);
     }
 }

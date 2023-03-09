@@ -26,12 +26,11 @@ class AccountPairController extends BaseController
     {
         if (request()->isAjax()) {
             $param = get_param();
-            $where = [];
-            if (!empty($param['keywords'])) {
-                $where[] = ['p.name', 'like', '%' . $param['keywords'] . '%'];
-            }
-            $list = $this->pairModel->getPairList($where, $param);
-            return $this->apiTable(['data'=>$list]);
+            $where = search_where($param, [
+                ['p.name', 'like', 'keywords']
+            ]);
+            $list = $this->pairModel->getPairList($where);
+            return $this->apiTable(['data' => $list]);
         } else {
             return view();
         }

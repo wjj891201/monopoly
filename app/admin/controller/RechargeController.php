@@ -12,10 +12,9 @@ class RechargeController extends BaseController
     {
         if (request()->isAjax()) {
             $param = get_param();
-            $where = [];
-            if (!empty($param['keywords'])) {
-                $where[] = ['m.username', 'like', '%' . $param['keywords'] . '%'];
-            }
+            $where = search_where($param,[
+                ['mt.username', 'like', 'keywords'],
+            ]);
             $rechargeModel = new AccountRechargeModel();
             $list = $rechargeModel->getRechargeList($where, $param);
             return $this->apiTable($list);

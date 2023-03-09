@@ -21,10 +21,9 @@ class WalletController extends BaseController
     {
         $param = get_param();
         if (request()->isAjax()) {
-            $where = [];
-            if (!empty($param['keywords'])) {
-                $where[] = ['w.address|m.username', 'like', '%' . $param['keywords'] . '%'];
-            }
+            $where = search_where($param,[
+                ['w.address|m.username', 'like', 'keywords'],
+            ]);
             $list = $this->walletService->getWalletList($where, $param);
             return $this->apiTable($list);
         } else {

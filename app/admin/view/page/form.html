@@ -64,11 +64,7 @@
     function xuwenInit() {
         var form = layui.form, tool = layui.tool;
 
-        //內容描述富文本編輯器
-        var edit = layui.tinymce.render({
-            selector: '#container_content',
-            height: 500
-        });
+        tool.renderTinymce()
 
         //監聽提交
         form.on('submit(webform)', function (data) {
@@ -77,13 +73,8 @@
                 layer.msg('請先完善內容描述內容');
                 return false;
             }
-            let callback = function (e) {
-                layer.msg(e.msg);
-                if (e.code == 0) {
-                    tool.sideClose(1000);
-                }
-            }
-            tool.post("/admin/page/edit", data.field, callback);
+            tool.btnLoading(true)
+            tool.post("/admin/page/edit", data.field, tool.reqCallBack());
             return false;
         });
     }

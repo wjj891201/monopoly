@@ -11,11 +11,9 @@ class TransferController extends BaseController
     {
         if (request()->isAjax()) {
             $param = get_param();
-            $where = [];
-            if (!empty($param['keywords'])) {
-                $where[] = ['username', 'like', '%' . $param['keywords'] . '%'];
-            }
-
+            $where = search_where($param,[
+                ['username', 'like', 'keywords'],
+            ]);
             $transferModel = new AccountTransferModel();
             $list = $transferModel->getTransferList($where, $param);
             return $this->apiTable($list);

@@ -19,36 +19,25 @@ class CurrencyController extends BaseController
 
     public function info()
     {
-        try {
-            $param = get_param();
-            validate(CommonValidate::class)->scene('id')->check($param);
-
-            $item = $this->ccService->getCurrencyById($param['id']);
-            if (empty($item)) {
-                throw new RespException(1, '數據不存在');
-            }
-            return $this->apiData($item);
-        } catch (\Exception $e) {
-            return $this->apiError($e->getMessage());
+        $param = get_param();
+        if (empty($param['id'])) {
+            return $this->apiError('参数错误');
         }
+        $item = $this->ccService->getCurrencyById($param['id']);
+        if (empty($item) || $item['status'] == 0) {
+            $this->apiError('數據不存在');
+        }
+        return $this->apiData($item);
     }
 
     public function list()
     {
         $param = get_param();
-        $where = [];
-
-        if (!empty($param['is_recharge'])) {
-            $where[] = ['is_recharge', '=', 1];
-        } elseif (!empty($param['is_withdraw'])) {
-            $where[] = ['is_withdraw', '=', 1];
-        } elseif (!empty($param['is_transfer'])) {
-            $where[] = ['is_transfer', '=', 1];
-        } elseif (!empty($param['is_trade'])) {
-            $where[] = ['is_trade', '=', 1];
-        }
-
-
+        $where = search_where($param,[
+            ['is_recharge'],
+            ['is_withdraw'],
+            ['is_trade'],
+        ]);
         $list = $this->ccService->getCurrencyList($where);
         if (count($list) == 0) {
             return $this->apiError('數據不存在');

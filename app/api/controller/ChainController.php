@@ -19,24 +19,22 @@ class ChainController extends BaseController
 
     public function info()
     {
-        try {
-            $param = get_param();
-            validate(CommonValidate::class)->scene("id")->check($param);
-
-            $item = $this->ccService->getChainById($param['id']);
-            if (empty($item)) {
-                throw new RespException(1, '數據不存在');
-            }
-            return $this->apiData($item);
-        } catch (\Exception $e) {
-            return $this->apiError($e->getMessage());
+        $param = get_param();
+        if (empty($param['id'])) {
+            return $this->apiError('参数错误');
         }
+        $item = $this->ccService->getChainById($param['id']);
+        if (empty($item) || $item['status'] == 0) {
+            return $this->apiError('数据不存在');
+        }
+        $this->apiData($item);
+
     }
 
     public function list()
     {
         $list = $this->ccService->getChainList();
-        if (count($list) == 0) {
+        if (empty($list)) {
             return $this->apiError('數據不存在');
         }
         return $this->apiData($list);

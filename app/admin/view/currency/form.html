@@ -130,34 +130,14 @@
     var form = layui.form,tool=layui.tool;
 
     //上传缩略图
-    var upload_thumb = layui.upload.render({
-      elem: '#upload_btn_thumb',
-      url: '/admin/api/upload',
-      done: function (res) {
-        //如果上传失败
-        if (res.code == 1) {
-          layer.msg('上传失败');
-          return false;
-        }
-        //上传成功
-        $('#upload_box_thumb input').attr('value', res.data.id);
-        $('#upload_box_thumb img').attr('src', res.data.filepath);
-      }
-    });
+    tool.renderUpload()
 
 
 
     //監聽提交
     form.on('submit(webform)', function (data) {
-      let callback = function (e) {
-        layer.msg(e.msg);
-        if (e.code == 0) {
-          setTimeout(function () {
-            parent.location.reload();
-          }, 1000);
-        }
-      }
-      tool.post("/admin/currency/edit", data.field, callback);
+     tool.btnLoading(true)
+      tool.post("/admin/currency/edit", data.field, tool.reqCallBack());
       return false;
     });
   }

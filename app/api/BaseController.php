@@ -98,7 +98,6 @@ abstract class BaseController
             if (count(explode('.', $token)) != 3) {
                 return 0;
             }
-
             try {
                 $secret = get_config('member.api.secret');
                 JWT::$leeway = 60;//当前时间减去60，把时间留点余地
@@ -124,7 +123,6 @@ abstract class BaseController
         return $this->apiReturn($data, 0, "success");
     }
 
-
     protected function apiError($msg = 'error', $data = [], $code = 1)
     {
         return $this->apiReturn($data, $code, $msg);
@@ -139,7 +137,6 @@ abstract class BaseController
             'time' => Carbon::now()->toDateTimeString(),
             'data' => $data,
         ];
-
         return json($result, $httpCode, $header);
     }
 

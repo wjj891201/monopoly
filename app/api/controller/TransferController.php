@@ -24,13 +24,9 @@ class TransferController extends CommonController
     public function list()
     {
         $param = get_param();
-        try {
-            $where[] = ['w.member_id', '=', JWT_UID];
-            $list = $this->transferModel->getTransferList($where, $param);
-            return $this->apiData($list);
-        } catch (\Exception $e) {
-            return $this->apiError($e->getMessage());
-        }
+        $where[] = ['w.member_id', '=', JWT_UID];
+        $list = $this->transferModel->getTransferList($where, $param);
+        return $this->apiData($list);
     }
 
     public function submit()

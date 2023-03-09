@@ -15,7 +15,6 @@ class AccountController extends BaseController
 {
     public function index()
     {
-
         if (request()->isAjax()) {
             $param = get_param();
             $where = [];
@@ -29,9 +28,6 @@ class AccountController extends BaseController
         }
     }
 
-    /**
-     * 编辑
-     */
     public function edit()
     {
         $param = get_param();
@@ -42,6 +38,7 @@ class AccountController extends BaseController
                 $account = (new AccountModel())->find($param['id']);
 
                 $mutex = MutexFacade::create("account_change");
+
                 if ($mutex->acquireLock(Config::get('mutex.timeout'))) {
                     (new AccountService())->updateAccount([
                         'member_id' => $account['member_id'],

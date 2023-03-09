@@ -9,23 +9,25 @@
         </div>
         <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="searchform">提交搜索</button>
     </form>
-    <table class="layui-hide" id="pages" lay-filter="pages"></table>
+    <table class="layui-hide" id="datalist" lay-filter="datalist"></table>
 </div>
 
-<script type="text/html" id="toolbarDemo">
+<script type="text/html" id="toolbar">
     <div class="layui-btn-container">
         <span class="layui-btn layui-btn-sm layui-btn-normal" lay-event="add" data-title="添加單頁面">+ 添加單頁面</span>
     </div>
 </script>
 
-<script type="text/html" id="barDemo">
-    <div class="layui-btn-group"><a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit">編輯</a><a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">刪除</a></div>
+<script type="text/html" id="bar">
+    <div class="layui-btn-group"><a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit">編輯</a><a
+            class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">刪除</a></div>
 </script>
 
 
 <script type="text/html" id="status">
     {{#  if(d.status==1){ }}
-    <input type="checkbox" name="status" lay-skin="switch" checked lay-text="開啟|禁用" value={{ d.id }} lay-filter="status" >
+    <input type="checkbox" name="status" lay-skin="switch" checked lay-text="開啟|禁用" value={{ d.id }}
+           lay-filter="status">
     {{#  } else { }}
     <input type="checkbox" name="status" lay-skin="switch" lay-text="開啟|禁用" value={{ d.id}} lay-filter="status">
     {{#  } }}
@@ -42,9 +44,9 @@
     function xuwenInit() {
         var table = layui.table, tool = layui.tool, form = layui.form;
         layui.pageTable = table.render({
-            elem: '#pages',
+            elem: '#datalist',
             title: '單頁面列表',
-            toolbar: '#toolbarDemo',
+            toolbar: '#toolbar',
             url: '/admin/page/index',
             page: true,
             limit: 20,
@@ -69,7 +71,7 @@
                     title: '排序',
                     align: 'center',
                     width: 100
-                },{
+                }, {
                     field: 'created_at',
                     title: '創建時間',
                     align: 'center',
@@ -85,7 +87,7 @@
                     {
                         field: 'right',
                         title: '操作',
-                        toolbar: '#barDemo',
+                        toolbar: '#bar',
                         width: 136,
                         align: 'center'
                     }
@@ -94,7 +96,7 @@
         });
 
         //監聽表頭工具欄事件
-        table.on('toolbar(pages)', function (obj) {
+        table.on('toolbar(datalist)', function (obj) {
             if (obj.event === 'add') {
                 tool.side("/admin/page/add");
                 return false;
@@ -102,7 +104,7 @@
         });
 
         //監聽表格行工具事件
-        table.on('tool(pages)', function (obj) {
+        table.on('tool(datalist)', function (obj) {
             var data = obj.data;
             if (obj.event === 'edit') {
                 tool.side('/admin/page/edit?id=' + obj.data.id);
@@ -111,13 +113,7 @@
                     icon: 3,
                     title: '提示'
                 }, function (index) {
-                    let callback = function (e) {
-                        layer.msg(e.msg);
-                        if (e.code == 0) {
-                            obj.del();
-                        }
-                    }
-                    tool.delete("/admin/page/delete", {id: data.id}, callback);
+                    tool.delete("/admin/page/delete", {id: data.id}, tool.deleteCallBack(obj));
                     layer.close(index);
                 });
             }
@@ -125,23 +121,15 @@
         });
 
         //监听指定开关
-        form.on('switch(status)', function(data){
-            let callback = function (e) {
-                layer.msg(e.msg);
-                if (e.code == 0) {
-                    parent.layui.tool.close(1000);
-                }
-            }
-            tool.post("/admin/index/status",{table:'page',id:data.value}, callback);
+        form.on('switch(status)', function (data) {
+            tool.post("/admin/index/status", {table: 'page', id: data.value}, tool.reqCallBack(false));
 
         });
 
         //監聽搜索提交
         form.on('submit(searchform)', function (data) {
             layui.pageTable.reload({
-                where: {
-                    keywords: data.field.keywords
-                },
+                where: data.field,
                 page: {
                     curr: 1
                 }

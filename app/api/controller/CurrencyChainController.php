@@ -19,31 +19,26 @@ class CurrencyChainController extends BaseController
 
     public function info()
     {
-        try {
-            $param = get_param();
-            validate(CommonValidate::class)->scene('id')->check($param);
-
-            $item = $this->ccService->getCurrencyChainByID($param['id']);
-            if (empty($item)) {
-                throw new RespException(1, '數據不存在');
-            }
-            return $this->apiData($item);
-        } catch (\Exception $e) {
-            return $this->apiError($e->getMessage());
+        $param = get_param();
+        if (empty($param['id'])) {
+            return $this->apiError('参数错误');
         }
+        $item = $this->ccService->getCurrencyChainByID($param['id']);
+        if (empty($item) || $item['status'] == 0) {
+            $this->apiError('數據不存在');
+        }
+        return $this->apiData($item);
     }
 
     public function list()
     {
         $param = get_param();
-        $where = [];
-        if (isset($param['currency_id']) && !empty($param['currency_id'])) {
-            $where[] = ['cc.currency_id', '=', $param['currency_id']];
-        }
 
-        if (isset($param['chain_id']) && !empty($param['chain_id'])) {
-            $where[] = ['cc.chain_id', '=', $param['chain_id']];
-        }
+        $where = search_where($param,[
+           ['cc.currency_id'],
+           ['cc.chain_id']
+        ]);
+
         $list = $this->ccService->getCurrencyChainList($where);
         if (count($list) == 0) {
             return $this->apiError('數據不存在');

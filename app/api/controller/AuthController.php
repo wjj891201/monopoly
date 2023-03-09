@@ -20,19 +20,18 @@ class AuthController extends CommonController
 
     public function email()
     {
-        $param = get_param();
-
         try {
-            validate(MemberValidate::class)->scene("email")->check($param);
 
+            $param = get_param();
+            validate(MemberValidate::class)->scene("email")->check($param);
             $member = $this->memberModel->find(JWT_UID);
+            $param['id'] = $member['id'];
 
             //验证email是否存在
             $checkEmail = $this->memberModel->getByEmail($param["email"]);
             if ($checkEmail) {
                 throw new RespException(1, 'Email已存在');
             }
-
 
             //驗證老郵箱驗證碼
             if (!$this->memberService->checkCode($member['email'], $param['verify_code'])) {
@@ -44,7 +43,7 @@ class AuthController extends CommonController
                 throw new RespException(1, '新验证码不正确');
             }
 
-            $this->memberModel->editMember($member['id'], $param);
+            $this->memberModel->editMember($param);
             add_user_log('edit', '修改email', $member['id'], ["old_email" => $member["email"], "new_email" => $param["email"]]);
             return $this->apiSuccess('修改成功');
         } catch (\Exception $e) {
@@ -58,15 +57,13 @@ class AuthController extends CommonController
 
         try {
             validate(MemberValidate::class)->scene("password")->check($param);
-
             $member = $this->memberModel->find(JWT_UID);
-
+            $param['id'] = $member['id'];
             if (!$this->memberService->checkCode($member['email'], $param['verify_code'])) {
                 throw new RespException(1, '验证码不正确');
             }
-
             $param['password'] = create_password($param['password']);
-            $this->memberModel->editMember($member['id'], $param);
+            $this->memberModel->editMember($param);
             add_user_log('edit', '修改密碼', $member['id']);
             return $this->apiSuccess('修改成功，請去登入');
         } catch (\Exception $e) {
@@ -80,15 +77,13 @@ class AuthController extends CommonController
 
         try {
             validate(MemberValidate::class)->scene("password")->check($param);
-
             $member = $this->memberModel->find(JWT_UID);
-
-
+            $param['id'] = $member['id'];
             if (!$this->memberService::checkCode($member['email'], $param['verify_code'])) {
                 throw new RespException(1, '验证码不正确');
             }
-            $data['safe_password'] = create_password($param['password']);
-            $this->memberModel->editMember($member['id'], $data);
+            $param['safe_password'] = create_password($param['password']);
+            $this->memberModel->editMember($param);
             add_user_log('edit', '修改密碼', $member['id']);
             return $this->apiSuccess('修改成功');
         } catch (\Exception $e) {

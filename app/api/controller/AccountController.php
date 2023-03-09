@@ -34,14 +34,10 @@ class AccountController extends CommonController
     public function log()
     {
         $param = get_param();
-        try {
-            $where = [
-                ['l.member_id', '=', JWT_UID]
-            ];
-            $list = (new AccountLogModel())->getLogList($where, $param);
-            return $this->apiData($list);
-        } catch (\Exception $e) {
-            return $this->apiError($e->getMessage());
-        }
+        $where = [
+            ['l.member_id', '=', JWT_UID]
+        ];
+        $list = (new AccountLogModel())->getLogList($where, $param);
+        return $this->apiData($list);
     }
 }

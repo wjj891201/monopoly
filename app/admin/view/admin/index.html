@@ -9,12 +9,12 @@
 <script type="text/html" id="status">
     <i class="layui-icon {{#  if(d.status == 1){ }}layui-icon-ok{{#  } else { }}layui-icon-close{{#  } }}"></i>
 </script>
-<script type="text/html" id="toolbarDemo">
+<script type="text/html" id="toolbar">
     <div class="layui-btn-container">
         <span class="layui-btn layui-btn-sm add-user layui-btn-normal">+ 添加管理員</span>
     </div>
 </script>
-<script type="text/html" id="barDemo">
+<script type="text/html" id="bar">
     <div class="layui-btn-group"><span
             class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit">編輯</span><span
             class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">刪除</span></div>
@@ -33,7 +33,7 @@
         layui.pageTable = table.render({
             elem: '#admin',
             title: '管理員列表',
-            toolbar: '#toolbarDemo',
+            toolbar: '#toolbar',
             url: '/admin/admin/index', //數據介面
             page: true, //開啟分頁
             limit: 20,
@@ -79,7 +79,7 @@
                     field: 'right',
                     fixed: 'right',
                     title: '操作',
-                    toolbar: '#barDemo',
+                    toolbar: '#bar',
                     width: 132,
                     align: 'center'
                 }
@@ -93,6 +93,7 @@
         });
         //監聽行工具事件
         table.on('tool(admin)', function (obj) {
+
             var data = obj.data;
             if (obj.event === 'view') {
                 tool.side('/admin/admin/view?id=' + data.id);

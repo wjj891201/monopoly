@@ -8,7 +8,7 @@
 <script type="text/html" id="status">
 	<i class="layui-icon {{#  if(d.status == 1){ }}layui-icon-ok{{#  } else { }}layui-icon-close{{#  } }}"></i>
 </script>
-<script type="text/html" id="toolbarDemo">
+<script type="text/html" id="toolbar">
 	<div class="layui-btn-container">
 		<button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="add">+ 添加許可權組</button>
 	</div>
@@ -24,7 +24,7 @@
 		var table = layui.table, tool = layui.tool, form = layui.form;
 		layui.pageTable = table.render({
 			elem: '#role',
-			toolbar: '#toolbarDemo',
+			toolbar: '#toolbar',
 			url: "/admin/admin_role/index", //數據介面
 			page: true, //開啟分頁
 			limit: 20,

@@ -23,11 +23,13 @@ class MemberController extends BaseController
     {
         if (request()->isAjax()) {
             $param = get_param();
-            $where = array();
-            if (!empty($param['keywords'])) {
-                $where[] = ['username|email', 'like', '%' . $param['keywords'] . '%'];
-            }
-            $dataWhere = $this->searchDate($param, 'm.created_at');
+
+            $where = search_where($param, [
+                ['username|email', 'like', 'keywords'],
+            ]);
+
+            $dataWhere = search_date($param, 'm.created_at');
+
             $where = array_merge($where, $dataWhere);
             $result = $this->memberModel->getMemberList($where, $param);
             foreach ($result as $key => $value) {

@@ -3,7 +3,7 @@
 namespace app\exception;
 
 
-class RespException extends \RuntimeException
+class RespException extends \Exception
 {
 
     protected $data;

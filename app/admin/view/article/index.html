@@ -29,13 +29,13 @@
     {{#  } }}
 </script>
 
-<script type="text/html" id="toolbarDemo">
+<script type="text/html" id="toolbar">
     <div class="layui-btn-container">
         <span class="layui-btn layui-btn-sm layui-btn-normal" lay-event="add" data-title="添加文章">+ 添加文章</span>
     </div>
 </script>
 
-<script type="text/html" id="barDemo">
+<script type="text/html" id="bar">
     <div class="layui-btn-group"><a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit">編輯</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">刪除</a></div>
 </script>
@@ -53,7 +53,7 @@
         layui.pageTable = table.render({
             elem: '#article',
             title: '文章表列表',
-            toolbar: '#toolbarDemo',
+            toolbar: '#toolbar',
             url: '/admin/article/index',
             page: true,
             limit: 20,
@@ -103,7 +103,7 @@
                     fixed: 'right',
                     field: 'right',
                     title: '操作',
-                    toolbar: '#barDemo',
+                    toolbar: '#bar',
                     width: 136,
                     align: 'center'
                 }
@@ -121,6 +121,7 @@
 
         //監聽表格行工具事件
         table.on('tool(article)', function (obj) {
+
             var data = obj.data;
             if (obj.event === 'read') {
                 tool.side('/admin/article/read?id=' + obj.data.id);
@@ -131,13 +132,7 @@
                     icon: 3,
                     title: '提示'
                 }, function (index) {
-                    let callback = function (e) {
-                        layer.msg(e.msg);
-                        if (e.code == 0) {
-                            obj.del();
-                        }
-                    }
-                    tool.delete("/admin/article/delete", {id: data.id}, callback);
+                    tool.delete("/admin/article/delete", {id: data.id}, tool.deleteCallBack(obj));
                     layer.close(index);
                 });
             }
@@ -147,23 +142,14 @@
 
         //监听指定开关
         form.on('switch(status)', function (data) {
-            let callback = function (e) {
-                layer.msg(e.msg);
-                if (e.code == 0) {
-                    parent.layui.tool.close(1000);
-                }
-            }
-            tool.post("/admin/index/status", {table: 'article', id: data.value}, callback);
+            tool.post("/admin/index/status", {table: 'article', id: data.value}, tool.reqCallBack(false));
 
         });
 
         //監聽搜索提交
         form.on('submit(searchform)', function (data) {
             layui.pageTable.reload({
-                where: {
-                    keywords: data.field.keywords,
-                    cate_id: data.field.cate_id
-                },
+                where: data.field,
                 page: {
                     curr: 1
                 }

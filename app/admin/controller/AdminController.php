@@ -28,10 +28,11 @@ class AdminController extends BaseController
     {
         if (request()->isAjax()) {
             $param = get_param();
-            $where = array();
-            if (!empty($param['keywords'])) {
-                $where[] = ['id|username|nickname|desc|mobile', 'like', '%' . $param['keywords'] . '%'];
-            }
+
+            $where = search_where($param,[
+                ['id|username|nickname|desc|mobile', 'like', 'keywords'],
+            ]);
+
             $where[] = ['status', '>=', 0];
             $rows = empty($param['limit']) ? get_config('app.page_size') : $param['limit'];
             $list = Db::name('admin')->where($where)

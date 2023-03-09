@@ -4,7 +4,7 @@
 <div class="p-3">
     <table class="layui-hide" id="role" lay-filter="role"></table>
 </div>
-<!--<script type="text/html" id="toolbarDemo">-->
+<!--<script type="text/html" id="toolbar">-->
 <!--    <div class="layui-btn-container">-->
 <!--        <button class="layui-btn layui-btn-sm add-menu layui-btn-normal">+ 添加用戶等級</button>-->
 <!--    </div>-->
@@ -29,7 +29,7 @@
         var table = layui.table, tool = layui.tool ,form = layui.form;
         layui.pageTable = table.render({
             elem: '#role'
-            // , toolbar: '#toolbarDemo'
+            // , toolbar: '#toolbar'
             , title: '用戶等級列表'
             , url: "/admin/role/index"
             , page: false //開啟分頁
@@ -64,13 +64,7 @@
 
         //监听指定开关
         form.on('switch(status)', function(data){
-            let callback = function (e) {
-                layer.msg(e.msg);
-                if (e.code == 0) {
-                    parent.layui.tool.close(1000);
-                }
-            }
-            tool.post("/admin/index/status",{table:'member_role',id:data.value}, callback);
+            tool.post("/admin/index/status",{table:'member_role',id:data.value}, tool.reqCallBack(false));
 
         });
 

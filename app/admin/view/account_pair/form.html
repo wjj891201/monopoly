@@ -11,19 +11,9 @@
   <h3 class="pb-3">編輯</h3>
   <table class="layui-table layui-table-form">
     <tr>
-      <td class="layui-td-gray">中文名稱<span>*</span></td>
-      <td>
-        <input type="text" value="{$item.name_cn}" name="name_cn" lay-verify="required" lay-reqText="請輸入"   class="layui-input">
-      </td>
-      <td class="layui-td-gray">英文名稱<span>*</span></td>
-      <td>
-        <input type="text" value="{$item.name_en}" name="name_en" lay-verify="required" lay-reqText="請輸入"   class="layui-input">
-      </td>
-    </tr>
-    <tr>
       <td class="layui-td-gray">標識符<span>*</span></td>
       <td>
-        <input type="text" name="code"  value="{$item.code}" lay-verify="required" lay-reqText="請輸入"  autocomplete="off" class="layui-input">
+        <input type="text" name="name"  value="{$item.name}" lay-verify="required" lay-reqText="請輸入"  autocomplete="off" class="layui-input">
       </td>
       <td class="layui-td-gray">小數位<span>*</span></td>
       <td>
@@ -130,34 +120,13 @@
     var form = layui.form,tool=layui.tool;
 
     //上传缩略图
-    var upload_thumb = layui.upload.render({
-      elem: '#upload_btn_thumb',
-      url: '/admin/api/upload',
-      done: function (res) {
-        //如果上传失败
-        if (res.code == 1) {
-          layer.msg('上传失败');
-          return false;
-        }
-        //上传成功
-        $('#upload_box_thumb input').attr('value', res.data.id);
-        $('#upload_box_thumb img').attr('src', res.data.filepath);
-      }
-    });
-
+    tool.renderUpload();
 
 
     //監聽提交
     form.on('submit(webform)', function (data) {
-      let callback = function (e) {
-        layer.msg(e.msg);
-        if (e.code == 0) {
-          setTimeout(function () {
-            parent.location.reload();
-          }, 1000);
-        }
-      }
-      tool.post("/admin/currency/edit", data.field, callback);
+      tool.btnLoading(true)
+      tool.post("/admin/currency/edit", data.field, tool.reqCallBack);
       return false;
     });
   }

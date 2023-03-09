@@ -11,10 +11,10 @@ class RewardController extends BaseController
     {
         if (request()->isAjax()) {
             $param = get_param();
-            $where = [];
-            if (!empty($param['keywords'])) {
-                $where[] = ['mt.username', 'like', '%' . $param['keywords'] . '%'];
-            }
+
+            $where = search_where($param,[
+                ['mt.username', 'like', 'keywords'],
+            ]);
 
             $rewardModel = new AccountRewardModel();
             $list = $rewardModel->getRewardList($where, $param);

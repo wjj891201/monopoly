@@ -26,10 +26,11 @@ class AdminRoleController extends BaseController
     {
         if (request()->isAjax()) {
             $param = get_param();
-            $where = array();
-            if (!empty($param['keywords'])) {
-                $where[] = ['id|title|desc', 'like', '%' . $param['keywords'] . '%'];
-            }
+
+            $where = search_where($param,[
+                ['id|title|desc', 'like', 'keywords'],
+            ]);
+
             $rows = empty($param['limit']) ? get_config('app.page_size') : $param['limit'];
             $group = AdminRoleModel::where($where)
                 ->order('created_at asc')

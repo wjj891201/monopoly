@@ -27,15 +27,11 @@ class ArticleController extends BaseController
     public function index()
     {
         $param = get_param();
-
         if (request()->isAjax()) {
-            $where = [];
-            if (!empty($param['keywords'])) {
-                $where[] = ['a.title', 'like', '%' . $param['keywords'] . '%'];
-            }
-            if (!empty($param['cate_id'])) {
-                $where[] = ['a.cate_id', '=', $param['cate_id']];
-            }
+            $where = search_where($param,[
+               ['a.title', 'like', 'keywords'],
+               ['a.cate_id']
+            ]);
             $list = $this->articleService->getArticleList($where, $param);
             return $this->apiTable($list);
         } else {
@@ -48,5 +44,4 @@ class ArticleController extends BaseController
         View::assign("type_list", $this->articleService->getTypeList());
         return $item;
     }
-
 }

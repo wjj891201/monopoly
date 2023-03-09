@@ -13,13 +13,13 @@
 
 </script>
 
-<script type="text/html" id="toolbarDemo">
+<script type="text/html" id="toolbar">
     <div class="layui-btn-container">
         <span class="layui-btn layui-btn-sm layui-btn-normal" lay-event="add" data-title="添加公鏈">+添加公鏈</span>
     </div>
 </script>
 
-<script type="text/html" id="barDemo">
+<script type="text/html" id="bar">
     <div class="layui-btn-group">
         <a class="layui-btn layui-btn-xs  layui-btn-normal" lay-event="edit">編輯</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">刪除</a>
@@ -39,7 +39,7 @@
         layui.pageTable = table.render({
             elem: '#currency',
             title: '公鏈列表',
-            toolbar: '#toolbarDemo',
+            toolbar: '#toolbar',
             url: '/admin/chain/index',
             page: true,
             limit: 20,
@@ -78,7 +78,7 @@
                     fixed: 'right',
                     field: 'right',
                     title: '操作',
-                    toolbar: '#barDemo',
+                    toolbar: '#bar',
                     width: 136,
                     align: 'center'
                 }
@@ -104,13 +104,7 @@
                     icon: 3,
                     title: '提示'
                 }, function (index) {
-                    let callback = function (e) {
-                        layer.msg(e.msg);
-                        if (e.code == 0) {
-                            obj.del();
-                        }
-                    }
-                    tool.delete("/admin/chain/delete", {id: data.id}, callback);
+                    tool.delete("/admin/chain/delete", {id: data.id}, tool.deleteCallBack(obj));
                     layer.close(index);
                 });
             }
@@ -121,16 +115,7 @@
         statusList.map((item) => {
             //监听指定开关
             form.on('switch(' + item + ')', function (data) {
-
-
-                console.log(data);
-                let callback = function (e) {
-                    layer.msg(e.msg);
-                    if (e.code == 0) {
-                        parent.layui.tool.close(1000);
-                    }
-                }
-                tool.post("/admin/index/status", {table: 'chain', id: data.value, field: item}, callback);
+                tool.post("/admin/index/status", {table: 'chain', id: data.value, field: item}, tool.reqCallBack(false));
 
             });
         })

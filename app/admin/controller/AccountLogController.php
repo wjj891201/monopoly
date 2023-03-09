@@ -11,10 +11,10 @@ class AccountLogController extends BaseController
     {
         if (request()->isAjax()) {
             $param = get_param();
-            $where = [];
-            if (!empty($param['keywords'])) {
-                $where[] = ['m.username', 'like', '%' . $param['keywords'] . '%'];
-            }
+
+            $where = search_where($param,[
+                ['m.username', 'like', 'keywords'],
+            ]);
 
             $accountLogModel = new AccountLogModel();
             $list = $accountLogModel->getLogList($where, $param);

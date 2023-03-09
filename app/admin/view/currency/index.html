@@ -9,16 +9,16 @@
     }
 </style>
 <div class="p-3">
-    <table class="layui-hide" id="currency" lay-filter="currency"></table>
+    <table class="layui-hide" id="datalist" lay-filter="datalist"></table>
 </div>
 
-<script type="text/html" id="toolbarDemo">
+<script type="text/html" id="toolbar">
     <div class="layui-btn-container">
         <span class="layui-btn layui-btn-sm layui-btn-normal" lay-event="add" data-title="添加貨幣">+添加貨幣</span>
     </div>
 </script>
 
-<script type="text/html" id="barDemo">
+<script type="text/html" id="bar">
     <div class="layui-btn-group">
         <a class="layui-btn layui-btn-xs  layui-btn-normal" lay-event="edit">編輯</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">刪除</a>
@@ -70,9 +70,9 @@
     function xuwenInit() {
         var table = layui.table, tool = layui.tool, form = layui.form;
         layui.pageTable = table.render({
-            elem: '#currency',
+            elem: '#datalist',
             title: '貨幣列表',
-            toolbar: '#toolbarDemo',
+            toolbar: '#toolbar',
             url: '/admin/currency/index',
             page: true,
             limit: 20,
@@ -136,7 +136,7 @@
                     {
                         field: 'right',
                         title: '操作',
-                        toolbar: '#barDemo',
+                        toolbar: '#bar',
                         width: 136,
                         align: 'center'
                     }
@@ -145,7 +145,7 @@
         });
 
         //監聽表頭工具欄事件
-        table.on('toolbar(currency)', function (obj) {
+        table.on('toolbar(datalist)', function (obj) {
             if (obj.event === 'add') {
                 tool.side("/admin/currency/add");
                 return false;
@@ -153,7 +153,7 @@
         });
 
         //監聽表格行工具事件
-        table.on('tool(currency)', function (obj) {
+        table.on('tool(datalist)', function (obj) {
             var data = obj.data;
             if (obj.event === 'edit') {
                 tool.side('/admin/currency/edit?id=' + obj.data.id);
@@ -162,13 +162,7 @@
                     icon: 3,
                     title: '提示'
                 }, function (index) {
-                    let callback = function (e) {
-                        layer.msg(e.msg);
-                        if (e.code == 0) {
-                            obj.del();
-                        }
-                    }
-                    tool.delete("/admin/currency/delete", {id: data.id}, callback);
+                    tool.delete("/admin/currency/delete", {id: data.id}, tool.deleteCallBack(obj));
                     layer.close(index);
                 });
             }
@@ -179,16 +173,7 @@
         statusList.map((item) => {
             //监听指定开关
             form.on('switch(' + item + ')', function (data) {
-
-
-                console.log(data);
-                let callback = function (e) {
-                    layer.msg(e.msg);
-                    if (e.code == 0) {
-                        parent.layui.tool.close(1000);
-                    }
-                }
-                tool.post("/admin/index/status", {table: 'currency', id: data.value, field: item}, callback);
+                tool.post("/admin/index/status", {table: 'currency', id: data.value, field: item}, tool.reqCallBack(false));
 
             });
         })

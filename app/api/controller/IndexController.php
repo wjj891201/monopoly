@@ -17,16 +17,7 @@ class IndexController extends BaseController
 
     public function index()
     {
-        try {
-            $mutex = MutexFacade::create("account_change");
-            if ($mutex->acquireLock(Config::get('mutex.timeout'))) {
-                sleep(3);
-                $mutex->releaseLock();
-            }
-            return $this->apiSuccess();
-        } catch (\Exception $e) {
-            return $this->apiError($e->getMessage());
-        }
+       return 'api_index';
     }
 
     public function uuid()

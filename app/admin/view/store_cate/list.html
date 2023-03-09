@@ -1,0 +1,114 @@
+{extend name="common/base"/}
+<!-- 主體 -->
+{block name="body"}
+
+<div class="p-3">
+    <table class="layui-hide" id="datalist" lay-filter="datalist"></table>
+</div>
+
+<script type="text/html" id="status">
+
+    <input type="checkbox" name="status" lay-skin="switch" {{# if(d.status==1){ }}checked {{# } }}
+           lay-text="開啟|禁用" value={{ d.id }} lay-filter="status">
+
+</script>
+
+<script type="text/html" id="toolbar">
+    <div class="layui-btn-container">
+        <span class="layui-btn layui-btn-sm layui-btn-normal" lay-event="add" data-title="添加分類">+添加分類</span>
+    </div>
+</script>
+
+<script type="text/html" id="bar">
+    <div class="layui-btn-group">
+        <a class="layui-btn layui-btn-xs  layui-btn-normal" lay-event="edit">編輯</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">刪除</a>
+    </div>
+</script>
+
+{/block}
+<!-- /主體 -->
+
+<!-- 腳本 -->
+{block name="script"}
+<script>
+    const moduleInit = ['tool'];
+
+    function xuwenInit() {
+        var table = layui.table, tool = layui.tool, form = layui.form;
+        layui.pageTable = table.render({
+            elem: '#datalist',
+            title: '公鏈列表',
+            toolbar: '#toolbar',
+            url: '/admin/store_cate/list',
+            page: true,
+            limit: 100,
+            cols: [
+                [
+                    {
+                        field: 'id',
+                        title: '編號',
+                        align: 'center',
+                        width: 80
+                    }, {
+                    field: 'title',
+                    title: '名稱',
+                }, {
+                    field: 'sort_order',
+                    title: '排序',
+                    align: 'center',
+                    width: 90
+                }, {
+                    field: 'status',
+                    title: '狀態',
+                    toolbar: '#status',
+                    align: 'center',
+                    width: 150
+                }, {
+                    field: 'right',
+                    title: '操作',
+                    toolbar: '#bar',
+                    width: 136,
+                    align: 'center'
+                }
+                ]
+            ]
+        });
+
+        //監聽表頭工具欄事件
+        table.on('toolbar(datalist)', function (obj) {
+            if (obj.event === 'add') {
+                tool.side("/admin/store_cate/add");
+                return false;
+            }
+        });
+
+        //監聽表格行工具事件
+        table.on('tool(datalist)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {
+                tool.side('/admin/store_cate/edit?id=' + obj.data.id);
+            } else if (obj.event === 'del') {
+                layer.confirm('確定要刪除該記錄嗎?', {
+                    icon: 3,
+                    title: '提示'
+                }, function (index) {
+                    tool.delete("/admin/store_cate/delete", {id: data.id}, tool.deleteCallBack(obj));
+                    layer.close(index);
+                });
+            }
+            return false;
+        });
+
+        let statusList = ['status'];
+        statusList.map((item) => {
+            //监听指定开关
+            form.on('switch(' + item + ')', function (data) {
+                tool.post("/admin/index/status", {table: 'store_cate', id: data.value, field: item}, tool.reqCallBack(false));
+
+            });
+        })
+    }
+</script>
+{/block}
+<!-- /腳本 -->

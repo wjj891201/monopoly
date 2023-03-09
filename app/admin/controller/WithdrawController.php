@@ -27,10 +27,9 @@ class WithdrawController extends BaseController
     {
         $param = get_param();
         if (request()->isAjax()) {
-            $where = [];
-            if (!empty($param['keywords'])) {
-                $where[] = ['m.username', 'like', '%' . $param['keywords'] . '%'];
-            }
+            $where = search_where($param,[
+                ['m.username', 'like', 'keywords'],
+            ]);
             $list = $this->withdrawService->getWithdrawList($where, $param);
             return $this->apiTable($list);
         } else {
@@ -55,12 +54,16 @@ class WithdrawController extends BaseController
 
     public function save($param)
     {
-        if ($param['status'] == 'finished') {
-            $param['finished_at'] = Carbon::now()->toDateTimeString();
-        } elseif ($param['status'] == 'refused') {
-            $param['refused_at'] = Carbon::now()->toDateTimeString();
-        } elseif ($param['status'] == 'checked') {
-            $param['checked_at'] = Carbon::now()->toDateTimeString();
+        switch ($param['status']){
+            case 'finished':
+                $param['finished_at'] = Carbon::now()->toDateTimeString();
+                break;
+            case 'refused':
+                $param['refused_at'] = Carbon::now()->toDateTimeString();
+                break;
+            case 'checked':
+                $param['checked_at'] = Carbon::now()->toDateTimeString();
+                break;
         }
         return parent::save($param);
     }

@@ -8,13 +8,13 @@
 <script type="text/html" id="status">
 	<i class="layui-icon {{#  if(d.status == 1){ }}layui-icon-ok{{#  } else { }}layui-icon-close{{#  } }}"></i>
 </script>
-<script type="text/html" id="toolbarDemo">
+<script type="text/html" id="toolbar">
 	<div class="layui-btn-container">
 		<button class="layui-btn layui-btn-sm add-menu layui-btn-normal">+ 添加廣告</button>
 		<button class="layui-btn layui-btn-primary layui-btn-sm add-back">返回</button>
 	</div>
 </script>
-<script type="text/html" id="barDemo">
+<script type="text/html" id="bar">
 	<div class="layui-btn-group"><button class="layui-btn layui-btn-xs" lay-event="edit">編輯</button><button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">刪除</button></div>
 </script>
 {/block}
@@ -30,7 +30,7 @@
 		layui.pageTable = table.render({
 			elem: '#slide_info',
 			title: '廣告列表',
-			toolbar: '#toolbarDemo',
+			toolbar: '#toolbar',
 			url: '/admin/banner/info', //數據介面
 			where: {
 				id: cate_id
@@ -73,7 +73,7 @@
 				}, {
 					field: 'right',
 					title: '操作',
-					toolbar: '#barDemo',
+					toolbar: '#bar',
 					width: 100,
 					align: 'center'
 				}

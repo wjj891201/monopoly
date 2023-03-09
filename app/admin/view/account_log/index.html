@@ -23,7 +23,7 @@
         var table = layui.table, tool = layui.tool, form = layui.form;
         layui.pageTable = table.render({
             elem: '#datalist',
-            title: '日誌列表',
+            title: '数据列表',
             url: '/admin/account_log/index',
             page: true,
             limit: 20,
@@ -86,9 +86,7 @@
         //監聽搜索提交
         form.on('submit(searchform)', function (data) {
             layui.pageTable.reload({
-                where: {
-                    keywords: data.field.keywords,
-                },
+                where: data.field,
                 page: {
                     curr: 1
                 }

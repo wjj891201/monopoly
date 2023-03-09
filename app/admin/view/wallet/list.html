@@ -82,9 +82,7 @@
         //監聽搜索提交
         form.on('submit(searchform)', function (data) {
             layui.pageTable.reload({
-                where: {
-                    keywords: data.field.keywords,
-                },
+                where: data.field,
                 page: {
                     curr: 1
                 }
