@@ -32,4 +32,5 @@ class RoleController extends BaseController
             return view();
         }
     }
+
 }

@@ -2,6 +2,7 @@ layui.define([], function (exports) {
     var MOD_NAME = 'tool';
     var tool = {
         loading: false,
+        buttonLoading: false,
         //右侧iframe的方式打开页面
         side: function (url, width) {
             let that = this;
@@ -44,9 +45,9 @@ layui.define([], function (exports) {
             })
         },
         //直接彈出
-        smallForm: function (url,width,height,title) {
+        smallForm: function (url, width, height, title) {
 
-            if(!title){
+            if (!title) {
                 title = '編輯'
             }
 
@@ -58,23 +59,24 @@ layui.define([], function (exports) {
 
             if (width && width > 0) {
                 width = width + 'px';
-            } else{
-                width = 400+'px'
+            } else {
+                width = 400 + 'px'
             }
 
             if (height && height > 0) {
                 height = height + 'px';
-            } else{
-                height = 400+'px'
+            } else {
+                height = 400 + 'px'
             }
 
             layer.open({
                 type: 2,
                 title: title,
                 content: url,
-                area: [width,height],
+                area: [width, height],
                 success: function (obj, index) {
                     that.loading = false;
+
                 }
             })
         },
@@ -200,31 +202,50 @@ layui.define([], function (exports) {
             if (layui.pageTable) {
                 layui.pageTable.reload();
             }
+
+
         },
         btnLoading: function (flag, attr) {
             const DISABLED = 'layui-btn-disabled';
-            if (attr == undefined) {
+
+            if (flag === undefined) {
+                flag = true
+            }
+
+            if (attr === undefined) {
                 attr = $(':button');
             }
+
             if (flag === true) {
                 attr.addClass(DISABLED); // 添加样式
                 attr.attr('disabled', 'disabled');  // 添加属性
+                this.buttonLoading = true;
             } else {
                 attr.removeClass(DISABLED);
                 attr.removeAttr('disabled');
+                this.buttonLoading = false;
 
             }
         },
-        reqCallBack(flag) {
+        reqCallBack() {
             let that = this
             return function (e) {
-                if (flag === true) {
-                    that.btnLoading(false)
+                if (tool.buttonLoading) {
+                    tool.btnLoading(false)
                 }
                 layer.msg(e.msg);
-                if (e.code == 0) {
+                if (e.code === 0) {
                     setTimeout(function () {
-                        parent.location.reload();
+
+                        if (parent.layui.tool) {
+                            parent.layui.tool.close(0);
+
+                            if (parent.layui.layer.index > 0) {
+                                parent.layui.layer.close(parent.layui.layer.index)
+                            }
+                        } else {
+                            location.reload();
+                        }
                     }, 1000);
                 }
             }
@@ -316,9 +337,6 @@ layui.define([], function (exports) {
             }, callback);
         },
         delete: function (url, data, callback) {
-
-
-
             this.ajax({
                 url: url,
                 type: "DELETE",

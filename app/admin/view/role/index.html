@@ -4,11 +4,6 @@
 <div class="p-3">
     <table class="layui-hide" id="datalist" lay-filter="datalist"></table>
 </div>
-<!--<script type="text/html" id="toolbar">-->
-<!--    <div class="layui-btn-container">-->
-<!--        <button class="layui-btn layui-btn-sm add-menu layui-btn-normal">+ 添加用戶等級</button>-->
-<!--    </div>-->
-<!--</script>-->
 <script type="text/html" id="status">
     {{#  if(d.status==1){ }}
     <input type="checkbox" name="status" lay-skin="switch" checked lay-text="開啟|禁用" value={{ d.id }}
@@ -16,6 +11,15 @@
     {{#  } else { }}
     <input type="checkbox" name="status" lay-skin="switch" lay-text="開啟|禁用" value={{ d.id}} lay-filter="status">
     {{#  } }}
+</script>
+<script type="text/html" id="accumulate">
+    {{# if(d.accumulate==0){ }}-{{# } else { }}{{ d.accumulate }}U{{# } }}
+</script>
+<script type="text/html" id="maintenance">
+    {{# if(d.maintenance==0){ }}-{{# } else { }}{{ d.maintenance }}U{{# } }}
+</script>
+<script type="text/html" id="layer_num">
+    {{ d.layer_num }}代
 </script>
 {/block}
 <!-- /主體 -->
@@ -26,7 +30,7 @@
     const moduleInit = ['tool'];
 
     function xuwenInit() {
-        var table = layui.table, tool = layui.tool ,form = layui.form;
+        var table = layui.table, tool = layui.tool, form = layui.form;
         layui.pageTable = table.render({
             elem: '#datalist'
             // , toolbar: '#toolbar'
@@ -35,20 +39,14 @@
             , page: false //開啟分頁
             , cellMinWidth: 120
             , cols: [[
-                {field: 'id', width: 80, title: 'ID號', align: 'center'}
-                , {field: 'name', title: '等級名稱', width: 120, align: 'center'}
-                , {field: 'reward_fee', title: '手續費獎勵比例', width: 200, align: 'center'}
-                , {field: 'member_count', title: '用戶數量', width: 200, align: 'center'}
-                , {field: 'desc', title: '等級描述'}
-                , {
-                    field: 'status',
-                    title: '狀態',
-                    toolbar: '#status',
-                    align: 'center',
-                    width: 150
-                }
-                , {
-                    width: 100, title: '操作', align: 'center', templet: function (d) {
+                {field: 'id', width: 80, title: 'ID號', align: 'center'},
+                {field: 'name', title: '等級名稱', align: 'center'},
+                {field: 'accumulate', title: '累積經驗值', toolbar: '#accumulate', align: 'center'},
+                {field: 'maintenance', title: '等級維護', toolbar: '#maintenance', align: 'center'},
+                {field: 'dice_num', title: '每日骰寶數', align: 'center'},
+                {field: 'layer_num', title: '代數', toolbar: '#layer_num', align: 'center'},
+                {
+                    width: 200, title: '操作', align: 'center', templet: function (d) {
                         return '<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit">編輯</a>';
                     }
                 }
@@ -57,13 +55,12 @@
 
         table.on('tool(datalist)', function (obj) {
             if (obj.event === 'edit') {
-                tool.smallForm('/admin/role/edit?id=' + obj.data.id,'edit');
+                tool.smallForm('/admin/role/edit?id=' + obj.data.id, 400, 430);
             }
         });
         //监听指定开关
-        form.on('switch(status)', function(data){
-            tool.post("/admin/index/status",{table:'member_role',id:data.value}, tool.reqCallBack(false));
-
+        form.on('switch(status)', function (data) {
+            tool.post("/admin/index/status", {table: 'member_role', id: data.value}, tool.reqCallBack(false, false));
         });
     }
 </script>

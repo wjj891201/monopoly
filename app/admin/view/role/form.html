@@ -6,25 +6,35 @@
         <tr>
             <td class="layui-td-gray">等級名稱<span>*</span></td>
             <td>
-                <input type="text" value="{$item.name}" name="name" lay-verify="required" lay-reqText="請輸入"   class="layui-input">
+                <input type="text" value="{$item.name}" name="name" lay-verify="required" lay-reqText="請輸入" class="layui-input">
             </td>
         </tr>
         <tr>
-            <td class="layui-td-gray">返傭比例<span>*</span></td>
+            <td class="layui-td-gray">累積經驗值<span>*</span></td>
             <td>
-                <input type="text" value="{$item.reward_fee}" name="reward_fee" lay-verify="required" lay-reqText="請輸入"   class="layui-input">
+                <input type="text" value="{$item.accumulate}" name="accumulate" lay-verify="required|number" lay-reqText="請輸入" class="layui-input">
             </td>
         </tr>
         <tr>
-            <td class="layui-td-gray">備註<span>*</span></td>
+            <td class="layui-td-gray">等級維護<span>*</span></td>
             <td>
-                <input type="text" value="{$item.desc}" name="desc" lay-verify="required" lay-reqText="請輸入"   class="layui-input">
+                <input type="text" value="{$item.maintenance}" name="maintenance" lay-verify="required|number" lay-reqText="請輸入" class="layui-input">
             </td>
         </tr>
-
-
+        <tr>
+            <td class="layui-td-gray">每日骰寶數<span>*</span></td>
+            <td>
+                <input type="text" value="{$item.dice_num|raw}" name="dice_num" lay-verify="required|number" lay-reqText="請輸入" class="layui-input">
+            </td>
+        </tr>
+        <tr>
+            <td class="layui-td-gray">代數<span>*</span></td>
+            <td>
+                <input type="text" value="{$item.layer_num|raw}" name="layer_num" lay-verify="required" lay-reqText="請輸入" class="layui-input">
+            </td>
+        </tr>
     </table>
-    <div class="flex justify-center py-4" >
+    <div class="flex justify-center py-4">
         <input type="hidden" name="id" value="{$item.id}"/>
         <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="webform">立即提交</button>
         <button type="reset" class="layui-btn layui-btn-primary">重置</button>
@@ -37,9 +47,9 @@
 {block name="script"}
 <script>
     const moduleInit = ['tool'];
-    function xuwenInit() {
-        var form = layui.form,tool=layui.tool;
 
+    function xuwenInit() {
+        var form = layui.form, tool = layui.tool;
         //監聽提交
         form.on('submit(webform)', function (data) {
             tool.btnLoading(true)
