@@ -22,7 +22,7 @@
     <table class="layui-table layui-table-form">
         <tr>
             <td class="layui-td-gray">房產標題<span>*</span></td>
-            <td colspan="7"><input type="text" name="title" lay-verify="required" lay-reqText="請輸入房產標題" autocomplete="off" placeholder="請輸入房產標題" class="layui-input" value="{$item.title}"></td>
+            <td colspan="3"><input type="text" name="title" lay-verify="required" lay-reqText="請輸入房產標題" autocomplete="off" placeholder="請輸入房產標題" class="layui-input" value="{$item.title}"></td>
         </tr>
         <tr>
             <td class="layui-td-gray">房產分類<span>*</span></td>
@@ -41,14 +41,20 @@
             </td>
         </tr>
         <tr>
+            <td class="layui-td-gray">價格<span>*</span></td>
+            <td colspan="3">
+                <input type="text" name="price" lay-verify="required|number" placeholder="請輸入價格" autocomplete="off" class="layui-input" value="{$item.price}">
+            </td>
+        </tr>
+        <tr>
             <td class="layui-td-gray">排序</td>
-            <td colspan="6">
+            <td colspan="3">
                 <input type="text" name="sort_order" placeholder="請輸入排序，數字" autocomplete="off" class="layui-input" value="{$item.sort_order}">
             </td>
         </tr>
         <tr>
             <td class="layui-td-gray" style="vertical-align:top;">房產簡介</td>
-            <td colspan="3">
+            <td>
                 <textarea name="desc" placeholder="請輸入簡介，不能超過200個字" class="layui-textarea">{$item.desc}</textarea>
             </td>
             <td class="layui-td-gray" style="vertical-align:top;">封面</td>

@@ -4,12 +4,14 @@ namespace app\service;
 
 use app\model\HouseCateModel;
 use app\model\HouseModel;
+use app\model\HouseOrderModel;
 use think\facade\Config;
 
 class HouseService
 {
     public HouseModel $houseModel;
     public HouseCateModel $cateModel;
+    public HouseOrderModel $orderModel;
     private bool $all;
 
     private static $instance = null;
@@ -27,6 +29,7 @@ class HouseService
         $this->all = $all;
         $this->cateModel = new HouseCateModel();
         $this->houseModel = new HouseModel();
+        $this->orderModel = new HouseOrderModel();
     }
 
     public function getHouseById($id)
@@ -39,12 +42,27 @@ class HouseService
         return $item;
     }
 
+    /**
+     * 房產列表
+     * @param array $where
+     * @param array $param
+     * @return mixed
+     */
     public function getHouseList($where = [], $param = [])
     {
         $result = $this->houseModel->getHouseList($where, $param);
         foreach ($result as $key => $value) {
             $result[$key] = $this->handleData($value);
         }
+        return $result;
+    }
+
+    public function getHouseOrderList($where = [], $param = [])
+    {
+        $result = $this->orderModel->getHouseOrderList($where, $param);
+//        foreach ($result as $key => $value) {
+//            $result[$key] = $this->handleData($value);
+//        }
         return $result;
     }
 

@@ -9,6 +9,13 @@
         <table class="layui-hide" id="treeTable" lay-filter="treeTable"></table>
     </div>
 </div>
+
+<script type="text/html" id="min_price">
+    {{ d.min_price }}U
+</script>
+<script type="text/html" id="max_price">
+    {{ d.max_price }}U
+</script>
 {/block}
 <!-- /主體 -->
 
@@ -32,8 +39,8 @@
                 {field: 'id', width: 80, title: 'ID號', align: 'center'},
                 {field: 'sort_order', title: '排序', align: 'center'},
                 {field: 'title', title: '地區名稱'},
-                {field: 'min_price', title: '最小金額'},
-                {field: 'max_price', title: '最大金額'},
+                {field: 'min_price', title: '最小金額', toolbar: '#min_price'},
+                {field: 'max_price', title: '最大金額', toolbar: '#max_price'},
                 {
                     width: 200, title: '操作', align: 'center', templet: function (d) {
                         var html = '<span class="layui-btn-group"><span class="layui-btn layui-btn-xs" lay-event="edit">編輯</span><span class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">刪除</span></span>';

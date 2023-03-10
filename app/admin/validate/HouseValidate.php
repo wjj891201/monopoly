@@ -10,12 +10,14 @@ class HouseValidate extends BaseValidate
     protected $rule = [
         'cate_id' => 'require',
         'title' => 'require',
-        'status' => 'require'
+        'status' => 'require',
+        'price' => 'require'
     ];
 
     protected $message = [
         'cate_id.require' => '所屬分類不能為空',
         'title.require' => '文章標題不能為空',
         'status.require' => '請選擇狀態',
+        'price.require' => '價格不能為空',
     ];
 }
