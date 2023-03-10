@@ -185,6 +185,13 @@ function get_article_cate()
     return $cate;
 }
 
+//讀取房產分類列表
+function get_house_cate()
+{
+    $cate = Db::name('house_cate')->order('created_at asc')->select()->toArray();
+    return $cate;
+}
+
 
 /**
  * 管理員操作日誌
