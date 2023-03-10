@@ -1,0 +1,64 @@
+{extend name="common/base"/}
+<!-- 主體 -->
+{block name="body"}
+<form class="layui-form p-4">
+    <h3 class="pb-3">地區{if $Request.action=='edit'}編輯{else/}新建{/if}</h3>
+    <table class="layui-table layui-table-form">
+        <tr>
+            <td class="layui-td-gray" style="width: 20%;">地區名稱<span>*</span></td>
+            <td><input type="text" name="title" lay-verify="required" lay-reqText="請輸入地區名稱" autocomplete="off" placeholder="請輸入地區名稱" class="layui-input" value="{$item.title}"></td>
+        </tr>
+        <tr>
+            <td class="layui-td-gray">最小金額<span>*</span></td>
+            <td><input type="text" name="min_price" lay-verify="required" lay-reqText="請輸入最小金額" autocomplete="off" placeholder="請輸入最小金額" class="layui-input" value="{$item.min_price}"></td>
+        </tr>
+        <tr>
+            <td class="layui-td-gray">最大金額<span>*</span></td>
+            <td><input type="text" name="max_price" lay-verify="required" lay-reqText="請輸入最大金額" autocomplete="off" placeholder="請輸入最大金額" class="layui-input" value="{$item.max_price}"></td>
+        </tr>
+        <tr>
+            <td class="layui-td-gray">排序</td>
+            <td>
+                <input type="text" name="sort_order" placeholder="請輸入排序，數字" autocomplete="off" class="layui-input" value="{$item.sort_order}">
+            </td>
+        </tr>
+        <tr>
+            <td class="layui-td-gray" style="vertical-align:top;">簡介</td>
+            <td>
+                <textarea name="desc" placeholder="請輸入簡介，不能超過200個字" class="layui-textarea">{$item.desc}</textarea>
+            </td>
+        </tr>
+    </table>
+    <div class="flex justify-center py-4">
+        <input type="hidden" name="id" value="{$item.id}">
+        <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="webform">立即提交</button>
+        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+</form>
+{/block}
+<!-- /主體 -->
+
+<!-- 腳本 -->
+{block name="script"}
+<script>
+    const moduleInit = ['tool'];
+
+    function xuwenInit() {
+        var form = layui.form, tool = layui.tool;
+        //監聽提交
+        form.on('submit(webform)', function (data) {
+            // let callback = function (e) {
+            //     layer.msg(e.msg);
+            //     if (e.code == 0) {
+            //         setTimeout(function () {
+            //             parent.location.reload();
+            //         }, 1000);
+            //     }
+            // }
+            tool.post("/admin/house_cate/add", data.field , tool.reqCallBack());
+            return false;
+        });
+    }
+</script>
+{/block}
+<!-- /腳本 -->

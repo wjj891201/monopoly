@@ -236,13 +236,12 @@ layui.define([], function (exports) {
                 layer.msg(e.msg);
                 if (e.code === 0) {
                     setTimeout(function () {
-
                         if (parent.layui.tool) {
                             parent.layui.tool.close(0);
-
                             if (parent.layui.layer.index > 0) {
                                 parent.layui.layer.close(parent.layui.layer.index)
                             }
+                            parent.location.reload();
                         } else {
                             location.reload();
                         }
