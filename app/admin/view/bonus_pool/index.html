@@ -1,0 +1,83 @@
+{extend name="common/base"/}
+<!-- 主體 -->
+{block name="body"}
+
+<div class="p-3">
+    <table class="layui-hide" id="bonus_pool" lay-filter="bonus_pool"></table>
+</div>
+
+<script type="text/html" id="toolbar">
+    <div class="layui-btn-container">
+        <span class="layui-btn layui-btn-sm layui-btn-normal" lay-event="add" data-title="充值">+ 充值</span>
+    </div>
+</script>
+
+<script type="text/html" id="status">
+    {{#  if(d.status==1){ }}
+    <input type="checkbox" name="status" lay-skin="switch" checked lay-text="開啟|禁用" value={{ d.id }} lay-filter="status">
+    {{#  } else { }}
+    <input type="checkbox" name="status" lay-skin="switch" lay-text="開啟|禁用" value={{ d.id}} lay-filter="status">
+    {{#  } }}
+</script>
+
+<script type="text/html" id="price">
+    {{ d.price }}U
+</script>
+
+{/block}
+<!-- /主體 -->
+
+<!-- 腳本 -->
+{block name="script"}
+<script>
+    const moduleInit = ['tool'];
+
+    function xuwenInit() {
+        var table = layui.table, tool = layui.tool, form = layui.form;
+        layui.pageTable = table.render({
+            elem: '#bonus_pool',
+            title: '彩金池列表',
+            toolbar: '#toolbar',
+            url: '/admin/bonus_pool/index',
+            page: true,
+            limit: 20,
+            cellMinWidth: 300,
+            cols: [
+                [
+                    {field: 'id', title: '編號', align: 'center', width: 80},
+                    {field: 'price', title: '充值金額', align: 'center', toolbar: '#price'},
+                    {field: 'flow_ch', title: '狀態', align: 'center'},
+                    {field: 'a_username', title: '充值人', align: 'center', width: 160},
+                    {field: 'created_at', title: '充值時間', align: 'center', width: 160}
+                ]
+            ]
+        });
+
+        //監聽表頭工具欄事件
+        table.on('toolbar(bonus_pool)', function (obj) {
+            if (obj.event === 'add') {
+                tool.smallForm('/admin/bonus_pool/add', '', '', '充值');
+                return false;
+            }
+        });
+
+        //監聽表格行工具事件
+        table.on('tool(bonus_pool)', function (obj) {
+            var data = obj.data;
+            return false;
+        });
+
+        //監聽搜索提交
+        form.on('submit(searchform)', function (data) {
+            layui.pageTable.reload({
+                where: data.field,
+                page: {
+                    curr: 1
+                }
+            });
+            return false;
+        });
+    }
+</script>
+{/block}
+<!-- /腳本 -->
