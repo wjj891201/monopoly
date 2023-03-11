@@ -22,9 +22,9 @@
 
 <script type="text/html" id="status">
     {{#  if(d.status==1){ }}
-    <input type="checkbox" name="status" lay-skin="switch" checked lay-text="開啟|禁用" value={{ d.id }} lay-filter="status">
+    <input type="checkbox" name="status" lay-skin="switch" checked lay-text="上架|下架" value={{ d.id }} lay-filter="status">
     {{#  } else { }}
-    <input type="checkbox" name="status" lay-skin="switch" lay-text="開啟|禁用" value={{ d.id}} lay-filter="status">
+    <input type="checkbox" name="status" lay-skin="switch" lay-text="上架|下架" value={{ d.id}} lay-filter="status">
     {{#  } }}
 </script>
 

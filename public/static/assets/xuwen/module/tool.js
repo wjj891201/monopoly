@@ -241,7 +241,7 @@ layui.define([], function (exports) {
                             if (parent.layui.layer.index > 0) {
                                 parent.layui.layer.close(parent.layui.layer.index)
                             }
-                            parent.location.reload();
+                            // parent.location.reload();
                         } else {
                             location.reload();
                         }

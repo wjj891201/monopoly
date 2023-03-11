@@ -17,7 +17,7 @@ class HouseModel extends BaseModel
             ->field('a.*,c.id as cate_id,c.title as cate_title,u.nickname as admin_name,m.username')
             ->alias('a')
             ->join('house_cate c', 'a.cate_id = c.id')
-            ->join('admin u', 'a.admin_id = u.id')
+            ->join('admin u', 'a.admin_id = u.id', 'LEFT')
             ->join('member m', 'a.owner_id = m.id', 'LEFT')
             ->order($order)
             ->paginate($rows, false, ['query' => $param]);
