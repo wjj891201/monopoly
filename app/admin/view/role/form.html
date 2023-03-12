@@ -30,7 +30,13 @@
         <tr>
             <td class="layui-td-gray">代數<span>*</span></td>
             <td>
-                <input type="text" value="{$item.layer_num|raw}" name="layer_num" lay-verify="required" lay-reqText="請輸入" class="layui-input">
+                <input type="text" value="{$item.layer_num|raw}" name="layer_num" lay-verify="required|number" lay-reqText="請輸入" class="layui-input">
+            </td>
+        </tr>
+        <tr>
+            <td class="layui-td-gray">獎勵比例<span>*</span></td>
+            <td>
+                <input type="text" value="{$item.reward_ratio|raw}" name="reward_ratio" lay-verify="required|number" lay-reqText="請輸入" class="layui-input">
             </td>
         </tr>
     </table>

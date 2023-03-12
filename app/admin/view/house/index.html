@@ -20,11 +20,18 @@
     <table class="layui-hide" id="house" lay-filter="house"></table>
 </div>
 
+<script type="text/html" id="active">
+    {{#  if(d.active==1){ }}
+    <input type="checkbox" name="active" lay-skin="switch" checked lay-text="是|否" value={{ d.id}} lay-filter="active">
+    {{#  } else { }}
+    <input type="checkbox" name="active" lay-skin="switch" lay-text="是|否" value={{ d.id }} lay-filter="active">
+    {{#  } }}
+</script>
 <script type="text/html" id="status">
     {{#  if(d.status==1){ }}
-    <input type="checkbox" name="status" lay-skin="switch" checked lay-text="上架|下架" value={{ d.id }} lay-filter="status">
+    <input type="checkbox" name="status" lay-skin="switch" lay-text="是|否" value={{ d.id}} lay-filter="status">
     {{#  } else { }}
-    <input type="checkbox" name="status" lay-skin="switch" lay-text="上架|下架" value={{ d.id}} lay-filter="status">
+    <input type="checkbox" name="status" lay-skin="switch" checked lay-text="是|否" value={{ d.id }} lay-filter="status">
     {{#  } }}
 </script>
 
@@ -65,10 +72,11 @@
                 [
                     {field: 'id', title: '編號', align: 'center', width: 80},
                     {field: 'sort_order', title: '排序', align: 'center', width: 80},
-                    {field: 'cate_title', title: '房產分類', align: 'center', width: 150},
+                    {field: 'cate_title', title: '所屬地區', align: 'center', width: 150},
                     {field: 'title', title: '房產標題'},
                     {field: 'price', title: '價格', align: 'center', toolbar: '#price', width: 150},
-                    {field: 'status', title: '狀態', toolbar: '#status', align: 'center', width: 150},
+                    {field: 'active', title: '是否掛賣', toolbar: '#active', align: 'center', width: 150},
+                    {field: 'status', title: '是否回收', toolbar: '#status', align: 'center', width: 150},
                     {field: 'username', title: '房產所屬人', align: 'center', width: 150},
                     {field: 'admin_name', title: '創建人', align: 'center', width: 150},
                     {field: 'created_at', title: '創建時間', align: 'center', width: 160},
@@ -107,9 +115,11 @@
 
 
         //监听指定开关
+        form.on('switch(active)', function (data) {
+            tool.post("/admin/index/status", {table: 'house', id: data.value, field: 'active'}, tool.reqCallBack(false));
+        });
         form.on('switch(status)', function (data) {
             tool.post("/admin/index/status", {table: 'house', id: data.value}, tool.reqCallBack(false));
-
         });
 
         //監聽搜索提交

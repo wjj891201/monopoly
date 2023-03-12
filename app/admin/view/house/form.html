@@ -25,19 +25,19 @@
             <td colspan="3"><input type="text" name="title" lay-verify="required" lay-reqText="請輸入房產標題" autocomplete="off" placeholder="請輸入房產標題" class="layui-input" value="{$item.title}"></td>
         </tr>
         <tr>
-            <td class="layui-td-gray">房產分類<span>*</span></td>
+            <td class="layui-td-gray">所屬地區<span>*</span></td>
             <td>
-                <select name="cate_id" lay-verify="required" lay-reqText="請選擇分類">
-                    <option value="">請選擇分類</option>
+                <select name="cate_id" lay-verify="required" lay-reqText="請選擇地區">
+                    <option value="">請選擇地區</option>
                     {volist name=":set_recursion(get_house_cate())" id="v"}
                     <option value="{$v.id}" {eq name="$item.cate_id" value="$v.id" }selected{/eq}>{$v.title}</option>
                     {/volist}
                 </select>
             </td>
-            <td class="layui-td-gray">狀態<span>*</span></td>
+            <td class="layui-td-gray">是否回收<span>*</span></td>
             <td>
-                <input type="radio" name="status" value="1" title="上架" {eq name="$item.status" value="1" }checked{/eq}>
-                <input type="radio" name="status" value="0" title="下架" {eq name="$item.status" value="0" }checked{/eq}>
+                <input type="radio" name="status" value="0" title="是" {eq name="$item.status" value="0" }checked{/eq}>
+                <input type="radio" name="status" value="1" title="否" {eq name="$item.status" value="1" }checked{/eq}>
             </td>
         </tr>
         <tr>

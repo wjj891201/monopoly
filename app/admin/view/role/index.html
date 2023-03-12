@@ -45,6 +45,7 @@
                 {field: 'maintenance', title: '等級維護', toolbar: '#maintenance', align: 'center'},
                 {field: 'dice_num', title: '每日骰寶數', align: 'center'},
                 {field: 'layer_num', title: '代數', toolbar: '#layer_num', align: 'center'},
+                {field: 'reward_ratio', title: '獎勵比例', align: 'center'},
                 {
                     width: 200, title: '操作', align: 'center', templet: function (d) {
                         return '<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit">編輯</a>';
@@ -55,7 +56,7 @@
 
         table.on('tool(datalist)', function (obj) {
             if (obj.event === 'edit') {
-                tool.smallForm('/admin/role/edit?id=' + obj.data.id, 400, 430);
+                tool.smallForm('/admin/role/edit?id=' + obj.data.id, 400, 470);
             }
         });
         //监听指定开关
