@@ -47,6 +47,17 @@
             </td>
         </tr>
         <tr>
+            <td class="layui-td-gray">綁定用戶</td>
+            <td colspan="3">
+                <select name="owner_id" lay-verify="required" lay-reqText="請選擇地區" lay-search="">
+                    <option value="">請選擇用戶</option>
+                    {volist name=":get_member()" id="v"}
+                    <option value="{$v.id}" {eq name="$item.owner_id" value="$v.id" }selected{/eq}>{$v.username}</option>
+                    {/volist}
+                </select>
+            </td>
+        </tr>
+        <tr>
             <td class="layui-td-gray">排序</td>
             <td colspan="3">
                 <input type="text" name="sort_order" placeholder="請輸入排序，數字" autocomplete="off" class="layui-input" value="{$item.sort_order}">

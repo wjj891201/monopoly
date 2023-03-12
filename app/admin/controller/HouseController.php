@@ -39,6 +39,12 @@ class HouseController extends BaseController
         }
     }
 
+    public function read()
+    {
+        $param = get_param();
+        return view();
+    }
+
 //    public function initForm($item)
 //    {
 //        View::assign("type_list", $this->houseService->getTypeList());

@@ -24,7 +24,7 @@ class Hello extends Command
     {
         $list = Db::name('house')->alias('h')->field(['h.*', 'c.min_price', 'c.max_price'])
             ->join('house_cate c', 'h.cate_id = c.id')
-            ->where(['h.effective' => 1])->select()->toArray();
+            ->where(['h.active' => 1])->select()->toArray();
         foreach ($list as $key => $vo) {
             if ($vo['price'] > $vo['max_price']) {
                 // 舍去法取整

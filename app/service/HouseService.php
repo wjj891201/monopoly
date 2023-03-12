@@ -6,6 +6,7 @@ use app\model\HouseCateModel;
 use app\model\HouseModel;
 use app\model\HouseOrderModel;
 use think\facade\Config;
+use think\facade\Db;
 
 class HouseService
 {
@@ -60,9 +61,19 @@ class HouseService
     public function getHouseOrderList($where = [], $param = [])
     {
         $result = $this->orderModel->getHouseOrderList($where, $param);
-//        foreach ($result as $key => $value) {
-//            $result[$key] = $this->handleData($value);
-//        }
+        return $result;
+    }
+
+    //获取历史房产
+    public function getHistoryHouse($id)
+    {
+        $info = Db::name('house')->where(['id' => $id])->find();
+        if (empty($info)) {
+            return [];
+        } else {
+            $temp = self::getHistoryHouse($info['pid']);
+            $result = array_merge($info, $temp);
+        }
         return $result;
     }
 
