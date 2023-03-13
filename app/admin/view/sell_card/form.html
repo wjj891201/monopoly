@@ -1,0 +1,57 @@
+{extend name="common/base"/}
+<!-- 主體 -->
+{block name="body"}
+<form class="layui-form p-4">
+    <table class="layui-table layui-table-form">
+        <tr>
+            <td class="layui-td-gray">天數<span>*</span></td>
+            <td>
+                <input type="text" value="{$item.day}" name="day" lay-verify="required" lay-reqText="請輸入" class="layui-input">
+            </td>
+        </tr>
+        <tr>
+            <td class="layui-td-gray">價格<span>*</span></td>
+            <td>
+                <input type="text" value="{$item.price}" name="price" lay-verify="required|number" lay-reqText="請輸入" class="layui-input">
+            </td>
+        </tr>
+        <tr>
+            <td class="layui-td-gray">狀態<span>*</span></td>
+            <td>
+                <input type="radio" name="status" value="1" title="上架" {eq name="$item.status" value="1" }checked{/eq}>
+                <input type="radio" name="status" value="0" title="下架" {eq name="$item.status" value="0" }checked{/eq}>
+            </td>
+        </tr>
+        <tr>
+            <td class="layui-td-gray">排序</td>
+            <td>
+                <input type="text" value="{$item.sort_order}" name="sort_order" lay-reqText="請輸入" class="layui-input">
+            </td>
+        </tr>
+    </table>
+    <div class="flex justify-center py-4">
+        <input type="hidden" name="id" value="{$item.id}"/>
+        <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="webform">立即提交</button>
+        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+</form>
+{/block}
+<!-- /主體 -->
+
+<!-- 腳本 -->
+{block name="script"}
+<script>
+    const moduleInit = ['tool'];
+
+    function xuwenInit() {
+        var form = layui.form, tool = layui.tool;
+        //監聽提交
+        form.on('submit(webform)', function (data) {
+            tool.btnLoading(true)
+            tool.post("/admin/sell_card/add", data.field, tool.reqCallBack());
+            return false;
+        });
+    }
+</script>
+{/block}
+<!-- /腳本 -->
