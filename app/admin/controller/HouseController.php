@@ -42,6 +42,8 @@ class HouseController extends BaseController
     public function read()
     {
         $param = get_param();
+        $history_list = $this->houseService->getHistoryHouse($param['id']);
+        View::assign("history_list", $history_list);
         return view();
     }
 

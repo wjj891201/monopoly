@@ -67,16 +67,21 @@ class HouseService
     //获取历史房产
     public function getHistoryHouse($id)
     {
-        $info = Db::name('house')->where(['id' => $id])->find();
-        if (empty($info)) {
+        $result = Db::name('house')->alias('h')
+            ->field(['h.id', 'h.pid', 'h.title', 'h.price', 'h.created_at', 'c.title cate_title', 'm.username'])
+            ->join('house_cate c', 'c.id=h.cate_id')
+            ->join('member m', 'm.id=h.owner_id')
+            ->where(['h.id' => $id])->select()->toArray();
+        if (empty($result)) {
             return [];
         } else {
-            $temp = self::getHistoryHouse($info['pid']);
-            $result = array_merge($info, $temp);
+            foreach ($result as $key => $val) {
+                $temp = $this->getHistoryHouse($val['pid']);
+                $result = array_merge($result, $temp);
+            }
         }
         return $result;
     }
-
 
     public function handleData($item)
     {
