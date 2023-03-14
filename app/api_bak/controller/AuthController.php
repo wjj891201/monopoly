@@ -56,14 +56,14 @@ class AuthController extends CommonController
         $param = get_param();
 
         try {
-            $member = $this->memberModel->find(JWT_UID);
-            $param['email'] = $member['email'];
-
             validate(MemberValidate::class)->scene("password")->check($param);
-
-            $password = create_password($param['password']);
-            $this->memberModel->editMember(['id'=>$member['id'],'password'=>$password]);
-
+            $member = $this->memberModel->find(JWT_UID);
+            $param['id'] = $member['id'];
+            if (!$this->memberService->checkCode($member['email'], $param['verify_code'])) {
+                throw new RespException(1, '验证码不正确');
+            }
+            $param['password'] = create_password($param['password']);
+            $this->memberModel->editMember($param);
             add_user_log('edit', '修改密碼', $member['id']);
             return $this->apiSuccess('修改成功，請去登入');
         } catch (\Exception $e) {
@@ -76,12 +76,15 @@ class AuthController extends CommonController
         $param = get_param();
 
         try {
-            $member = $this->memberModel->find(JWT_UID);
-            $param['email'] = $member['email'];
             validate(MemberValidate::class)->scene("password")->check($param);
-            $safe_password = create_password($param['password']);
-            $this->memberModel->editMember(['id'=>$member['id'],'safe_password'=>$safe_password]);
-            add_user_log('edit', '修改安全密碼', $member['id']);
+            $member = $this->memberModel->find(JWT_UID);
+            $param['id'] = $member['id'];
+            if (!$this->memberService::checkCode($member['email'], $param['verify_code'])) {
+                throw new RespException(1, '验证码不正确');
+            }
+            $param['safe_password'] = create_password($param['password']);
+            $this->memberModel->editMember($param);
+            add_user_log('edit', '修改密碼', $member['id']);
             return $this->apiSuccess('修改成功');
         } catch (\Exception $e) {
             return $this->apiError($e->getMessage());

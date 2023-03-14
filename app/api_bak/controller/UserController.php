@@ -95,8 +95,7 @@ class UserController extends BaseController
             }
 
             $param['password'] = create_password($param['password']);
-            $param['id'] = $member['id'];
-            $this->memberModel->editMember($param);
+            $this->memberModel->editMember($member['id'], $param);
             return $this->apiSuccess('修改成功，請去登入');
         } catch (\Exception $e) {
             return $this->apiError($e->getMessage());

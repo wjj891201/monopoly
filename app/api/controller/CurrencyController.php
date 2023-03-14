@@ -39,7 +39,7 @@ class CurrencyController extends BaseController
             ['is_trade'],
         ]);
         $list = $this->ccService->getCurrencyList($where);
-        if (count($list) == 0) {
+        if (empty($list)) {
             return $this->apiError('數據不存在');
         }
         return $this->apiData($list);

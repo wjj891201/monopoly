@@ -24,7 +24,7 @@ class TransferController extends CommonController
     public function list()
     {
         $param = get_param();
-        $where[] = ['from_member|to_member', '=', JWT_UID];
+        $where[] = ['w.member_id', '=', JWT_UID];
         $list = $this->transferModel->getTransferList($where, $param);
         return $this->apiData($list);
     }
@@ -52,7 +52,6 @@ class TransferController extends CommonController
 
                 $id = $this->transferModel->addTransfer($data);
                 add_user_log("add", "劃轉", $id, $param);
-
                 $this->accountService->updateAccount([
                     'member_id' => JWT_UID,
                     'scene' => 'transfer',
@@ -63,7 +62,6 @@ class TransferController extends CommonController
                     'amount' => $param['amount'],
                     'item_id' => $id,
                 ]);
-
                 $this->accountService->updateAccount([
                     'member_id' => JWT_UID,
                     'scene' => 'transfer',

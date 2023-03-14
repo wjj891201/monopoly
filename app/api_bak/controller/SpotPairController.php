@@ -2,43 +2,39 @@
 
 namespace app\api\controller;
 
-use app\api\BaseController;
+use app\service\SpotService;
 use app\exception\RespException;
-use app\service\CCService;
-use app\validate\CommonValidate;
+use app\api\controller\CommonController;
 
-class ChainController extends BaseController
+class SpotPairController extends CommonController
 {
-    private CCService $ccService;
+    private SpotService $spotService;
 
     public function initialize()
     {
         parent::initialize();
-        $this->ccService = new CCService(false);
+        $this->spotService = new SpotService(false);
     }
 
     public function info()
     {
-        $param = get_param();
-        if (empty($param['id'])) {
+        $pair = get_param('pair');
+        if (empty($pair)) {
             return $this->apiError('参数错误');
         }
-
-        $item = $this->ccService->getChainById($param['id']);
-        if (empty($item) || $item['status'] == 0) {
+        $item = $this->spotService->getPairByCode($pair);
+        if (empty($item) || $item['is_show'] == 0) {
             return $this->apiError('数据不存在');
         }
-
-        return $this->apiData($item);
+        $this->apiData($item);
     }
 
     public function list()
     {
-        $list = $this->ccService->getChainList();
+        $list = $this->spotService->getPairList();
         if (empty($list)) {
             return $this->apiError('數據不存在');
         }
         return $this->apiData($list);
     }
-
 }

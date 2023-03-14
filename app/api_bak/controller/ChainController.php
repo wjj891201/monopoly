@@ -23,13 +23,12 @@ class ChainController extends BaseController
         if (empty($param['id'])) {
             return $this->apiError('参数错误');
         }
-
         $item = $this->ccService->getChainById($param['id']);
         if (empty($item) || $item['status'] == 0) {
             return $this->apiError('数据不存在');
         }
+        $this->apiData($item);
 
-        return $this->apiData($item);
     }
 
     public function list()

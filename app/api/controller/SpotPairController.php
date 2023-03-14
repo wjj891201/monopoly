@@ -2,11 +2,10 @@
 
 namespace app\api\controller;
 
+use app\api\BaseController;
 use app\service\SpotService;
-use app\exception\RespException;
-use app\api\controller\CommonController;
 
-class SpotPairController extends CommonController
+class SpotPairController extends BaseController
 {
     private SpotService $spotService;
 

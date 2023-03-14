@@ -4,17 +4,18 @@ namespace app\api\controller;
 
 use app\api\BaseController;
 use app\exception\RespException;
-use app\service\CCService;
+use app\model\PageModel;
 use app\validate\CommonValidate;
 
-class ChainController extends BaseController
+class PageController extends BaseController
 {
-    private CCService $ccService;
+    private PageModel $pageModel;
+
 
     public function initialize()
     {
         parent::initialize();
-        $this->ccService = new CCService(false);
+        $this->pageModel = new PageModel();
     }
 
     public function info()
@@ -23,22 +24,10 @@ class ChainController extends BaseController
         if (empty($param['id'])) {
             return $this->apiError('参数错误');
         }
-
-        $item = $this->ccService->getChainById($param['id']);
+        $item = $this->pageModel->find($param['id']);
         if (empty($item) || $item['status'] == 0) {
             return $this->apiError('数据不存在');
         }
-
-        return $this->apiData($item);
+        $this->apiData($item);
     }
-
-    public function list()
-    {
-        $list = $this->ccService->getChainList();
-        if (empty($list)) {
-            return $this->apiError('數據不存在');
-        }
-        return $this->apiData($list);
-    }
-
 }

@@ -2,9 +2,9 @@
 
 namespace app\api\validate;
 
-use app\BaseValidate;
+use think\Validate;
 
-class AddressValidate extends BaseValidate
+class AddressValidate extends Validate
 {
     protected $rule = [
         'chain_id' => 'require',
@@ -13,7 +13,7 @@ class AddressValidate extends BaseValidate
     ];
 
     protected $message = [
-        'chain_id' => '公鏈不正確',
+        'chain_id.require' => '公鏈不能為空',
         'name.require' => '名稱不能為空',
         'address.require' => '地址不能為空',
     ];

@@ -17,17 +17,18 @@ class IndexController extends BaseController
 
     public function index()
     {
-        return 'api_index';
+       return 'api_index';
     }
 
     public function uuid()
     {
-        return $this->apiData(['uuid' => Uuid::uuid4()->toString()]);
+        $uuid = Uuid::uuid4()->toString();
+        return $this->apiData(['uuid' => $uuid]);
     }
 
     public function captcha()
     {
-        $client_id = Request::header('X-Client-ID');
+        $client_id = get_param('client_id');
         if (!$client_id) {
             return $this->apiError('參數不正確');
         }
@@ -38,7 +39,7 @@ class IndexController extends BaseController
     {
         $param = get_param();
         try {
-            $param['client_id'] = Request::header('X-Client-ID');
+            $param['client_id'] =  Request::header('X-Client-ID');
 
             validate(VerifyCodeValidate::class)->scene('captcha_send')->check($param);
             //todo 執行發送
@@ -49,11 +50,4 @@ class IndexController extends BaseController
             return $this->apiError($e->getMessage());
         }
     }
-
-
-    public function config(){
-        return $this->apiData([]);
-    }
-
-
 }

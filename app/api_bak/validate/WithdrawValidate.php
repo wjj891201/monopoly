@@ -11,7 +11,7 @@ class WithdrawValidate extends BaseValidate
         'address' => 'require',
         'amount' => 'require|float',
         'password' => 'require|checkSafePassword',
-//        'verify_code' => 'require|checkVerifyCode',
+        'verify_code' => 'require|checkVerifyCode',
     ];
 
     protected $message = [

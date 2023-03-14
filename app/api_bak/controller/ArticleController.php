@@ -46,6 +46,6 @@ class ArticleController extends BaseController
         if (empty($item) || $item['status'] == 0) {
             return $this->apiError('数据不存在');
         }
-        return $this->apiData($item);
+        $this->apiData($item);
     }
 }

@@ -7,7 +7,7 @@ use app\exception\RespException;
 use app\service\CCService;
 use app\validate\CommonValidate;
 
-class ChainController extends BaseController
+class CurrencyChainController extends BaseController
 {
     private CCService $ccService;
 
@@ -23,22 +23,26 @@ class ChainController extends BaseController
         if (empty($param['id'])) {
             return $this->apiError('参数错误');
         }
-
-        $item = $this->ccService->getChainById($param['id']);
+        $item = $this->ccService->getCurrencyChainByID($param['id']);
         if (empty($item) || $item['status'] == 0) {
-            return $this->apiError('数据不存在');
+            $this->apiError('數據不存在');
         }
-
         return $this->apiData($item);
     }
 
     public function list()
     {
-        $list = $this->ccService->getChainList();
-        if (empty($list)) {
+        $param = get_param();
+
+        $where = search_where($param,[
+           ['cc.currency_id'],
+           ['cc.chain_id']
+        ]);
+
+        $list = $this->ccService->getCurrencyChainList($where);
+        if (count($list) == 0) {
             return $this->apiError('數據不存在');
         }
         return $this->apiData($list);
     }
-
 }

@@ -10,7 +10,6 @@ use app\service\AccountService;
 use app\service\CCService;
 use app\service\WithdrawService;
 use think\facade\Config;
-use xwaddress\AddressFactory;
 
 class WithdrawController extends CommonController
 {
@@ -35,8 +34,6 @@ class WithdrawController extends CommonController
     public function submit()
     {
         $param = get_param();
-        $mutex = MutexFacade::create("account_change");
-
         try {
             $member = $this->memberModel->find(JWT_UID);
             $param['email'] = $member['email'];
@@ -44,37 +41,39 @@ class WithdrawController extends CommonController
             validate(WithdrawValidate::class)->check($param);
 
             $ccItem = (new CCService())->getCurrencyChainByID($param["cc_id"]);
-            if (empty($ccItem)) {
-                throw new RespException(1, '幣鏈數據不存在');
+            if (empty($ccItem)){
+                throw new RespException(1,'幣鏈數據不存在');
             }
 
             $account = $this->accountService->getAccountByMemberID(JWT_UID, $ccItem['currency_id'], 'funding');
             if (empty($account)) {
-                throw new RespException(1, '資產帳戶不存在');
+                throw new RespException(1,'資產帳戶不存在');
             }
 
-
-            $address = AddressFactory::create($ccItem['base_chain'], $ccItem['base_chain_protocol'], $param['address']);
-            if (!$address->isValid()) {
-                throw new RespException(1, '地址格式不正確');
-            }
-
+            $mutex = MutexFacade::create("account_change");
             if ($mutex->acquireLock(Config::get('mutex.timeout'))) {
                 $param["member_id"] = JWT_UID;
-
+                //保存提現
                 $id = (new AccountWithdrawModel())->addWithdraw($param);
                 add_user_log("add", "提現", JWT_UID, $param);
 
-                $this->accountService->subFundingAvailable($account['member_id'],
-                    $account['currency_id'], $param['amount'], $id, 'withdraw');
+                $this->accountService->subFundingAvailable();
 
-                add_user_log('edit', "帳戶變更", $id, $param);
+                $this->accountService->updateAccount([
+                    'member_id' => $account['member_id'],
+                    'scene' => 'withdraw',
+                    'asset_type' => 'funding',
+                    'balance_type' => 'available',
+                    'operate_type' => 'sub',
+                    'currency_id' => $account['currency_id'],
+                    'amount' => $param['amount'],
+                    'item_id' => $id,
+                ]);
+                add_user_log('edit', "提現", $id, $param);
                 $mutex->releaseLock();
             }
-
             return $this->apiSuccess();
         } catch (\Exception $e) {
-            $mutex->releaseLock();
             return $this->apiError($e->getMessage());
         }
     }
