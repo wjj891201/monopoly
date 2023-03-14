@@ -3,7 +3,7 @@
 {block name="body"}
 
 <div class="p-3">
-    <table class="layui-hide" id="house" lay-filter="house"></table>
+    <table class="layui-hide" id="buy_card" lay-filter="buy_card"></table>
 </div>
 
 <script type="text/html" id="status">
@@ -16,7 +16,7 @@
 
 <script type="text/html" id="toolbar">
     <div class="layui-btn-container">
-        <span class="layui-btn layui-btn-sm layui-btn-normal" lay-event="add" data-title="添加掛賣寶">+ 添加掛賣寶</span>
+        <span class="layui-btn layui-btn-sm layui-btn-normal" lay-event="add" data-title="添加搶房寶">+ 添加搶房寶</span>
     </div>
 </script>
 <script type="text/html" id="price">
@@ -40,10 +40,10 @@
     function xuwenInit() {
         var table = layui.table, tool = layui.tool, form = layui.form;
         layui.pageTable = table.render({
-            elem: '#house',
-            title: '掛賣寶列表',
+            elem: '#buy_card',
+            title: '搶房寶列表',
             toolbar: '#toolbar',
-            url: '/admin/sell_card/index',
+            url: '/admin/buy_card/index',
             page: true,
             limit: 20,
             cellMinWidth: 300,
@@ -51,7 +51,7 @@
                 [
                     {field: 'id', title: '編號', align: 'center', width: 80},
                     {field: 'sort_order', title: '排序', align: 'center', width: 80},
-                    {field: 'day', title: '天數', align: 'center'},
+                    {field: 'num', title: '個數', align: 'center'},
                     {field: 'price', title: '價格', align: 'center', toolbar: '#price'},
                     {field: 'status', title: '狀態', toolbar: '#status', align: 'center', width: 200},
                     {field: 'admin_name', title: '創建人', align: 'center', width: 150},
@@ -62,24 +62,24 @@
         });
 
         //監聽表頭工具欄事件
-        table.on('toolbar(house)', function (obj) {
+        table.on('toolbar(buy_card)', function (obj) {
             if (obj.event === 'add') {
-                tool.smallForm("/admin/sell_card/add");
+                tool.smallForm("/admin/buy_card/add");
                 return false;
             }
         });
 
         //監聽表格行工具事件
-        table.on('tool(house)', function (obj) {
+        table.on('tool(buy_card)', function (obj) {
             var data = obj.data;
             if (obj.event === 'edit') {
-                tool.smallForm('/admin/sell_card/edit?id=' + obj.data.id);
+                tool.smallForm('/admin/buy_card/edit?id=' + obj.data.id);
             } else if (obj.event === 'del') {
                 layer.confirm('確定要刪除該記錄嗎?', {
                     icon: 3,
                     title: '提示'
                 }, function (index) {
-                    tool.delete("/admin/sell_card/delete", {id: data.id}, tool.deleteCallBack(obj));
+                    tool.delete("/admin/buy_card/delete", {id: data.id}, tool.deleteCallBack(obj));
                     layer.close(index);
                 });
             }
@@ -89,7 +89,7 @@
 
         //监听指定开关
         form.on('switch(status)', function (data) {
-            tool.post("/admin/index/status", {table: 'sell_card', id: data.value}, tool.reqCallBack(false));
+            tool.post("/admin/index/status", {table: 'buy_card', id: data.value}, tool.reqCallBack(false));
         });
 
         //監聽搜索提交

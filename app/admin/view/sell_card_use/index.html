@@ -1,0 +1,83 @@
+{extend name="common/base"/}
+<!-- 主體 -->
+{block name="body"}
+
+<div class="p-3">
+    <table class="layui-hide" id="house" lay-filter="house"></table>
+</div>
+
+<script type="text/html" id="price">
+    {{ d.price }}U
+</script>
+<script type="text/html" id="bar">
+    <div class="layui-btn-group">
+        <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit">編輯</a>
+        <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">刪除</a>
+    </div>
+</script>
+
+{/block}
+<!-- /主體 -->
+
+<!-- 腳本 -->
+{block name="script"}
+<script>
+    const moduleInit = ['tool'];
+
+    function xuwenInit() {
+        var table = layui.table, tool = layui.tool, form = layui.form;
+        layui.pageTable = table.render({
+            elem: '#house',
+            title: '掛賣寶使用記錄',
+            // toolbar: '#toolbar',
+            url: '/admin/sell_card_use/index',
+            page: true,
+            limit: 20,
+            cellMinWidth: 300,
+            cols: [
+                [
+                    {field: 'id', title: '編號', align: 'center', width: 80},
+                    {field: 'order_no', title: '掛賣寶訂單號', align: 'center'},
+                    {field: 'title', title: '房產標題', align: 'center'},
+                    {field: 'date_start', title: '掛賣寶開始時間', align: 'center'},
+                    {field: 'date_end', title: '掛賣寶結束時間', align: 'center', width: 200},
+                    {field: 'username', title: '創建人', align: 'center', width: 200},
+                    {field: 'created_at', title: '創建時間', align: 'center', width: 200},
+                ]
+            ]
+        });
+
+        //監聽表頭工具欄事件
+        table.on('toolbar(house)', function (obj) {
+            if (obj.event === 'add') {
+                tool.smallForm("/admin/sell_card_use/add");
+                return false;
+            }
+        });
+
+        //監聽表格行工具事件
+        table.on('tool(house)', function (obj) {
+            var data = obj.data;
+            return false;
+        });
+
+
+        //监听指定开关
+        form.on('switch(status)', function (data) {
+            tool.post("/admin/index/status", {table: 'sell_card_use', id: data.value}, tool.reqCallBack(false));
+        });
+
+        //監聽搜索提交
+        form.on('submit(searchform)', function (data) {
+            layui.pageTable.reload({
+                where: data.field,
+                page: {
+                    curr: 1
+                }
+            });
+            return false;
+        });
+    }
+</script>
+{/block}
+<!-- /腳本 -->

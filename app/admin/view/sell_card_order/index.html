@@ -6,19 +6,6 @@
     <table class="layui-hide" id="house" lay-filter="house"></table>
 </div>
 
-<script type="text/html" id="status">
-    {{#  if(d.status==1){ }}
-    <input type="checkbox" name="status" lay-skin="switch" checked lay-text="上架|下架" value={{ d.id}} lay-filter="status">
-    {{#  } else { }}
-    <input type="checkbox" name="status" lay-skin="switch" lay-text="上架|下架" value={{ d.id }} lay-filter="status">
-    {{#  } }}
-</script>
-
-<script type="text/html" id="toolbar">
-    <div class="layui-btn-container">
-        <span class="layui-btn layui-btn-sm layui-btn-normal" lay-event="add" data-title="添加掛賣寶">+ 添加掛賣寶</span>
-    </div>
-</script>
 <script type="text/html" id="price">
     {{ d.price }}U
 </script>
@@ -41,22 +28,21 @@
         var table = layui.table, tool = layui.tool, form = layui.form;
         layui.pageTable = table.render({
             elem: '#house',
-            title: '掛賣寶列表',
-            toolbar: '#toolbar',
-            url: '/admin/sell_card/index',
+            title: '掛賣寶訂單列表',
+            // toolbar: '#toolbar',
+            url: '/admin/sell_card_order/index',
             page: true,
             limit: 20,
             cellMinWidth: 300,
             cols: [
                 [
                     {field: 'id', title: '編號', align: 'center', width: 80},
-                    {field: 'sort_order', title: '排序', align: 'center', width: 80},
+                    {field: 'order_no', title: '訂單號', align: 'center'},
                     {field: 'day', title: '天數', align: 'center'},
                     {field: 'price', title: '價格', align: 'center', toolbar: '#price'},
-                    {field: 'status', title: '狀態', toolbar: '#status', align: 'center', width: 200},
-                    {field: 'admin_name', title: '創建人', align: 'center', width: 150},
-                    {field: 'created_at', title: '創建時間', align: 'center', width: 160},
-                    {fixed: 'right', field: 'right', title: '操作', toolbar: '#bar', width: 160, align: 'center'}
+                    {field: 'statu_ch', title: '狀態', align: 'center', width: 200},
+                    {field: 'username', title: '創建人', align: 'center', width: 200},
+                    {field: 'created_at', title: '創建時間', align: 'center', width: 200},
                 ]
             ]
         });
@@ -64,7 +50,7 @@
         //監聽表頭工具欄事件
         table.on('toolbar(house)', function (obj) {
             if (obj.event === 'add') {
-                tool.smallForm("/admin/sell_card/add");
+                tool.smallForm("/admin/sell_card_order/add");
                 return false;
             }
         });
@@ -72,24 +58,13 @@
         //監聽表格行工具事件
         table.on('tool(house)', function (obj) {
             var data = obj.data;
-            if (obj.event === 'edit') {
-                tool.smallForm('/admin/sell_card/edit?id=' + obj.data.id);
-            } else if (obj.event === 'del') {
-                layer.confirm('確定要刪除該記錄嗎?', {
-                    icon: 3,
-                    title: '提示'
-                }, function (index) {
-                    tool.delete("/admin/sell_card/delete", {id: data.id}, tool.deleteCallBack(obj));
-                    layer.close(index);
-                });
-            }
             return false;
         });
 
 
         //监听指定开关
         form.on('switch(status)', function (data) {
-            tool.post("/admin/index/status", {table: 'sell_card', id: data.value}, tool.reqCallBack(false));
+            tool.post("/admin/index/status", {table: 'sell_card_order', id: data.value}, tool.reqCallBack(false));
         });
 
         //監聽搜索提交
