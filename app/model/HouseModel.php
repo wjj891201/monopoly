@@ -24,25 +24,4 @@ class HouseModel extends BaseModel
         return $list;
     }
 
-//    public function addHouse($param)
-//    {
-//        try {
-//            $param['created_at'] = Carbon::now()->toDateTimeString();
-//            $param['updated_at'] = Carbon::now()->toDateTimeString();
-//            return $this->strict(false)->insert($param);
-//        } catch (\Exception $e) {
-//            throw new RespException(1, $e->getMessage());
-//        }
-//    }
-//
-//
-//    public function editHouse($data)
-//    {
-//        try {
-//            $data['updated_at'] = Carbon::now()->toDateTimeString();
-//            $this->where('id', $data['id'])->strict(false)->field(true)->update($data);
-//        } catch (\Exception $e) {
-//            throw new RespException(1, $e->getMessage());
-//        }
-//    }
 }

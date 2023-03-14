@@ -1,0 +1,46 @@
+{extend name="common/base"/}
+<!-- 主體 -->
+{block name="body"}
+
+<div class="p-3">
+    <table class="layui-hide" id="house" lay-filter="house"></table>
+</div>
+
+<script type="text/html" id="status">
+    {{#  if(d.status==1){ }}
+    <input type="checkbox" name="status" lay-skin="switch" checked lay-text="上架|下架" value={{ d.id}} lay-filter="status">
+    {{#  } else { }}
+    <input type="checkbox" name="status" lay-skin="switch" lay-text="上架|下架" value={{ d.id }} lay-filter="status">
+    {{#  } }}
+</script>
+
+{/block}
+<!-- /主體 -->
+
+<!-- 腳本 -->
+{block name="script"}
+<script>
+    const moduleInit = ['tool'];
+
+    function xuwenInit() {
+        var table = layui.table, tool = layui.tool, form = layui.form;
+        layui.pageTable = table.render({
+            elem: '#house',
+            title: '骰寶使用記錄列表',
+            // toolbar: '#toolbar',
+            url: '/admin/member_sieve/index',
+            page: true,
+            limit: 20,
+            cellMinWidth: 300,
+            cols: [
+                [
+                    {field: 'id', title: '編號', align: 'center', width: 80},
+                    {field: 'username', title: '使用人', align: 'center'},
+                    {field: 'created_at', title: '使用時間', align: 'center'},
+                ]
+            ]
+        });
+    }
+</script>
+{/block}
+<!-- /腳本 -->

@@ -2,15 +2,15 @@
 Navicat MySQL Data Transfer
 
 Source Server         : localhost
-Source Server Version : 50726
+Source Server Version : 50529
 Source Host           : localhost:3306
 Source Database       : monopoly
 
 Target Server Type    : MYSQL
-Target Server Version : 50726
+Target Server Version : 50529
 File Encoding         : 65001
 
-Date: 2023-03-14 17:57:53
+Date: 2023-03-15 00:13:08
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -322,7 +322,7 @@ CREATE TABLE `xw_admin_log` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0删除 1正常',
   `created_at` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=198 DEFAULT CHARSET=utf8mb4 COMMENT='后台操作日志表';
+) ENGINE=InnoDB AUTO_INCREMENT=200 DEFAULT CHARSET=utf8mb4 COMMENT='后台操作日志表';
 
 -- ----------------------------
 -- Records of xw_admin_log
@@ -524,6 +524,8 @@ INSERT INTO `xw_admin_log` VALUES ('194', '1', 'admin', 'add', '新增', '搶房
 INSERT INTO `xw_admin_log` VALUES ('195', '1', 'admin', 'add', '新增', '搶房寶列表', '新建', '超级管理员在2023-03-14 17:55:15新增了搶房寶列表', 'admin', 'buy_card', 'add', '', '127.0.0.1', '4', '{\"num\":\"1\",\"price\":\"1\",\"status\":\"1\",\"sort_order\":\"\",\"id\":\"\",\"admin_id\":1,\"updated_at\":\"2023-03-14 17:55:15\",\"created_at\":\"2023-03-14 17:55:15\"}', '1', '2023-03-14 17:55:15');
 INSERT INTO `xw_admin_log` VALUES ('196', '1', 'admin', 'edit', '編輯', '搶房寶列表', '新建', '超级管理员在2023-03-14 17:55:20編輯了搶房寶列表', 'admin', 'buy_card', 'add', '', '127.0.0.1', '4', '{\"num\":\"2\",\"price\":\"1.0000\",\"status\":\"1\",\"sort_order\":\"0\",\"id\":\"4\",\"admin_id\":1,\"updated_at\":\"2023-03-14 17:55:20\"}', '1', '2023-03-14 17:55:20');
 INSERT INTO `xw_admin_log` VALUES ('197', '1', 'admin', 'delete', '刪除', '搶房寶列表', '刪除', '超级管理员在2023-03-14 17:55:24刪除了搶房寶列表', 'admin', 'buy_card', 'delete', '', '127.0.0.1', '4', '{\"id\":4,\"num\":2,\"price\":\"1.0000\",\"status\":1,\"admin_id\":1,\"sort_order\":0,\"created_at\":\"2023-03-14 17:55:15\"}', '1', '2023-03-14 17:55:24');
+INSERT INTO `xw_admin_log` VALUES ('198', '1', 'admin', 'edit', '編輯', '功能菜單', '新建', '超级管理员在2023-03-14 21:30:58編輯了功能菜單', 'admin', 'admin_menu', 'add', '', '127.0.0.1', '198', '{\"pid\":\"196\",\"menu\":\"1\",\"title\":\"\\u6436\\u623f\\u5bf6\\u8a02\\u55ae\",\"name\":\"\\u6436\\u623f\\u5bf6\",\"src\":\"admin\\/buy_card_order\\/index\",\"sort_order\":\"0\",\"icon\":\"\",\"id\":\"198\",\"admin_id\":1,\"updated_at\":\"2023-03-14 21:30:58\"}', '1', '2023-03-14 21:30:58');
+INSERT INTO `xw_admin_log` VALUES ('199', '1', 'admin', 'edit', '編輯', '功能菜單', '新建', '超级管理员在2023-03-14 22:27:34編輯了功能菜單', 'admin', 'admin_menu', 'add', '', '127.0.0.1', '199', '{\"pid\":\"196\",\"menu\":\"1\",\"title\":\"\\u6436\\u623f\\u5bf6\\u4f7f\\u7528\\u8a18\\u9304\",\"name\":\"\\u6436\\u623f\\u5bf6\",\"src\":\"admin\\/buy_card_use\\/index\",\"sort_order\":\"0\",\"icon\":\"\",\"id\":\"199\",\"admin_id\":1,\"updated_at\":\"2023-03-14 22:27:34\"}', '1', '2023-03-14 22:27:34');
 
 -- ----------------------------
 -- Table structure for xw_admin_menu
@@ -655,8 +657,8 @@ INSERT INTO `xw_admin_menu` VALUES ('194', '4', 'admin/member_sieve/index', '骰
 INSERT INTO `xw_admin_menu` VALUES ('195', '190', 'admin/sell_card_use/index', '掛賣寶使用記錄', '掛賣寶', '', '1', '0', '1', '', '', '2023-03-13 15:15:00', '2023-03-14 16:51:23');
 INSERT INTO `xw_admin_menu` VALUES ('196', '0', '', '搶房寶', '搶房寶', 'bi-cart-plus', '1', '13', '1', '', '', '2023-03-13 15:17:26', '2023-03-13 15:17:26');
 INSERT INTO `xw_admin_menu` VALUES ('197', '196', 'admin/buy_card/index', '搶房寶列表', '搶房寶', '', '1', '0', '1', '', '', '2023-03-13 15:19:10', '2023-03-14 17:18:18');
-INSERT INTO `xw_admin_menu` VALUES ('198', '196', '', '搶房寶訂單', '搶房寶', '', '1', '0', '1', '', '', '2023-03-13 15:20:40', '2023-03-13 15:20:40');
-INSERT INTO `xw_admin_menu` VALUES ('199', '196', '', '搶房寶使用記錄', '搶房寶', '', '1', '0', '1', '', '', '2023-03-13 15:23:08', '2023-03-13 15:23:08');
+INSERT INTO `xw_admin_menu` VALUES ('198', '196', 'admin/buy_card_order/index', '搶房寶訂單', '搶房寶', '', '1', '0', '1', '', '', '2023-03-13 15:20:40', '2023-03-14 21:30:58');
+INSERT INTO `xw_admin_menu` VALUES ('199', '196', 'admin/buy_card_use/index', '搶房寶使用記錄', '搶房寶', '', '1', '0', '1', '', '', '2023-03-13 15:23:08', '2023-03-14 22:27:34');
 INSERT INTO `xw_admin_menu` VALUES ('200', '191', 'admin/sell_card/add', '新建', '掛賣寶列表', '', '2', '0', '1', '', '', '2023-03-13 21:39:36', '2023-03-13 21:39:36');
 INSERT INTO `xw_admin_menu` VALUES ('201', '191', 'admin/sell_card/edit', '編輯', '掛賣寶列表', '', '2', '0', '1', '', '', '2023-03-13 21:40:19', '2023-03-13 21:40:19');
 INSERT INTO `xw_admin_menu` VALUES ('202', '191', 'admin/sell_card/delete', '刪除', '掛賣寶列表', '', '2', '0', '1', '', '', '2023-03-13 21:41:01', '2023-03-13 21:41:01');
@@ -866,6 +868,46 @@ CREATE TABLE `xw_buy_card` (
 INSERT INTO `xw_buy_card` VALUES ('1', '10', '9.9000', '1', '1', '0', '2023-03-14 17:54:03');
 INSERT INTO `xw_buy_card` VALUES ('2', '20', '14.9000', '1', '1', '0', '2023-03-14 17:54:42');
 INSERT INTO `xw_buy_card` VALUES ('3', '30', '19.9000', '1', '1', '0', '2023-03-14 17:54:58');
+
+-- ----------------------------
+-- Table structure for xw_buy_card_order
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_buy_card_order`;
+CREATE TABLE `xw_buy_card_order` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `buy_card_id` int(11) NOT NULL,
+  `order_no` varchar(255) NOT NULL,
+  `num` int(11) NOT NULL,
+  `price` decimal(30,4) NOT NULL,
+  `used_num` int(11) NOT NULL COMMENT '已使用个数',
+  `member_id` int(11) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0待支付、1已支付',
+  `created_at` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of xw_buy_card_order
+-- ----------------------------
+INSERT INTO `xw_buy_card_order` VALUES ('1', '1', 'qwqw12121', '10', '9.9000', '0', '6', '0', '2023-03-14 16:15:27');
+
+-- ----------------------------
+-- Table structure for xw_buy_card_use
+-- ----------------------------
+DROP TABLE IF EXISTS `xw_buy_card_use`;
+CREATE TABLE `xw_buy_card_use` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) NOT NULL,
+  `house_id` int(11) NOT NULL,
+  `member_id` int(11) NOT NULL,
+  `created_at` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of xw_buy_card_use
+-- ----------------------------
+INSERT INTO `xw_buy_card_use` VALUES ('1', '1', '13', '6', '2023-03-01 16:54:33');
 
 -- ----------------------------
 -- Table structure for xw_chain
@@ -1339,11 +1381,13 @@ CREATE TABLE `xw_member_sieve` (
   `member_id` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of xw_member_sieve
 -- ----------------------------
+INSERT INTO `xw_member_sieve` VALUES ('1', '1', '2023-03-08 00:07:48');
+INSERT INTO `xw_member_sieve` VALUES ('2', '2', '2023-03-23 00:08:01');
 
 -- ----------------------------
 -- Table structure for xw_page
